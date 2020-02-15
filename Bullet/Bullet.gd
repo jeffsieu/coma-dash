@@ -2,7 +2,8 @@ extends KinematicBody
 
 var timer = 0
 var decay_limit = 2
-var speed = 1000
+var speed = 100
+var damage = 30
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -15,4 +16,8 @@ func _process(delta):
 
 func _physics_process(delta):
 	var velocity = transform.basis.z * speed
-	velocity = move_and_slide(velocity * delta)
+	var collision = move_and_collide(velocity * delta)
+	if collision:
+		if collision.collider.name == "Zombie":
+			collision.collider.damage(self)
+			queue_free()
