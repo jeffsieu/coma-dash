@@ -8,6 +8,7 @@ const damage = 30
 var health = 100
 var velocity = Vector3()
 var wave
+var has_loot = false
 
 onready var player = $"/root/Level/Player"
 
@@ -28,5 +29,5 @@ func damage(bullet):
 		_die()
 
 func _die():
-	wave.on_enemy_died()
+	wave.on_enemy_died(self)
 	.queue_free()
