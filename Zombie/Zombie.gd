@@ -27,4 +27,5 @@ func damage(bullet):
 		_die()
 
 func _die():
+	wave.on_enemy_died()
 	.queue_free()
