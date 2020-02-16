@@ -25,9 +25,8 @@ func _process(delta):
 			respawn_cooldown += respawn_time
 			count += 1
 			var zombie = Zombie.instance()
-			randomize() 
 			zombie.wave = wave
 			zombie.transform.origin = transform.origin + Vector3(randf() * scale.x, -zombie.scale.y, randf() * scale.z)
 			$"/root/Level".add_child(zombie)
-			wave.on_enemy_spawned()
+			wave.on_enemy_spawned(zombie)
 		respawn_cooldown -= delta
