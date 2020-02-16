@@ -30,4 +30,4 @@ func _on_player_health_changed(old, new):
 	$PlayerHealthBarContainer/CenterContainer/HealthPoints.text = "%d/%d" % [new, player.max_health]
 	
 func on_loot_collected(collected):
-	$"LootDisplay/LootCounter".text = "x%d" % (collected)
+	$"LootCollected".text = "x%d" % (collected)
