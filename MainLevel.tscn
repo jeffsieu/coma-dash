@@ -107,13 +107,12 @@ margin_right = 536.0
 margin_bottom = 57.0
 
 [node name="CenterContainer" type="CenterContainer" parent="GUI/LootDisplay/HBoxContainer"]
-margin_right = 45.0
+margin_right = 40.0
 margin_bottom = 57.0
 
 [node name="TextureRect" type="TextureRect" parent="GUI/LootDisplay/HBoxContainer/CenterContainer"]
-margin_left = 2.0
 margin_top = 8.0
-margin_right = 42.0
+margin_right = 40.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 40, 40 )
 texture = ExtResource( 13 )
