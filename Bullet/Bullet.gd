@@ -15,7 +15,7 @@ func _ready():
 func _process(delta):
 	timer += delta
 	if timer > decay_limit:
-		free()
+		queue_free()
 
 func _physics_process(delta):
 	var velocity = transform.basis.z * speed
