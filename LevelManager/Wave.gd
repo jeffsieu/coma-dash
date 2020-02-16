@@ -22,15 +22,12 @@ func end():
 	emit_signal("ended", self)
 	
 func on_enemy_spawned(enemy):
-	loot_manager.maybe_attach_loot_enemy(enemy)
-	
 	spawned_count += 1
 	if spawned_count >= total_count:
 		stop_spawners()
 
 func on_enemy_died(enemy):
-	if enemy.has_loot:
-		loot_manager.drop_loot(enemy)
+	loot_manager.maybe_drop_loot_enemy(enemy)
 	
 	dead_count += 1
 	emit_signal("enemy_died", dead_count, total_count)
