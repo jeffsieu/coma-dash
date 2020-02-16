@@ -29,4 +29,3 @@ func on_enemy_died():
 	emit_signal("enemy_died", dead_count, total_count)
 	if dead_count == total_count:
 		end()
-	

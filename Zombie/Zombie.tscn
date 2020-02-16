@@ -1,7 +1,9 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Zombie/Zombie.gd" type="Script" id=1]
 [ext_resource path="res://Zombie/HealthBar.gd" type="Script" id=2]
+[ext_resource path="res://HealthBar/healthbarfront.png" type="Texture" id=3]
+[ext_resource path="res://HealthBar/healthbarback.png" type="Texture" id=4]
 
 [sub_resource type="CylinderShape" id=1]
 
@@ -14,9 +16,6 @@ albedo_color = Color( 0.301961, 0, 0.654902, 1 )
 flags_transparent = true
 flags_unshaded = true
 params_billboard_mode = 1
-
-[sub_resource type="StyleBoxFlat" id=5]
-bg_color = Color( 1, 0, 0, 1 )
 
 [node name="Zombie" type="KinematicBody"]
 transform = Transform( 1.5, 0, 0, 0, 1, 0, 0, 0, 1.5, 0, 0, 0 )
@@ -32,19 +31,16 @@ material = SubResource( 3 )
 [node name="HealthBar" type="Sprite3D" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.62991, 0 )
 material_override = SubResource( 4 )
-pixel_size = 0.1
 script = ExtResource( 2 )
 
 [node name="Viewport" type="Viewport" parent="HealthBar"]
-size = Vector2( 100, 15 )
+size = Vector2( 536, 77 )
 transparent_bg = true
 usage = 0
 render_target_v_flip = true
 
-[node name="ProgressBar" type="ProgressBar" parent="HealthBar/Viewport"]
-margin_right = 100.0
-margin_bottom = 15.0
-custom_styles/fg = SubResource( 5 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="ProgressBar" type="TextureProgress" parent="HealthBar/Viewport"]
+margin_right = 40.0
+margin_bottom = 40.0
+texture_under = ExtResource( 4 )
+texture_progress = ExtResource( 3 )

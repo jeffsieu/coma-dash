@@ -1,18 +1,26 @@
 extends KinematicBody
 
+const Bullet = preload("res://Bullet/Bullet.tscn")
+const Zombie = preload("res://Zombie/Zombie.gd")
+
 const movement_speed = 0.5
 const velocity_limit = 5
 const acceleration = 0.2
 const gravity = 5
 const friction = 0.7
+const max_health = 200
 
 const shoot_interval = 0.1
 var shoot_cooldown = 0
 
+const damage_interval = 0.5
+var damage_cooldown = damage_interval
+
+var health = max_health
 var velocity = Vector3()
 var is_shooting = false
 
-const Bullet = preload("res://Bullet/Bullet.tscn")
+signal health_changed
 
 func _get_joystick_direction():
 	return $"/root/Level/Joystick/JoystickKnob".joystick_direction
@@ -35,6 +43,7 @@ func _rotate_body():
 
 func _process(delta):
 	_rotate_body()
+	damage_cooldown -= delta
 
 func _physics_process(delta):
 	if is_shooting:
@@ -52,3 +61,15 @@ func _physics_process(delta):
 		shoot_cooldown = 0
 	velocity.y = -gravity
 	velocity = move_and_slide(velocity)
+	
+	for i in range(get_slide_count()):
+		var collision = get_slide_collision(i)
+		if collision.collider is Zombie:
+			_receive_damage(collision.collider)
+
+func _receive_damage(attacker):
+	if damage_cooldown <= 0:
+		damage_cooldown = damage_interval
+		var old_health = health
+		health -= attacker.damage
+		emit_signal("health_changed", old_health, health)

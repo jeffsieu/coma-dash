@@ -3,6 +3,7 @@ extends KinematicBody
 const max_health = 100
 const movement_speed = 2
 const gravity = 5
+const damage = 30
 
 var health = 100
 var velocity = Vector3()
