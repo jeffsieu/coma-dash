@@ -23,10 +23,10 @@ func _physics_process(delta):
 		for i in range(get_slide_count()):
 			var collision = get_slide_collision(i)
 			if collision.collider is Player:
+				emit_signal("collected")
 				_die()
 
 func collect(player):
-	emit_signal("collected")
 	is_flying = true
 	self.player = player
 
