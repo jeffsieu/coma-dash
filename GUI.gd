@@ -1,4 +1,4 @@
-extends VBoxContainer
+extends Control
 
 var level_manager
 var player
@@ -30,4 +30,4 @@ func _on_player_health_changed(old, new):
 	$PlayerHealthBarContainer/CenterContainer/HealthPoints.text = "%d/%d" % [new, player.max_health]
 	
 func on_loot_collected(collected):
-	$LootCollected.text = "%d CRYSTALS COLLECTED" % (collected)
+	$"LootDisplay/LootCounter".text = "x%d" % (collected)
