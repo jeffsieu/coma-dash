@@ -10,7 +10,7 @@ albedo_color = Color( 0, 1, 0.909804, 1 )
 [sub_resource type="BoxShape" id=3]
 extents = Vector3( 1.00611, 1, 1 )
 
-[node name="Crystal" type="Area"]
+[node name="Crystal" type="KinematicBody"]
 script = ExtResource( 1 )
 
 [node name="CSGMesh" type="CSGMesh" parent="."]
@@ -21,4 +21,3 @@ material = SubResource( 2 )
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 0.520133, 0, 0, 0, 0.520133, 0, 0, 0, 0.520133, 0, 0, 0 )
 shape = SubResource( 3 )
-[connection signal="body_entered" from="." to="." method="_on_Crystal_body_entered"]
