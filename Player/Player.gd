@@ -1,12 +1,12 @@
 extends KinematicBody
 
-var movement_speed = 0.5
-var velocity_limit = 5
-var acceleration = 0.2
-var gravity = 5
-var friction = 0.7
+const movement_speed = 0.5
+const velocity_limit = 5
+const acceleration = 0.2
+const gravity = 5
+const friction = 0.7
 
-var shoot_interval = 0.1
+const shoot_interval = 0.1
 var shoot_cooldown = 0
 
 var velocity = Vector3()

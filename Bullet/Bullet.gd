@@ -1,9 +1,12 @@
 extends KinematicBody
 
+const decay_limit = 2
+const speed = 100
+const damage = 30
+
 var timer = 0
-var decay_limit = 2
-var speed = 100
-var damage = 30
+
+const Zombie = preload("res://Zombie/Zombie.gd")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -18,6 +21,6 @@ func _physics_process(delta):
 	var velocity = transform.basis.z * speed
 	var collision = move_and_collide(velocity * delta)
 	if collision:
-		if collision.collider.name == "Zombie":
+		if collision.collider is Zombie:
 			collision.collider.damage(self)
 			queue_free()
