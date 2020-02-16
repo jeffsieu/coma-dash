@@ -19,6 +19,11 @@ config/name="Last Man Sitting"
 run/main_scene="res://MainLevel.tscn"
 config/icon="res://icon.png"
 
+[display]
+
+window/size/width=480
+window/size/height=800
+
 [input]
 
 move_left={

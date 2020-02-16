@@ -6,8 +6,8 @@ var health
 func _ready():
 	texture = $Viewport.get_texture()
 
-func set_max_health(max_health):
-	self.max_health = max_health
+func set_max_health(health):
+	self.max_health = health
 	$Viewport/ProgressBar.set_max(self.max_health)
 
 func update_health(health):

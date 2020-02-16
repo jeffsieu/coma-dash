@@ -45,7 +45,7 @@ func _physics_process(delta):
 		direction.z -= joystick_direction.x
 		
 		if has_shot:
-			velocity += direction * movement_speed * pow(direction.angle_to(velocity), 2)
+			velocity += direction * movement_speed
 	else:
 		velocity = velocity * pow((1 - friction), delta)
 		shoot_cooldown = 0
