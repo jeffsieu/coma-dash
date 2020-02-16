@@ -138,7 +138,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LoopDisplay" type="HBoxContainer" parent="GUI"]
+[node name="LootDisplay" type="HBoxContainer" parent="GUI"]
 margin_top = 928.0
 margin_right = 536.0
 margin_bottom = 961.0
@@ -147,7 +147,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CrystalIcon" type="TextureRect" parent="GUI/LoopDisplay"]
+[node name="CrystalIcon" type="TextureRect" parent="GUI/LootDisplay"]
 margin_left = 242.0
 margin_right = 272.0
 margin_bottom = 33.0
@@ -157,7 +157,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LootCount" type="Label" parent="GUI/LoopDisplay"]
+[node name="LootCount" type="Label" parent="GUI/LootDisplay"]
 margin_left = 276.0
 margin_right = 293.0
 margin_bottom = 33.0
