@@ -98,5 +98,5 @@ margin_top = 61.0
 margin_right = 536.0
 margin_bottom = 102.0
 custom_fonts/font = ExtResource( 9 )
-text = "10 ZOMBIES LEFT"
+text = "ZOMBIES LEFT"
 align = 1
