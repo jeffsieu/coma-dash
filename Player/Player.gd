@@ -12,6 +12,8 @@ var shoot_cooldown = 0
 var velocity = Vector3()
 var is_shooting = false
 
+const Bullet = preload("res://Bullet/Bullet.tscn")
+
 func _get_joystick_direction():
 	return $"/root/Level/Joystick/JoystickKnob".joystick_direction
 	
@@ -19,8 +21,7 @@ func _try_shoot(delta):
 	var has_shot = shoot_cooldown <= 0
 	if has_shot:
 		shoot_cooldown += shoot_interval
-		var bullet_resource = preload("res://Bullet/Bullet.tscn")
-		var bullet = bullet_resource.instance()
+		var bullet = Bullet.instance()
 		bullet.transform.origin = transform.origin + transform.basis.z * 2.2
 		bullet.rotation = rotation
 		$"/root/Level".add_child(bullet)
