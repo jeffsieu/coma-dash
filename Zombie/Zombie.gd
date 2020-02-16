@@ -6,6 +6,7 @@ const gravity = 5
 
 var health = 100
 var velocity = Vector3()
+var wave
 
 onready var player = $"/root/Level/Player"
 
@@ -26,4 +27,5 @@ func damage(bullet):
 		_die()
 
 func _die():
+	wave.on_enemy_died()
 	.queue_free()
