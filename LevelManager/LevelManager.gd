@@ -20,16 +20,14 @@ func _ready() -> void:
 	self.connect("enemy_died", loot_manager, "_on_enemy_died")
 	
 func _end() -> void:
-	print("Game over")
-	current_wave_count = 0
-	_spawn_wave()
+	get_tree().change_scene("res://Scene/GameOverScene.tscn")
 
 func _spawn_wave() -> void:
 	current_wave = Wave.new(self, 5)
 	current_wave.connect("enemy_died", self, "_on_enemy_died")
 	current_wave.connect("ended", self, "_on_wave_ended")
-	emit_signal("wave_changed", current_wave, current_wave_count, wave_count)
 	current_wave_count += 1
+	emit_signal("wave_changed", current_wave, current_wave_count, wave_count)
 	current_wave.start()
 	
 func _on_enemy_died(enemy: Enemy, died: int, total: int) -> void:

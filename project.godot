@@ -34,6 +34,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://GUI/GUI.gd"
 }, {
+"base": "Spatial",
+"class": "Game",
+"language": "GDScript",
+"path": "res://Scene/Game.gd"
+}, {
 "base": "Node",
 "class": "LevelManager",
 "language": "GDScript",
@@ -65,6 +70,7 @@ _global_script_class_icons={
 "Enemy": "",
 "EnemySpawner": "",
 "GUI": "",
+"Game": "",
 "LevelManager": "",
 "LootManager": "",
 "Player": "",
@@ -75,7 +81,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Last Man Sitting"
-run/main_scene="res://MainLevel.tscn"
+run/main_scene="res://Scene/Game.tscn"
 config/icon="res://icon.png"
 
 [display]
@@ -112,6 +118,10 @@ move_down={
 [input_devices]
 
 pointing/emulate_touch_from_mouse=true
+
+[physics]
+
+common/physics_fps=120
 
 [rendering]
 
