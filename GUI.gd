@@ -1,4 +1,4 @@
-extends VBoxContainer
+extends Control
 
 var level_manager
 var player
@@ -9,6 +9,7 @@ func _ready():
 	
 	level_manager.connect("wave_changed", self, "_on_wave_changed")
 	level_manager.connect("enemy_died", self, "_on_enemy_died")
+	level_manager.connect("loot_collected", self, "on_loot_collected")
 	player.connect("health_changed", self, "_on_player_health_changed")	
 
 	$WaveCounter.text = "WAVE %s/%s" % [level_manager.current_wave_count, level_manager.wave_count]
@@ -27,4 +28,6 @@ func _on_enemy_died(died, total):
 func _on_player_health_changed(old, new):
 	$PlayerHealthBarContainer/PlayerHealthBar.value = new
 	$PlayerHealthBarContainer/CenterContainer/HealthPoints.text = "%d/%d" % [new, player.max_health]
-
+	
+func on_loot_collected(collected):
+	$LootDisplay/HBoxContainer/LootCount.text = "x%d" % (collected)

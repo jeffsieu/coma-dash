@@ -2,6 +2,7 @@ extends KinematicBody
 
 const Bullet = preload("res://Bullet/Bullet.tscn")
 const Zombie = preload("res://Zombie/Zombie.gd")
+const Crystal = preload("res://Loot/Crystal.gd")
 
 const movement_speed = 0.5
 const velocity_limit = 5
@@ -22,6 +23,9 @@ var is_shooting = false
 
 signal health_changed
 
+func _ready():
+	$ItemCollector.connect("body_entered", self, "_on_body_entered")
+
 func _get_joystick_direction():
 	return $"/root/Level/Joystick/JoystickKnob".joystick_direction
 	
@@ -40,6 +44,10 @@ func _rotate_body():
 	var direction = _get_joystick_direction()
 	if direction != Vector2():
 		rotation.y = -direction.angle()
+		
+func _on_body_entered(body):
+	if body is Crystal:
+		body.collect(self)
 
 func _process(delta):
 	_rotate_body()
