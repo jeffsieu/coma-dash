@@ -4,6 +4,8 @@ const Bullet = preload("res://Bullet/Bullet.tscn")
 const Zombie = preload("res://Zombie/Zombie.gd")
 const Crystal = preload("res://Loot/Crystal.gd")
 
+onready var anim = $Sprite
+
 const movement_speed = 0.5
 const velocity_limit = 5
 const acceleration = 0.2
@@ -51,7 +53,15 @@ func _on_body_entered(body):
 
 func _process(delta):
 	_rotate_body()
+	_set_anim()
 	damage_cooldown -= delta
+	
+func _set_anim():
+	if rotation.y < 0:
+		anim.play("back")
+	else:
+		anim.play("forward")
+		
 
 func _physics_process(delta):
 	if is_shooting:
