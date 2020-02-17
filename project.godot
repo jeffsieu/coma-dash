@@ -8,9 +8,68 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "KinematicBody",
+"class": "Bullet",
+"language": "GDScript",
+"path": "res://Bullet/Bullet.gd"
+}, {
+"base": "KinematicBody",
+"class": "Collectible",
+"language": "GDScript",
+"path": "res://Loot/Collectible.gd"
+}, {
+"base": "KinematicBody",
+"class": "Enemy",
+"language": "GDScript",
+"path": "res://Enemy/Enemy.gd"
+}, {
+"base": "Area",
+"class": "EnemySpawner",
+"language": "GDScript",
+"path": "res://EnemySpawner/EnemySpawner.gd"
+}, {
+"base": "Control",
+"class": "GUI",
+"language": "GDScript",
+"path": "res://GUI/GUI.gd"
+}, {
+"base": "Node",
+"class": "LevelManager",
+"language": "GDScript",
+"path": "res://LevelManager/LevelManager.gd"
+}, {
+"base": "Node",
+"class": "LootManager",
+"language": "GDScript",
+"path": "res://LevelManager/LootManager.gd"
+}, {
+"base": "KinematicBody",
+"class": "Player",
+"language": "GDScript",
+"path": "res://Player/Player.gd"
+}, {
+"base": "Reference",
+"class": "Wave",
+"language": "GDScript",
+"path": "res://LevelManager/Wave.gd"
+}, {
+"base": "KinematicBody",
+"class": "Zombie",
+"language": "GDScript",
+"path": "res://Enemy/Zombie.gd"
+} ]
 _global_script_class_icons={
-
+"Bullet": "",
+"Collectible": "",
+"Enemy": "",
+"EnemySpawner": "",
+"GUI": "",
+"LevelManager": "",
+"LootManager": "",
+"Player": "",
+"Wave": "",
+"Zombie": ""
 }
 
 [application]

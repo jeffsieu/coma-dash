@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/knob.png-7038243705bd806d248bd1ad587bc365.stex"
+path="res://.import/knob.png-7e098f87d43ad3bc3f45cee5e151c115.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Joystick/knob.png"
-dest_files=[ "res://.import/knob.png-7038243705bd806d248bd1ad587bc365.stex" ]
+source_file="res://GUI/Joystick/knob.png"
+dest_files=[ "res://.import/knob.png-7e098f87d43ad3bc3f45cee5e151c115.stex" ]
 
 [params]
 
