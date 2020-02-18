@@ -1,6 +1,8 @@
 extends Node
 class_name LevelManager
 
+var _level
+
 var current_wave: Wave
 var current_wave_count: int = 0
 var wave_count: int = 5
@@ -11,16 +13,17 @@ signal wave_changed
 signal enemy_died
 signal loot_collected
 
-onready var player := $"/root/Level/Player"
-
 func _ready() -> void:
+	_level = get_tree().get_root().find_node("Level", true, false)
 	loot_manager = LootManager.new(self)
 	_spawn_wave()
+	var player: Player = _level.get_node("Player")
 	player.connect("health_changed", self, "_on_player_health_changed")
 	self.connect("enemy_died", loot_manager, "_on_enemy_died")
 	
 func _end() -> void:
-	get_tree().change_scene("res://Scene/GameOverScene.tscn")
+	var scene_manager: SceneManager = get_tree().get_root().get_node("SceneManager")
+	scene_manager.load_scene("res://Scene/GameOverScene.tscn")
 
 func _spawn_wave() -> void:
 	current_wave = Wave.new(self, 5)

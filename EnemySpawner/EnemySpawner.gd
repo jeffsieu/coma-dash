@@ -2,6 +2,8 @@ extends Area
 class_name EnemySpawner
 
 const Zombie = preload("res://Enemy/Zombie.tscn")
+var _level
+
 const max_count := 15
 const _respawn_time := 2
 
@@ -20,6 +22,7 @@ func stop(wave: Wave) -> void:
 	_is_running = false
 	
 func _ready() -> void:
+	_level = get_tree().get_root().find_node("Level", true, false)
 	add_to_group("spawners")
 
 func _process(delta: float) -> void:
@@ -28,7 +31,7 @@ func _process(delta: float) -> void:
 			var enemy: Enemy = _get_next_enemy_type().instance()
 			enemy.transform.origin = transform.origin + Vector3(randf() * scale.x, -enemy.scale.y, randf() * scale.z)
 			enemy.connect("died", _wave, "on_enemy_died")
-			$"/root/Level".add_child(enemy)
+			_level.add_child(enemy)
 			emit_signal("spawned", self, enemy)
 			_spawn_cooldown += _respawn_time
 		_spawn_cooldown -= delta

@@ -5,8 +5,9 @@ var _level_manager: LevelManager
 var _player: Player
 
 func _ready() -> void:
-	_level_manager = $"/root/Level/LevelManager"
-	_player = $"/root/Level/Player"
+	var level := get_tree().get_root().find_node("Level", true, false)
+	_level_manager = level.get_node("LevelManager")
+	_player =  level.get_node("Player")
 
 	_level_manager.connect("wave_changed", self, "_on_wave_changed")
 	_level_manager.connect("enemy_died", self, "_on_enemy_died")

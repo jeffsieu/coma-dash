@@ -1,6 +1,6 @@
 extends Sprite
 
-onready var player = $"/root/Level/Player"
+onready var player = $"../Player"
 
 func _ready() -> void:
 	visible = false

@@ -1,10 +1,12 @@
 extends RichTextLabel
 
+var _level
 var current_wave: Wave
 
 func _ready() -> void:
 	text = "Zombies left"
-	var level_manager := $"/root/Level/LevelManager"
+	_level = get_tree().get_root().find_node("Level", true, false)
+	var level_manager = _level.get_node("LevelManager")
 	level_manager.connect("wave_changed", self, "on_wave_changed")
 	
 func _on_wave_changed(wave: Wave) -> void:
