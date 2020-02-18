@@ -33,8 +33,8 @@ func _spawn_wave() -> void:
 	emit_signal("wave_changed", current_wave, current_wave_count, wave_count)
 	current_wave.start()
 	
-func _on_enemy_died(enemy: Enemy, died: int, total: int) -> void:
-	emit_signal("enemy_died", enemy, died, total)
+func _on_enemy_died(enemy: Enemy) -> void:
+	emit_signal("enemy_died", enemy)
 	
 func _on_wave_ended(wave: Wave) -> void:
 	if current_wave_count == wave_count:
@@ -46,6 +46,5 @@ func _on_player_health_changed(old: int, new: int) -> void:
 	if new <= 0:
 		_end()
 	
-func on_loot_collected(item: Collectible) -> void:
-	loot_count += 1
-	emit_signal("loot_collected", loot_count)
+func on_loot_collected() -> void:
+	emit_signal("loot_collected")

@@ -1,6 +1,11 @@
 extends KinematicBody
 class_name Collectible
 
+enum {
+	CRYSTAL,
+	EXPORB
+}
+
 var Player = load("res://Player/Player.gd")
 
 signal collected

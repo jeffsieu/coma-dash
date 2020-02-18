@@ -6,6 +6,8 @@ var _level
 const movement_speed := 2
 const gravity := 5
 const damage := 30
+const drop_chance := 1.0/2.0
+const drop_item := preload("res://Loot/Crystal.tscn")
 
 var has_loot := false
 
