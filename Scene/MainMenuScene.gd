@@ -5,4 +5,4 @@ func _ready() -> void:
 
 func _on_play_button_pressed() -> void:
 	var scene_manager: SceneManager = get_tree().get_root().get_node("SceneManager")
-	scene_manager.load_scene("res://MainLevel.tscn")
+	scene_manager.load_scene("res://Levels/MainLevel.tscn")

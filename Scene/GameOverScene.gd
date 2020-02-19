@@ -8,7 +8,7 @@ func _ready():
 	$VBoxContainer/VBoxContainer2/RetryButton.connect("pressed", self, "_on_retry_button_pressed")
 
 func _on_retry_button_pressed() -> void:
-	_scene_manager.load_scene("res://Scene/MainLevel.tscn")
+	_scene_manager.load_scene("res://Levels/MainLevel.tscn")
 
 func _on_home_button_pressed() -> void:
 	var scene_manager: SceneManager = get_tree().get_root().get_node("SceneManager")
