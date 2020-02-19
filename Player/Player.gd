@@ -7,7 +7,7 @@ const movement_speed := 2.5
 const velocity_limit := 5
 const acceleration := 0.2
 const gravity := 5
-const friction := 0.03
+const friction := 0.6
 const max_health := 200
 
 const shoot_interval := 0.1
