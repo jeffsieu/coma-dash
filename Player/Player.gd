@@ -50,7 +50,6 @@ func _on_item_near(item: PhysicsBody) -> void:
 
 func _process(delta: float) -> void:
 	_rotate_body()
-	damage_cooldown -= delta
 
 func _physics_process(delta: float) -> void:
 	if is_shooting:
@@ -69,12 +68,9 @@ func _physics_process(delta: float) -> void:
 	velocity.y = -gravity
 	velocity = move_and_slide(velocity)
 	
-	for i in range(get_slide_count()):
-		var collision := get_slide_collision(i)
-		if collision.collider is Enemy:
-			_on_damaged_by(collision.collider)
+	damage_cooldown -= delta
 
-func _on_damaged_by(entity: Enemy) -> void:
+func on_damaged_by(entity: Enemy) -> void:
 	if damage_cooldown <= 0:
 		damage_cooldown = damage_interval
 		var old_health := health
