@@ -7,7 +7,7 @@ const _BASE_ACCELERATION = 0.01
 const _FRICTION = 0.9
 const _THRESHOLD_DISTANCE = 2 # Maximum distance from the player at which the camera won't move
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if not _initialized:
 		transform.origin.x = _player.transform.origin.x
 		transform.origin.z = _player.transform.origin.z
