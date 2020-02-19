@@ -1,26 +1,35 @@
 extends Node
 class_name LootManager
 
-const Crystal = preload("res://Loot/Crystal.tscn")
+const Collectible = preload("res://Loot/Collectible.gd")
 
-var level_manager
-var chance := 1.0/3.0
+var _level_manager
+
+var crystal_count := 0
+var exp_count := 0
 
 func _init(level_manager) -> void:
-	self.level_manager = level_manager
+	_level_manager = level_manager
+	randomize()
 	
-func _on_enemy_died(enemy: Enemy, died: int, total: int) -> void:
-	maybe_drop_loot_enemy(enemy)
+func _on_enemy_died(enemy: Enemy) -> void:
+	drop_loot_enemy(enemy)
 
-func maybe_drop_loot_enemy(enemy: Enemy) -> void:
-	if randf() < chance:
-		drop_loot(enemy)
+func drop_loot_enemy(enemy: Enemy) -> void:
+	for drop_item in enemy.generate_drops():
+		drop_loot(enemy, drop_item)
 	
-func drop_loot(entity: Enemy) -> void:
-	var crystal = Crystal.instance()
-	crystal.connect("collected", self, "_on_loot_collected")
-	crystal.transform.origin = entity.transform.origin
-	level_manager.add_child(crystal)
+func drop_loot(entity: Enemy, item: Collectible) -> void:
+	item.connect("collected", self, "_on_loot_collected")
+	# offset the item position by a random amount so that the exp orb doesnt sit right under the crystal
+	var offset := Vector3((randi() % 10 - 20) / 10.0, 0, (randi() % 20 - 10) / 10.0)
+	item.transform.origin = entity.transform.origin + offset
+	_level_manager.add_child(item)
 	
-func _on_loot_collected(item) -> void:
-	level_manager.on_loot_collected(item)
+func _on_loot_collected(item: Collectible) -> void:
+	match item.type:
+		Collectible.CRYSTAL:
+			crystal_count += item.value
+		Collectible.EXPORB:
+			exp_count += item.value
+	_level_manager.on_loot_collected()

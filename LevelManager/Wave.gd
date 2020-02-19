@@ -28,6 +28,6 @@ func on_enemy_spawned(spawner, enemy: Enemy) -> void:
 
 func on_enemy_died(enemy: Enemy) -> void:
 	dead_count += 1
-	emit_signal("enemy_died", enemy, dead_count, total_count)
+	emit_signal("enemy_died", enemy)
 	if dead_count == total_count:
 		end()

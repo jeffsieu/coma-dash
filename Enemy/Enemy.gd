@@ -21,7 +21,11 @@ func on_damaged(damage: int) -> void:
 	emit_signal("health_changed", self)
 	if health <= 0:
 		_die()
-
+		
+func generate_drops() -> Array:
+	push_error("generate_drops not implemented by %s" % filename)
+	return []
+	
 func _die() -> void:
 	emit_signal("died", self)
 	queue_free()

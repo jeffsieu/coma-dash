@@ -31,5 +31,6 @@ func _on_player_health_changed(old: int, new: int):
 	$PlayerHealthBarContainer/PlayerHealthBar.value = new
 	$PlayerHealthBarContainer/CenterContainer/HealthPoints.text = "%d/%d" % [new, _player.max_health]
 	
-func _on_loot_collected(collected: int):
-	$LootDisplay/HBoxContainer/LootCount.text = "x%d" % (collected)
+func _on_loot_collected():
+	$LootDisplay/LootContainer/CrystalCount.text = "x%d" % (_level_manager.loot_manager.crystal_count)
+	$LootDisplay/LootContainer/PlayerExpBar.value = _level_manager.loot_manager.exp_count
