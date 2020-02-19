@@ -19,14 +19,12 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.62991, 0 )
 material_override = SubResource( 1 )
 script = ExtResource( 2 )
 
-[node name="Viewport" type="Viewport" parent="HealthBar"]
-size = Vector2( 536, 77 )
-transparent_bg = true
-usage = 0
-render_target_v_flip = true
-
-[node name="ProgressBar" type="TextureProgress" parent="HealthBar/Viewport"]
-margin_right = 40.0
-margin_bottom = 40.0
+[node name="ProgressBar" type="TextureProgress" parent="HealthBar"]
+margin_right = 536.0
+margin_bottom = 77.0
+rect_scale = Vector2( 0.1, 0.1 )
 texture_under = ExtResource( 4 )
 texture_progress = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
