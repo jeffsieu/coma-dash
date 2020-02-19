@@ -3,11 +3,11 @@ class_name Player
 
 const Bullet = preload("res://Bullet/Bullet.tscn")
 
-const movement_speed := 0.5
+const movement_speed := 2.5
 const velocity_limit := 5
 const acceleration := 0.2
 const gravity := 5
-const friction := 0.7
+const friction := 0.6
 const max_health := 200
 
 const shoot_interval := 0.1
@@ -64,7 +64,9 @@ func _physics_process(delta: float) -> void:
 		if has_shot:
 			velocity += direction * movement_speed
 	else:
-		velocity = velocity * pow((1 - friction), delta)
+		var deceleration := velocity.normalized() * (friction * velocity.length_squared())
+		# velocity = velocity * pow((1 - friction), delta)
+		velocity -= deceleration * delta
 		shoot_cooldown = 0
 	velocity.y = -gravity
 	velocity = move_and_slide(velocity)
