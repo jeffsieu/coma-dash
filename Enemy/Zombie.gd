@@ -19,4 +19,9 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	var direction_to_player = (player.transform.origin - transform.origin).normalized()
 	velocity.y = -gravity
-	velocity = move_and_slide(movement_speed * direction_to_player)
+	var collision = move_and_collide(movement_speed * direction_to_player * delta)
+	if collision and collision.collider is Player:
+		_damage_player(collision.collider)
+
+func _damage_player(player: Player) -> void:
+	player.on_damaged_by(self)
