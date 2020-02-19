@@ -12,7 +12,7 @@ extents = Vector3( 1.00611, 1, 1 )
 
 [node name="Crystal" type="KinematicBody"]
 collision_layer = 2
-collision_mask = 524288
+collision_mask = 0
 script = ExtResource( 1 )
 
 [node name="CSGMesh" type="CSGMesh" parent="."]
@@ -20,6 +20,10 @@ transform = Transform( 0.497768, 0, 0, 0, 0.497768, 0, 0, 0, 0.497768, 0, 0, 0 )
 mesh = SubResource( 1 )
 material = SubResource( 2 )
 
-[node name="CollisionShape" type="CollisionShape" parent="."]
+[node name="ItemArea" type="Area" parent="."]
+collision_layer = 2
+collision_mask = 524288
+
+[node name="CollisionShape" type="CollisionShape" parent="ItemArea"]
 transform = Transform( 0.520133, 0, 0, 0, 0.520133, 0, 0, 0, 0.520133, 0, 0, 0 )
 shape = SubResource( 3 )
