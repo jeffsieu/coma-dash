@@ -28,8 +28,10 @@ func _on_enemy_died(enemy: Enemy, died: int, total: int):
 	$ZombiesLeft.text = "%d ZOMBIES LEFT" % (total - died)
 	
 func _on_player_health_changed(old: int, new: int):
-	$PlayerHealthBarContainer/PlayerHealthBar.value = new
 	$PlayerHealthBarContainer/CenterContainer/HealthPoints.text = "%d/%d" % [new, _player.max_health]
+	var tween := $PlayerHealthBarContainer/PlayerHealthBar/Tween
+	tween.interpolate_method($PlayerHealthBarContainer/PlayerHealthBar, "set_value", old, new, 0.25, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	tween.start()
 	
 func _on_loot_collected():
 	$LootDisplay/LootContainer/CrystalCount.text = "x%d" % (_level_manager.loot_manager.crystal_count)
