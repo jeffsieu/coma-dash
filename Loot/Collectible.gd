@@ -13,8 +13,12 @@ signal collected
 var _is_flying_to_player := false
 var _is_collected := false
 var velocity := Vector3()
+var value: int
 
 var player
+
+func set_value(value: int) -> void:
+	self.value = value
 
 func _physics_process(delta: float) -> void:
 	if _is_flying_to_player:
