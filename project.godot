@@ -49,6 +49,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Player/Player.gd"
 }, {
+"base": "Spatial",
+"class": "SceneManager",
+"language": "GDScript",
+"path": "res://Scene/SceneManager.gd"
+}, {
 "base": "Reference",
 "class": "Wave",
 "language": "GDScript",
@@ -68,6 +73,7 @@ _global_script_class_icons={
 "LevelManager": "",
 "LootManager": "",
 "Player": "",
+"SceneManager": "",
 "Wave": "",
 "Zombie": ""
 }
@@ -75,7 +81,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Last Man Sitting"
-run/main_scene="res://MainLevel.tscn"
+run/main_scene="res://Scene/Game.tscn"
 config/icon="res://icon.png"
 
 [display]
@@ -83,8 +89,8 @@ config/icon="res://icon.png"
 window/size/width=600
 window/size/height=1024
 window/handheld/orientation="portrait"
-window/stretch/mode="viewport"
-window/stretch/aspect="expand"
+window/stretch/mode="2d"
+window/stretch/aspect="keep_width"
 
 [input]
 
@@ -115,6 +121,5 @@ pointing/emulate_touch_from_mouse=true
 
 [rendering]
 
-quality/driver/driver_name="GLES2"
 vram_compression/import_etc=true
 environment/default_environment="res://default_env.tres"

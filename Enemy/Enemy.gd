@@ -24,4 +24,4 @@ func on_damaged(damage: int) -> void:
 
 func _die() -> void:
 	emit_signal("died", self)
-	.queue_free()
+	queue_free()
