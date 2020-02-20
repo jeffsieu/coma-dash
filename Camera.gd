@@ -20,8 +20,7 @@ func _physics_process(delta: float) -> void:
 	distance_to_player = max(distance_to_player, 0)
 
 	var acceleration = _BASE_ACCELERATION * distance_to_player * direction
-	
-	print(delta)
+
 	_velocity += acceleration * delta
 	_velocity *= _FRICTION
 	transform.origin += _velocity * delta
