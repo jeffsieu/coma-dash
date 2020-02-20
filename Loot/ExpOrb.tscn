@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Loot/ExpOrb.gd" type="Script" id=1]
 
@@ -10,9 +10,11 @@ albedo_color = Color( 0.972549, 0.701961, 0.129412, 1 )
 [sub_resource type="BoxShape" id=3]
 extents = Vector3( 1.00611, 1, 1 )
 
+[sub_resource type="BoxShape" id=4]
+
 [node name="ExpOrb" type="KinematicBody"]
 transform = Transform( 0.333, 0, 0, 0, 0.333, 0, 0, 0, 0.333, 0, 0, 0 )
-collision_layer = 2
+collision_layer = 8
 collision_mask = 0
 script = ExtResource( 1 )
 
@@ -21,8 +23,10 @@ mesh = SubResource( 1 )
 material = SubResource( 2 )
 
 [node name="ItemArea" type="Area" parent="."]
-collision_layer = 2
-collision_mask = 524288
+collision_layer = 8
 
 [node name="CollisionShape" type="CollisionShape" parent="ItemArea"]
 shape = SubResource( 3 )
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+shape = SubResource( 4 )
