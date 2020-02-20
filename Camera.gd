@@ -3,7 +3,7 @@ extends Camera
 onready var _player: Player = get_tree().get_root().find_node("Level", true, false).get_node("Player")
 var _initialized := false
 var _velocity: Vector3
-const _BASE_ACCELERATION = 0.01
+const _BASE_ACCELERATION = 80
 const _FRICTION = 0.9
 const _THRESHOLD_DISTANCE = 2 # Maximum distance from the player at which the camera won't move
 
@@ -21,6 +21,7 @@ func _process(delta: float) -> void:
 
 	var acceleration = _BASE_ACCELERATION * distance_to_player * direction
 	
-	_velocity += acceleration
+	print(delta)
+	_velocity += acceleration * delta
 	_velocity *= _FRICTION
-	transform.origin += _velocity
+	transform.origin += _velocity * delta
