@@ -4,9 +4,12 @@ class_name LootManager
 const Collectible = preload("res://Loot/Collectible.gd")
 
 var _level_manager
+var _player
 
 var crystal_count := 0
 var exp_count := 0
+
+signal heal_player
 
 func _init(level_manager) -> void:
 	_level_manager = level_manager
@@ -32,4 +35,7 @@ func _on_loot_collected(item: Collectible) -> void:
 			crystal_count += item.value
 		Collectible.EXPORB:
 			exp_count += item.value
+		Collectible.HEAL:
+			emit_signal("heal_player", item.value)
+
 	_level_manager.on_loot_collected()

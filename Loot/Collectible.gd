@@ -3,7 +3,8 @@ class_name Collectible
 
 enum {
 	CRYSTAL,
-	EXPORB
+	EXPORB,
+	HEAL
 }
 
 var Player = load("res://Player/Player.gd")

@@ -2,6 +2,7 @@ extends Node
 class_name LevelManager
 
 var _level
+var _player
 
 var current_wave: Wave
 var current_wave_count: int = 0
@@ -17,8 +18,10 @@ func _ready() -> void:
 	_level = get_tree().get_root().find_node("Level", true, false)
 	loot_manager = LootManager.new(self)
 	_spawn_wave()
-	var player: Player = _level.get_node("Player")
-	player.connect("health_changed", self, "_on_player_health_changed")
+	_player = _level.get_node("Player")
+	_player.connect("health_changed", self, "_on_player_health_changed")
+
+	loot_manager.connect("heal_player", _player, "on_heal")
 	self.connect("enemy_died", loot_manager, "_on_enemy_died")
 	
 func _end() -> void:

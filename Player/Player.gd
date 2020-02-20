@@ -81,3 +81,9 @@ func on_damaged_by(entity: Enemy) -> void:
 		var old_health := health
 		health -= entity.damage
 		emit_signal("health_changed", old_health, health)
+
+func on_heal(heal: int) -> void:
+	var old_health = health
+	health += heal
+	health = min(max_health, health)
+	emit_signal("health_changed", old_health, health)

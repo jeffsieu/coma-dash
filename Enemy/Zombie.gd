@@ -6,6 +6,7 @@ var _level
 const Collectible = preload("res://Loot/Collectible.gd")
 const Crystal := preload("res://Loot/Crystal.tscn")
 const ExpOrb = preload("res://Loot/ExpOrb.tscn")
+const HealthBoost = preload("res://Loot/HealthBoost.tscn")
 
 const movement_speed := 2
 const gravity := 5
