@@ -8,17 +8,18 @@ var velocity: Vector3
 signal health_changed
 signal died
 
-func _health_set(health_new: int) -> void:
-	if health != health_new:
-		emit_signal("health_changed", self)
-	health = health_new
+func _health_set(new_health: int) -> void:
+	if health != new_health:
+		emit_signal("health_changed", self, health)
+	health = new_health
 	
 func _health_get() -> int:
 	return health
 
 func on_damaged(damage: int) -> void:
+	var old_health := health
 	health -= damage
-	emit_signal("health_changed", self)
+	emit_signal("health_changed", self, old_health)
 	if health <= 0:
 		_die()
 		

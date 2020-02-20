@@ -23,7 +23,7 @@ func _ready() -> void:
 	health = max_health
 	velocity = Vector3()
 	add_to_group("enemies")
-	emit_signal("health_changed", self)
+	emit_signal("health_changed", self, health)
 
 func _physics_process(delta: float) -> void:
 	var direction_to_player = (_player.transform.origin - transform.origin).normalized()
