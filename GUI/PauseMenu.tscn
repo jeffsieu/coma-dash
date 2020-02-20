@@ -17,26 +17,26 @@ custom_constants/separation = 20
 alignment = 1
 
 [node name="PauseTitle" type="Label" parent="VBoxContainer"]
-margin_top = 357.0
+margin_top = 332.0
 margin_right = 543.0
-margin_bottom = 462.0
+margin_bottom = 437.0
 custom_fonts/font = ExtResource( 1 )
 text = "GAME PAUSED"
 align = 1
 uppercase = true
 
 [node name="ResumeButton" type="Button" parent="VBoxContainer"]
-margin_top = 482.0
+margin_top = 457.0
 margin_right = 543.0
 margin_bottom = 532.0
-rect_min_size = Vector2( 0, 50 )
+rect_min_size = Vector2( 0, 75 )
 custom_fonts/font = ExtResource( 2 )
 text = "RESUME"
 
 [node name="QuitButton" type="Button" parent="VBoxContainer"]
 margin_top = 552.0
 margin_right = 543.0
-margin_bottom = 602.0
-rect_min_size = Vector2( 0, 50 )
+margin_bottom = 627.0
+rect_min_size = Vector2( 0, 75 )
 custom_fonts/font = ExtResource( 2 )
 text = "QUIT TO MAIN MENU"
