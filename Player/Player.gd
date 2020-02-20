@@ -26,7 +26,7 @@ signal health_changed
 
 func _ready() -> void:
 	_level = get_tree().get_root().find_node("Level", true, false)
-	$ItemCollector.connect("body_entered", self, "_on_item_near")
+	$ItemCollector.connect("area_entered", self, "_on_item_near")
 
 func _get_joystick_direction() -> Vector3:
 	return _level.get_node("Joystick/JoystickKnob").joystick_direction
@@ -47,9 +47,9 @@ func _rotate_body() -> void:
 	if direction != Vector2():
 		rotation.y = -direction.angle()
 		
-func _on_item_near(item: PhysicsBody) -> void:
-	if item is Collectible:
-		item.fly_to(self)
+func _on_item_near(item: Area) -> void:
+	if item and item.get_parent() is Collectible:
+		item.get_parent().fly_to(self)
 
 func _process(delta: float) -> void:
 	_rotate_body()

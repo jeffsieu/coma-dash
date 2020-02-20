@@ -16,6 +16,9 @@ var value: int
 
 var _player
 
+func _ready() -> void:
+	$ItemArea.connect("body_entered", self, "_on_body_entered")
+
 func set_value(value: int) -> void:
 	self.value = value
 
@@ -23,11 +26,11 @@ func _physics_process(delta: float) -> void:
 	if _is_flying_to_player:
 		var distance_to_player = (_player.transform.origin - transform.origin).length()
 		move_and_slide((_player.transform.origin - transform.origin).normalized() / pow(distance_to_player, 2) * 100)
-		for i in range(get_slide_count()):
-			var collision = get_slide_collision(i)
-			if collision.collider is Player and not _is_collected:
-				emit_signal("collected", self)
-				_die()
+
+func _on_body_entered(body: PhysicsBody) -> void:
+	if body is Player and not _is_collected:
+		emit_signal("collected", self)
+		_die()
 
 func fly_to(player) -> void:
 	_is_flying_to_player = true
@@ -35,4 +38,5 @@ func fly_to(player) -> void:
 
 func _die() -> void:
 	_is_collected =  true
+	_is_flying_to_player = false
 	.queue_free()
