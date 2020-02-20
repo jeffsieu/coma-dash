@@ -5,4 +5,6 @@ font_path = "res://GloriaHallelujah-Regular.ttf"
 
 [resource]
 size = 52
+outline_size = 8
+outline_color = Color( 0, 0, 0, 1 )
 font_data = SubResource( 1 )
