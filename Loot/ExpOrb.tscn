@@ -20,7 +20,7 @@ script = ExtResource( 1 )
 
 [node name="CSGMesh" type="CSGMesh" parent="."]
 mesh = SubResource( 1 )
-material = SubResource( 3 )
+material = SubResource( 2 )
 
 [node name="ItemArea" type="Area" parent="."]
 collision_layer = 8

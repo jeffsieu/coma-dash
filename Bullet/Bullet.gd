@@ -16,6 +16,6 @@ func _physics_process(delta: float) -> void:
 	var velocity := transform.basis.z * _speed
 	var collision := move_and_collide(velocity * delta)
 	if collision:
-		if collision.collider.is_in_group("enemies"):
+		if collision.collider.is_in_group("enemies") or collision.collider.is_in_group("crates"):
 			collision.collider.on_damaged(_damage)
 			queue_free()

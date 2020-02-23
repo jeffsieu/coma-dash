@@ -12,6 +12,7 @@ var loot_manager: LootManager
 
 signal wave_changed
 signal enemy_died
+signal crate_died
 signal loot_collected
 
 func _ready() -> void:
@@ -23,6 +24,7 @@ func _ready() -> void:
 
 	loot_manager.connect("heal_player", _player, "on_heal")
 	self.connect("enemy_died", loot_manager, "_on_enemy_died")
+	self.connect("crate_died", loot_manager, "_on_crate_died")
 	
 func _end() -> void:
 	var scene_manager: SceneManager = get_tree().get_root().get_node("SceneManager")
@@ -35,6 +37,9 @@ func _spawn_wave() -> void:
 	current_wave_count += 1
 	emit_signal("wave_changed", current_wave, current_wave_count, wave_count)
 	current_wave.start()
+	
+func _on_crate_died(crate: Crate) -> void:
+	emit_signal("crate_died", crate)
 	
 func _on_enemy_died(enemy: Enemy) -> void:
 	emit_signal("enemy_died", enemy)

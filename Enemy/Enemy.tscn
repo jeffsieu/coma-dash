@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://Enemy/Zombie.gd" type="Script" id=1]
+[ext_resource path="res://Enemy/Enemy.gd" type="Script" id=1]
 [ext_resource path="res://Enemy/HealthBar.gd" type="Script" id=2]
 [ext_resource path="res://GUI/PlayerHealthBar/healthbarfront.png" type="Texture" id=3]
 [ext_resource path="res://GUI/PlayerHealthBar/healthbarback.png" type="Texture" id=4]
