@@ -3,7 +3,7 @@ class_name Player
 
 const Bullet = preload("res://Bullet/Bullet.tscn")
 
-var _level
+onready var _level = get_tree().get_root().find_node("Level", true, false)
 
 const movement_speed := 2.5
 const velocity_limit := 5
@@ -25,7 +25,6 @@ var is_shooting := false
 signal health_changed
 
 func _ready() -> void:
-	_level = get_tree().get_root().find_node("Level", true, false)
 	$ItemCollector.connect("area_entered", self, "_on_item_near")
 
 func _get_joystick_direction() -> Vector3:
@@ -81,3 +80,9 @@ func on_damaged_by(entity: Enemy) -> void:
 		var old_health := health
 		health -= entity.damage
 		emit_signal("health_changed", old_health, health)
+
+func on_healed(heal: int) -> void:
+	var old_health = health
+	health += heal
+	health = min(max_health, health)
+	emit_signal("health_changed", old_health, health)

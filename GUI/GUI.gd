@@ -1,24 +1,22 @@
 extends Control
 class_name GUI
 
-var _player: Player
 
-onready var level := get_tree().get_root().find_node("Level", true, false)
-onready var _wave_counter := level.find_node("WaveCounter")
-onready var _level_manager := level.get_node("LevelManager")
-onready var _zombies_left := level.find_node("ZombiesLeft")
-onready var _player_health_bar := level.find_node("PlayerHealthBar")
-onready var _player_health_points := level.find_node("HealthPoints")
-onready var _crystal_count := level.find_node("CrystalCount")
-onready var _player_exp_bar := level.find_node("PlayerExpBar")
-onready var _pause_button := level.find_node("PauseButton")
-onready var _resume_button := level.find_node("ResumeButton")
-onready var _quit_button := level.find_node("QuitButton")
-onready var _pause_menu := level.find_node("PauseMenu")
+onready var _level := get_tree().get_root().find_node("Level", true, false)
+onready var _player: Player = _level.get_node("Player")
+onready var _wave_counter := _level.find_node("WaveCounter")
+onready var _level_manager := _level.get_node("LevelManager")
+onready var _zombies_left := _level.find_node("ZombiesLeft")
+onready var _player_health_bar := _level.find_node("PlayerHealthBar")
+onready var _player_health_points := _level.find_node("HealthPoints")
+onready var _crystal_count := _level.find_node("CrystalCount")
+onready var _player_exp_bar := _level.find_node("PlayerExpBar")
+onready var _pause_button := _level.find_node("PauseButton")
+onready var _resume_button := _level.find_node("ResumeButton")
+onready var _quit_button := _level.find_node("QuitButton")
+onready var _pause_menu := _level.find_node("PauseMenu")
 
 func _ready() -> void:
-	_player =  level.get_node("Player")
-
 	_level_manager.connect("wave_changed", self, "_on_wave_changed")
 	_level_manager.connect("enemy_died", self, "_on_enemy_died")
 	_level_manager.connect("loot_collected", self, "_on_loot_collected")

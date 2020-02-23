@@ -1,5 +1,5 @@
 extends Area
-class_name EnemySpawner
+class_name Spawner
 
 const Zombie = preload("res://Enemy/Zombie.tscn")
 

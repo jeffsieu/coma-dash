@@ -1,8 +1,6 @@
 extends "res://Enemy/Enemy.gd"
 class_name Zombie
 
-var _level
-
 const Collectible = preload("res://Loot/Collectible.gd")
 const Crystal := preload("res://Loot/Crystal.tscn")
 const ExpOrb = preload("res://Loot/ExpOrb.tscn")
@@ -14,15 +12,10 @@ const drop_chance := 1.0/2.0
 
 var has_loot := false
 
-var _player
-
 func _ready() -> void:
-	_level = get_tree().get_root().find_node("Level", true, false)
-	_player = _level.get_node("Player")
 	max_health = 100
 	health = max_health
 	velocity = Vector3()
-	add_to_group("enemies")
 	emit_signal("health_changed", self, health)
 
 func _physics_process(delta: float) -> void:

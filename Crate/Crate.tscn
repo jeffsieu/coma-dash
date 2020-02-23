@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://Enemy/Enemy.gd" type="Script" id=1]
-[ext_resource path="res://Enemy/HealthBar.gd" type="Script" id=2]
+[ext_resource path="res://Crate/Crate.gd" type="Script" id=1]
+[ext_resource path="res://Crate/HealthBar.gd" type="Script" id=2]
 [ext_resource path="res://GUI/PlayerHealthBar/healthbarfront.png" type="Texture" id=3]
 [ext_resource path="res://GUI/PlayerHealthBar/healthbarback.png" type="Texture" id=4]
 
@@ -10,9 +10,9 @@ flags_transparent = true
 flags_unshaded = true
 params_billboard_mode = 1
 
-[node name="Enemy" type="KinematicBody"]
+[node name="Crate" type="KinematicBody"]
 transform = Transform( 1.5, 0, 0, 0, 1, 0, 0, 0, 1.5, 0, 0, 0 )
-collision_layer = 2
+collision_layer = 32
 script = ExtResource( 1 )
 
 [node name="HealthBar" type="Sprite3D" parent="."]
