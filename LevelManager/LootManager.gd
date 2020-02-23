@@ -9,7 +9,7 @@ var _player
 var crystal_count := 0
 var exp_count := 0
 
-signal heal_player
+signal player_healed
 
 func _init(level_manager) -> void:
 	_level_manager = level_manager
@@ -39,6 +39,6 @@ func _on_loot_collected(item: Collectible) -> void:
 		Collectible.EXPORB:
 			exp_count += item.value
 		Collectible.HEAL:
-			emit_signal("heal_player", item.value)
+			emit_signal("player_healed", item.value)
 
 	_level_manager.on_loot_collected()

@@ -5,15 +5,13 @@ var health: int setget _health_set, _health_get
 var max_health: int
 var velocity: Vector3
 
-var _player
-var _level
+onready var _level = get_tree().get_root().find_node("Level", true, false)
+onready var _player = _level.get_node("Player")
 
 signal health_changed
 signal died
 
 func _ready() -> void:
-	_level = get_tree().get_root().find_node("Level", true, false)
-	_player = _level.get_node("Player")
 	add_to_group("enemies")
 
 func _health_set(new_health: int) -> void:

@@ -2,7 +2,8 @@ extends Area
 class_name EnemySpawner
 
 const Zombie = preload("res://Enemy/Zombie.tscn")
-var _level
+
+onready var _level = get_tree().get_root().find_node("Level", true, false)
 
 const max_count := 15
 const _respawn_time := 2
@@ -22,7 +23,6 @@ func stop(wave: Wave) -> void:
 	_is_running = false
 	
 func _ready() -> void:
-	_level = get_tree().get_root().find_node("Level", true, false)
 	add_to_group("spawners")
 
 func _process(delta: float) -> void:
