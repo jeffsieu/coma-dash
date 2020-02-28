@@ -2,7 +2,6 @@ extends Crate
 
 const HealthBoost = preload("res://Loot/HealthBoost.tscn")
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	max_health = 20
 	health = max_health
