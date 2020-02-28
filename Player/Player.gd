@@ -3,7 +3,7 @@ class_name Player
 
 const Bullet = preload("res://Bullet/Bullet.tscn")
 
-onready var _level = get_tree().get_root().find_node("Level", true, false)
+onready var _level_manager = get_tree().get_root().find_node("LevelManager", true, false)
 
 const movement_speed := 2.5
 const velocity_limit := 5
@@ -28,7 +28,7 @@ func _ready() -> void:
 	$ItemCollector.connect("area_entered", self, "_on_item_near")
 
 func _get_joystick_direction() -> Vector3:
-	return _level.get_node("Joystick/JoystickKnob").joystick_direction
+	return _level_manager.get_node("Joystick/JoystickKnob").joystick_direction
 	
 func _try_shoot(delta: float) -> bool:
 	var has_shot := shoot_cooldown <= 0
@@ -37,7 +37,7 @@ func _try_shoot(delta: float) -> bool:
 		var bullet := Bullet.instance()
 		bullet.transform.origin = transform.origin + transform.basis.z * 2.2
 		bullet.rotation = rotation
-		_level.add_child(bullet)
+		_level_manager.add_child(bullet)
 	shoot_cooldown -= delta
 	return has_shot
 			

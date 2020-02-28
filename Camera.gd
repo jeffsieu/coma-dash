@@ -1,6 +1,6 @@
 extends Camera
 
-onready var _player: Player = get_tree().get_root().find_node("Level", true, false).get_node("Player")
+onready var _player: Player = get_tree().get_root().find_node("LevelManager", true, false).get_node("Player")
 var _initialized := false
 var _velocity: Vector3
 const _BASE_ACCELERATION = 80

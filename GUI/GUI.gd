@@ -2,42 +2,55 @@ extends Control
 class_name GUI
 
 
-onready var _level := get_tree().get_root().find_node("Level", true, false)
-onready var _player: Player = _level.get_node("Player")
-onready var _wave_counter := _level.find_node("WaveCounter")
-onready var _level_manager := _level.get_node("LevelManager")
-onready var _enemies_left := _level.find_node("EnemiesLeft")
-onready var _player_health_bar := _level.find_node("PlayerHealthBar")
-onready var _player_health_points := _level.find_node("HealthPoints")
-onready var _crystal_count := _level.find_node("CrystalCount")
-onready var _player_exp_bar := _level.find_node("PlayerExpBar")
-onready var _pause_button := _level.find_node("PauseButton")
-onready var _resume_button := _level.find_node("ResumeButton")
-onready var _quit_button := _level.find_node("QuitButton")
-onready var _pause_menu := _level.find_node("PauseMenu")
+onready var _level_manager := get_tree().get_root().find_node("LevelManager", true, false)
+onready var _player: Player = _level_manager.get_node("Player")
+
+onready var _wave_counter := _level_manager.find_node("WaveCounter")
+onready var _enemies_left := _level_manager.find_node("EnemiesLeft")
+onready var _player_health_bar := _level_manager.find_node("PlayerHealthBar")
+onready var _player_health_points := _level_manager.find_node("HealthPoints")
+onready var _crystal_count := _level_manager.find_node("CrystalCount")
+onready var _player_exp_bar := _level_manager.find_node("PlayerExpBar")
+onready var _pause_button := _level_manager.find_node("PauseButton")
+onready var _resume_button := _level_manager.find_node("ResumeButton")
+onready var _quit_button := _level_manager.find_node("QuitButton")
+onready var _pause_menu := _level_manager.find_node("PauseMenu")
+onready var _cleared_menu := _level_manager.find_node("ClearedMenu")
+
+var _level: Level
+
+signal proceed_next
 
 func _ready() -> void:
-	_level_manager.connect("wave_changed", self, "_on_wave_changed")
 	_level_manager.connect("enemy_died", self, "_on_enemy_died")
 	_level_manager.connect("loot_collected", self, "_on_loot_collected")
+	_level_manager.connect("level_cleared", self, "_on_level_cleared")
+	_level_manager.connect("new_level", self, "_on_new_level")
 	_player.connect("health_changed", self, "_on_player_health_changed")
 	_pause_button.connect("pressed", self, "_on_pause_button_pressed")
 	_resume_button.connect("pressed", self, "_on_resume_button_pressed")
 	_quit_button.connect("pressed", self, "_on_quit_button_pressed")
+	_cleared_menu.connect("proceed_next", self, "_on_proceed_next")
+	self.connect("proceed_next", _level_manager, "on_proceed_next")
 
-	_wave_counter.text = "WAVE %s/%s" % [_level_manager.current_wave_count, _level_manager.wave_count]
-	_enemies_left.text = "%d ENEMIES LEFT" % _level_manager.current_wave.total_count
 	_player_health_bar.max_value = _player.max_health
 	_player_health_bar.value = _player.health
 	_player_health_points.text = "%d/%d" % [_player.health, _player.max_health]
 	_pause_menu.set_visible(false)
-	
+	_cleared_menu.set_visible(false)
+
+func _on_new_level(level: Level) -> void:
+	_level = level
+	_level.connect("wave_changed", self, "_on_wave_changed")
+	_wave_counter.text = "WAVE %s/%s" % [_level.current_wave_count, _level.wave_count]
+	_enemies_left.text = "%d ENEMIES LEFT" % _level.mobs_per_wave
+
 func _on_wave_changed(wave: Wave, wave_count: int, total_wave_count: int) -> void:
 	_wave_counter.text = "WAVE %d/%d" % [wave_count, total_wave_count]
 	_enemies_left.text = "%d ENEMIES LEFT" % wave.total_count
-	
+
 func _on_enemy_died(enemy: Enemy) -> void:
-	var wave: Wave = _level_manager.current_wave
+	var wave: Wave = _level.current_wave
 	_enemies_left.text = "%d ENEMIES LEFT" % (wave.total_count - wave.dead_count)
 	
 func _on_player_health_changed(old: int, new: int) -> void:
@@ -57,6 +70,16 @@ func _on_pause_button_pressed() -> void:
 func _on_resume_button_pressed() -> void:
 	_pause_menu.set_visible(false)
 	get_tree().paused = false
+
+func _on_level_cleared(enemies_died, crystal_count) -> void:
+	get_tree().paused = true
+	_cleared_menu.set_score(enemies_died, crystal_count)
+	_cleared_menu.set_visible(true)
+
+func _on_proceed_next() -> void:
+	get_tree().paused = false
+	_cleared_menu.set_visible(false)
+	emit_signal("proceed_next")
 
 func _on_quit_button_pressed() -> void:
 	get_tree().paused = false

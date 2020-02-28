@@ -29,7 +29,7 @@ func drop_loot(entity, item: Collectible) -> void:
 	item.connect("collected", self, "_on_loot_collected")
 	# offset the item position by a random amount so that the exp orb doesnt sit right under the crystal
 	var offset := Vector3((randi() % 10 - 20) / 10.0, 0, (randi() % 20 - 10) / 10.0)
-	item.transform.origin = entity.transform.origin + offset
+	item.transform.origin = entity.global_transform.origin + offset
 	_level_manager.add_child(item)
 	
 func _on_loot_collected(item: Collectible) -> void:

@@ -55,6 +55,11 @@ _global_script_classes=[ {
 "path": "res://Loot/HealthBoost.gd"
 }, {
 "base": "Node",
+"class": "Level",
+"language": "GDScript",
+"path": "res://Levels/Level.gd"
+}, {
+"base": "Node",
 "class": "LevelManager",
 "language": "GDScript",
 "path": "res://LevelManager/LevelManager.gd"
@@ -104,6 +109,7 @@ _global_script_class_icons={
 "ExpOrb": "",
 "GUI": "",
 "HealthBoost": "",
+"Level": "",
 "LevelManager": "",
 "LootManager": "",
 "Player": "",

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Loot/Crystal.png" type="Texture" id=1]
 [ext_resource path="res://GUI/PlayerExpBar/ExpBarFront.png" type="Texture" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://GUI/PlayerHealthBar/healthbarback.png" type="Texture" id=8]
 [ext_resource path="res://GUI/PauseButton/PauseButton.png" type="Texture" id=9]
 [ext_resource path="res://GUI/PauseMenu.tscn" type="PackedScene" id=10]
+[ext_resource path="res://GUI/ClearedMenu.tscn" type="PackedScene" id=11]
 
 [node name="GUI Layer" type="CanvasLayer"]
 layer = 2
@@ -149,3 +150,8 @@ __meta__ = {
 }
 
 [node name="PauseMenu" parent="LevelGUI" instance=ExtResource( 10 )]
+visible = false
+
+[node name="ClearedMenu" parent="LevelGUI" instance=ExtResource( 11 )]
+visible = false
+margin_right = 543.0

@@ -4,7 +4,7 @@ class_name EnemySpawner
 const Spider = preload("res://Enemy/Spider/Spider.tscn")
 const Zombie = preload("res://Enemy/Zombie/Zombie.tscn")
 
-onready var _level = get_tree().get_root().find_node("Level", true, false)
+onready var _level = get_tree().get_root()
 
 const max_count := 15
 const _respawn_time := 2
@@ -31,7 +31,7 @@ func _process(delta: float) -> void:
 	if _is_running:
 		if _spawn_cooldown <= 0 and _wave.spawned_count < _wave.total_count:
 			var enemy: Enemy = _get_next_enemy_type().instance()
-			enemy.transform.origin = transform.origin + Vector3(randf() * scale.x, -enemy.scale.y, randf() * scale.z)
+			enemy.transform.origin = global_transform.origin + Vector3(randf() * scale.x, -enemy.scale.y, randf() * scale.z)
 			enemy.connect("died", _wave, "on_enemy_died")
 			_level.add_child(enemy)
 			emit_signal("spawned", self, enemy)

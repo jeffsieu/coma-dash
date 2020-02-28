@@ -5,8 +5,8 @@ var health: int setget _health_set, _health_get
 var max_health: int
 var velocity: Vector3
 
-onready var _level = get_tree().get_root().find_node("Level", true, false)
-onready var _player = _level.get_node("Player")
+onready var _level_manager = get_tree().get_root().find_node("LevelManager", true, false)
+onready var _player = _level_manager.get_node("Player")
 
 signal health_changed
 signal died

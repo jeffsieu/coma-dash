@@ -1,0 +1,55 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://GUI/Heading2.tres" type="DynamicFont" id=1]
+[ext_resource path="res://GUI/Title.tres" type="DynamicFont" id=2]
+[ext_resource path="res://GUI/ClearedMenu.gd" type="Script" id=3]
+
+[node name="ClearedMenu" type="MarginContainer"]
+margin_right = 582.0
+margin_bottom = 960.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_right = 582.0
+margin_bottom = 960.0
+custom_constants/separation = 20
+alignment = 1
+
+[node name="ClearedTitle" type="Label" parent="VBoxContainer"]
+margin_top = 287.0
+margin_right = 582.0
+margin_bottom = 392.0
+custom_fonts/font = ExtResource( 2 )
+text = "LEVEL CLEARED"
+align = 1
+uppercase = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
+margin_top = 412.0
+margin_right = 582.0
+margin_bottom = 612.0
+rect_min_size = Vector2( 0, 200 )
+
+[node name="EnemiesDefeated" type="Label" parent="VBoxContainer/VBoxContainer"]
+margin_right = 582.0
+margin_bottom = 41.0
+custom_fonts/font = ExtResource( 1 )
+text = "Enemies defeated: 0"
+
+[node name="CrystalCount" type="Label" parent="VBoxContainer/VBoxContainer"]
+margin_top = 45.0
+margin_right = 582.0
+margin_bottom = 86.0
+custom_fonts/font = ExtResource( 1 )
+text = "Crystals collected: 0"
+
+[node name="TapNext" type="Label" parent="VBoxContainer"]
+margin_top = 632.0
+margin_right = 582.0
+margin_bottom = 673.0
+custom_fonts/font = ExtResource( 1 )
+text = "TAP TO PROCEED"
+align = 1
