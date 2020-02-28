@@ -1,15 +1,15 @@
 [gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Player/Player.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Joystick/knob.png" type="Texture" id=2]
-[ext_resource path="res://Joystick/back.png" type="Texture" id=3]
-[ext_resource path="res://Joystick/Joystick.gd" type="Script" id=4]
-[ext_resource path="res://Joystick/JoystickKnob.gd" type="Script" id=5]
+[ext_resource path="res://GUI/Joystick/knob.png" type="Texture" id=2]
+[ext_resource path="res://GUI/Joystick/back.png" type="Texture" id=3]
+[ext_resource path="res://GUI/Joystick/Joystick.gd" type="Script" id=4]
+[ext_resource path="res://GUI/Joystick/JoystickKnob.gd" type="Script" id=5]
 [ext_resource path="res://EnemySpawner/EnemySpawner.tscn" type="PackedScene" id=6]
 [ext_resource path="res://LevelManager/LevelManager.gd" type="Script" id=7]
-[ext_resource path="res://Heading1.tres" type="DynamicFont" id=8]
-[ext_resource path="res://Heading2.tres" type="DynamicFont" id=9]
-[ext_resource path="res://GUI.gd" type="Script" id=10]
+[ext_resource path="res://GUI/LevelGUI.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Camera.gd" type="Script" id=9]
+[ext_resource path="res://Crate/HealthCrate.tscn" type="PackedScene" id=10]
 
 [sub_resource type="BoxShape" id=1]
 
@@ -21,6 +21,8 @@
 
 [node name="Floor" type="StaticBody" parent="."]
 transform = Transform( 20, 0, 0, 0, 1, 0, 0, 0, 20, 0, -3.24301, 0 )
+collision_layer = 16
+collision_mask = 3
 
 [node name="CollisionShape" type="CollisionShape" parent="Floor"]
 shape = SubResource( 1 )
@@ -30,10 +32,13 @@ cast_shadow = 0
 mesh = SubResource( 2 )
 
 [node name="Camera" type="Camera" parent="."]
-transform = Transform( -3.89697e-08, 0.970972, -0.239194, 1.58191e-07, 0.239194, 0.970972, 1, 1.49214e-13, -1.6292e-07, -7.02198, 35.7103, -0.0807962 )
+transform = Transform( -3.89697e-08, 0.970972, -0.239194, 1.58191e-07, 0.239194, 0.970972, 1, 1.49214e-13, -1.6292e-07, -7.022, 25, -0.081 )
 fov = 96.0
+script = ExtResource( 9 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
+collision_layer = 1
+collision_mask = 0
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
 transform = Transform( 0.945487, 0.0636667, 0.319377, -0.197554, -0.667519, 0.717908, 0.258897, -0.741866, -0.618552, 4.92451, 9.0293, -4.38018 )
@@ -62,41 +67,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 12.6797, -0.634198, 11.0169 )
 [node name="LevelManager" type="Node" parent="."]
 script = ExtResource( 7 )
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
-margin_left = 26.0
-margin_top = 14.0
-margin_right = 571.0
-margin_bottom = 998.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="LevelGUI" parent="." instance=ExtResource( 8 )]
 
-[node name="GUI" type="VBoxContainer" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 32.0
-margin_top = 33.5074
-margin_right = -32.0
-margin_bottom = -30.4926
-script = ExtResource( 10 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="WaveCounter" type="Label" parent="GUI"]
-margin_right = 536.0
-margin_bottom = 57.0
-custom_fonts/font = ExtResource( 8 )
-text = "WAVE 2/3"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ZombiesLeft" type="Label" parent="GUI"]
-margin_top = 61.0
-margin_right = 536.0
-margin_bottom = 102.0
-custom_fonts/font = ExtResource( 9 )
-text = "10 ZOMBIES LEFT"
-align = 1
+[node name="HealthCrate" parent="." instance=ExtResource( 10 )]
+transform = Transform( 0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 12.636, -1.52977, -11.623 )

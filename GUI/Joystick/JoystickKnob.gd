@@ -1,17 +1,14 @@
 extends TouchScreenButton
 
-onready var parent_radius = $"..".texture.get_height() / 2
-onready var parent = $".."
-var size = self.normal.get_size()
-var joystick_direction = Vector2()
+onready var parent_radius:float = $"..".texture.get_height() / 2
+onready var parent: Sprite = $".."
+var size := self.normal.get_size()
+var joystick_direction := Vector2()
 
-func _ready():
-	pass # Replace with function body.
-
-func reset_position():
+func reset_position() -> void:
 	set_position(-size / 2)
 	
-func _input(event):
+func _input(event: InputEvent) -> void:
 	if event is InputEventScreenDrag:
 		var new_position = event.position
 		var parent_position = $"..".global_position

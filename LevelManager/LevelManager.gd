@@ -1,34 +1,57 @@
 extends Node
+class_name LevelManager
 
-const Wave = preload("res://LevelManager/Wave.gd")
+onready var _level = get_tree().get_root().find_node("Level", true, false)
+onready var _player = _level.get_node("Player")
 
-var current_wave
-var current_wave_count = 0
-var wave_count = 5
+var current_wave: Wave
+var current_wave_count: int = 0
+var wave_count: int = 5
+var loot_count: int = 0
+var loot_manager: LootManager
 
 signal wave_changed
-signal enemy_spawned
+signal enemy_died
+signal crate_died
+signal loot_collected
 
-func _ready():
-	spawn_wave()
+func _ready() -> void:
+	loot_manager = LootManager.new(self)
+
+	_player.connect("health_changed", self, "_on_player_health_changed")
+	loot_manager.connect("player_healed", _player, "on_healed")
+	self.connect("enemy_died", loot_manager, "_on_enemy_died")
+	self.connect("crate_died", loot_manager, "_on_crate_died")
+
+	_spawn_wave()
 	
-func end():
-	pass
+func _end() -> void:
+	var scene_manager: SceneManager = get_tree().get_root().get_node("SceneManager")
+	scene_manager.load_scene("res://Scene/GameOverScene.tscn")
 
-func spawn_wave():
-	var wave = Wave.new(self, 5)
-	wave.connect("spawned_count_changed", self, "on_spawned_count_changed")
-	wave.connect("ended", self, "on_wave_ended")
-	current_wave = wave
+func _spawn_wave() -> void:
+	current_wave = Wave.new(self, 5)
+	current_wave.connect("enemy_died", self, "_on_enemy_died")
+	current_wave.connect("ended", self, "_on_wave_ended")
 	current_wave_count += 1
-	wave.start()
 	emit_signal("wave_changed", current_wave, current_wave_count, wave_count)
+	current_wave.start()
 	
-func on_spawned_count_changed(spawned, total):
-	emit_signal("enemy_spawned", spawned, total)
+func _on_crate_died(crate: Crate) -> void:
+	emit_signal("crate_died", crate)
 	
-func on_wave_ended(wave):
+func _on_enemy_died(enemy: Enemy) -> void:
+	emit_signal("enemy_died", enemy)
+
+func _on_wave_ended(wave: Wave) -> void:
 	if current_wave_count == wave_count:
-		end()
+		_end()
 	else:
-		spawn_wave()
+		_spawn_wave()
+
+func _on_player_health_changed(old: int, new: int) -> void:
+	if new <= 0:
+		_end()
+	
+func on_loot_collected() -> void:
+	emit_signal("loot_collected")

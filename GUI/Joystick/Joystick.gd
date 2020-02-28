@@ -1,11 +1,11 @@
 extends Sprite
 
-onready var player = $"/root/Level/Player"
+onready var player = $"../Player"
 
-func _ready():
+func _ready() -> void:
 	visible = false
 	
-func _input(event):
+func _input(event: InputEvent) -> void:
 	if event is InputEventScreenTouch and event.is_pressed():
 		visible = true
 		set_global_position(event.position)

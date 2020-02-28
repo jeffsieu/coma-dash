@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/back.png-3e1a753d57aad92531071227627b8eec.stex"
+path="res://.import/healthbarback.png-493375b21f6c68688c8e9209d5235afd.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Joystick/back.png"
-dest_files=[ "res://.import/back.png-3e1a753d57aad92531071227627b8eec.stex" ]
+source_file="res://GUI/PlayerHealthBar/healthbarback.png"
+dest_files=[ "res://.import/healthbarback.png-493375b21f6c68688c8e9209d5235afd.stex" ]
 
 [params]
 
