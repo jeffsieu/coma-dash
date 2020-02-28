@@ -6,8 +6,7 @@ const Zombie = preload("res://Enemy/Zombie/Zombie.tscn")
 
 onready var _level = get_tree().get_root()
 
-const max_count := 15
-const _respawn_time := 2
+const _RESPAWN_TIME := 2
 
 var _spawn_cooldown: float = 0
 var _is_running := false
@@ -35,7 +34,7 @@ func _process(delta: float) -> void:
 			enemy.connect("died", _wave, "on_enemy_died")
 			_level.add_child(enemy)
 			emit_signal("spawned", self, enemy)
-			_spawn_cooldown += _respawn_time
+			_spawn_cooldown += _RESPAWN_TIME
 		_spawn_cooldown -= delta
 
 func _get_next_enemy_type():
