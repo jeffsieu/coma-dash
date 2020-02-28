@@ -56,7 +56,6 @@ func _on_player_health_changed(old: int, new: int) -> void:
 
 func on_proceed_next() -> void:
 	_prev_level = level
-<<<<<<< HEAD
 	
 	if level.next_level:
 		_create_level(level.next_level)
@@ -80,31 +79,6 @@ func _create_level(level_path: String) -> void:
 	_level_manager.add_child(level)
 	level.transform.origin = _level_position.transform.origin
 	
-=======
-	
-	if level.next_level:
-		_create_level(level.next_level)
-
-func _move_to_next_level() -> void:
-	var camera_origin: Vector3 = _camera.transform.origin
-	var player_origin: Vector3 = _player.transform.origin
-	var new_player_origin: Vector3 = level.find_node("PlayerPosition").global_transform.origin
-	var duration := 1.2
-	
-	var tween: Tween = _level_manager.find_node("Tween")
-	tween.interpolate_property(_camera, "translation", camera_origin, camera_origin + _level_floor_distance, duration, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
-	tween.interpolate_property(_player, "translation", player_origin, new_player_origin, duration, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
-	tween.interpolate_callback(self, duration * 1.5, "_on_reached_new_level")
-	tween.start()
-
-func _create_level(level_path: String) -> void:
-	_level_position.transform.origin += _level_floor_distance
-	var LevelScene = load(level_path)
-	level = LevelScene.instance()
-	_level_manager.add_child(level)
-	level.transform.origin = _level_position.transform.origin
-	
->>>>>>> Implement multiple levels (with a lot of broken stuff for now)
 	_move_to_next_level()
 	emit_signal("new_level", level)
 
