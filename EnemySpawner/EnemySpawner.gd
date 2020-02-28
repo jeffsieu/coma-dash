@@ -1,7 +1,8 @@
 extends Area
 class_name EnemySpawner
 
-const Zombie = preload("res://Enemy/Zombie.tscn")
+const Spider = preload("res://Enemy/Spider/Spider.tscn")
+const Zombie = preload("res://Enemy/Zombie/Zombie.tscn")
 
 onready var _level = get_tree().get_root().find_node("Level", true, false)
 
@@ -23,6 +24,7 @@ func stop(wave: Wave) -> void:
 	_is_running = false
 	
 func _ready() -> void:
+	randomize()
 	add_to_group("spawners")
 
 func _process(delta: float) -> void:
@@ -37,4 +39,7 @@ func _process(delta: float) -> void:
 		_spawn_cooldown -= delta
 
 func _get_next_enemy_type():
-	return Zombie
+	if randf() < 0.5:
+		return Zombie
+	else:
+		return Spider

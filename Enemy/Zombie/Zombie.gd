@@ -20,6 +20,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	var direction_to_player = (_player.transform.origin - transform.origin).normalized()
+	rotation.y = deg2rad(90) - Vector2(direction_to_player.x, direction_to_player.z).angle()
 	velocity.y = -gravity
 	var collision = move_and_collide(movement_speed * direction_to_player * delta)
 	if collision and collision.collider is Player:
