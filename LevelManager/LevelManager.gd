@@ -67,7 +67,7 @@ func _move_to_next_level() -> void:
 	var duration := 1.2
 	
 	var tween: Tween = _level_manager.find_node("Tween")
-	tween.interpolate_property(_camera, "translation", camera_origin, camera_origin + _level_floor_distance, duration, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
+	tween.interpolate_property(_camera, "translation", camera_origin, camera_origin + new_player_origin - player_origin, duration, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
 	tween.interpolate_property(_player, "translation", player_origin, new_player_origin, duration, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
 	tween.interpolate_callback(self, duration * 1.5, "_on_reached_new_level")
 	tween.start()
