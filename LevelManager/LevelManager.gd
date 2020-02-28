@@ -19,7 +19,7 @@ func _ready() -> void:
 	loot_manager = LootManager.new(self)
 
 	_player.connect("health_changed", self, "_on_player_health_changed")
-	loot_manager.connect("heal_player", _player, "on_healed")
+	loot_manager.connect("player_healed", _player, "on_healed")
 	self.connect("enemy_died", loot_manager, "_on_enemy_died")
 	self.connect("crate_died", loot_manager, "_on_crate_died")
 
@@ -42,7 +42,7 @@ func _on_crate_died(crate: Crate) -> void:
 	
 func _on_enemy_died(enemy: Enemy) -> void:
 	emit_signal("enemy_died", enemy)
-	
+
 func _on_wave_ended(wave: Wave) -> void:
 	if current_wave_count == wave_count:
 		_end()

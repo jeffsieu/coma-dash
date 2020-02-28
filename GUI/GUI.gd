@@ -6,7 +6,7 @@ onready var _level := get_tree().get_root().find_node("Level", true, false)
 onready var _player: Player = _level.get_node("Player")
 onready var _wave_counter := _level.find_node("WaveCounter")
 onready var _level_manager := _level.get_node("LevelManager")
-onready var _zombies_left := _level.find_node("ZombiesLeft")
+onready var _enemies_left := _level.find_node("EnemiesLeft")
 onready var _player_health_bar := _level.find_node("PlayerHealthBar")
 onready var _player_health_points := _level.find_node("HealthPoints")
 onready var _crystal_count := _level.find_node("CrystalCount")
@@ -26,7 +26,7 @@ func _ready() -> void:
 	_quit_button.connect("pressed", self, "_on_quit_button_pressed")
 
 	_wave_counter.text = "WAVE %s/%s" % [_level_manager.current_wave_count, _level_manager.wave_count]
-	_zombies_left.text = "%d ZOMBIES LEFT" % _level_manager.current_wave.total_count
+	_enemies_left.text = "%d ENEMIES LEFT" % _level_manager.current_wave.total_count
 	_player_health_bar.max_value = _player.max_health
 	_player_health_bar.value = _player.health
 	_player_health_points.text = "%d/%d" % [_player.health, _player.max_health]
@@ -34,10 +34,11 @@ func _ready() -> void:
 	
 func _on_wave_changed(wave: Wave, wave_count: int, total_wave_count: int) -> void:
 	_wave_counter.text = "WAVE %d/%d" % [wave_count, total_wave_count]
-	_zombies_left.text = "%d ZOMBIES LEFT" % wave.total_count
+	_enemies_left.text = "%d ENEMIES LEFT" % wave.total_count
 	
-func _on_enemy_died(enemy: Enemy, died: int, total: int) -> void:
-	_zombies_left.text = "%d ZOMBIES LEFT" % (total - died)
+func _on_enemy_died(enemy: Enemy) -> void:
+	var wave: Wave = _level_manager.current_wave
+	_enemies_left.text = "%d ENEMIES LEFT" % (wave.total_count - wave.dead_count)
 	
 func _on_player_health_changed(old: int, new: int) -> void:
 	_player_health_points.text = "%d/%d" % [new, _player.max_health]
