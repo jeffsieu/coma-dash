@@ -1,17 +1,31 @@
 extends Sprite
 
-onready var player = $"../Player"
+onready var _level_manager = get_tree().get_root().find_node("LevelManager", true, false)
+onready var _player = _level_manager.find_node("Player")
+onready var _knob = find_node("JoystickKnob")
+
+var disabled := false
 
 func _ready() -> void:
 	visible = false
-	
+
+func enable() -> void:
+	disabled = false
+
+func disable() -> void:
+	_player.is_shooting = false
+	_knob.reset_position()
+	visible = false
+	disabled = true
+
 func _input(event: InputEvent) -> void:
-	if event is InputEventScreenTouch and event.is_pressed():
-		visible = true
-		set_global_position(event.position)
-		$JoystickKnob.reset_position()
-		player.is_shooting = true
-	elif event is InputEventScreenTouch:
-		visible = false
-		player.is_shooting = false
-		$JoystickKnob.reset_position()
+	if not disabled:
+		if event is InputEventScreenTouch and event.is_pressed():
+			visible = true
+			set_global_position(event.position)
+			_knob.reset_position()
+			_player.is_shooting = true
+		elif event is InputEventScreenTouch:
+			visible = false
+			_player.is_shooting = false
+			_knob.reset_position()

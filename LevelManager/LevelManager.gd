@@ -5,6 +5,7 @@ onready var _level_manager = get_tree().get_root().find_node("LevelManager", tru
 onready var _level_position = _level_manager.find_node("LevelPosition")
 onready var _player: Player = _level_manager.find_node("Player")
 onready var _camera = _level_manager.find_node("Camera")
+onready var _joystick = _level_manager.find_node("Joystick")
 
 var _start_level := "res://Levels/Level1.tscn"
 var _level_floor_distance := Vector3(0, 50, 0)
@@ -36,6 +37,7 @@ func _ready() -> void:
 
 func _cleared() -> void:
 	loot_manager.collect_all_items()
+	_joystick.disable()
 
 func _on_drops_collected() -> void:
 	emit_signal("level_cleared", _enemies_died, loot_manager.crystal_count)
@@ -101,6 +103,8 @@ func _on_reached_new_level() -> void:
 	level.set_name("Level")
 	level.spawn_wave(self)
 	emit_signal("level_loaded", level)
+
+	_joystick.enable()
 
 func on_loot_collected() -> void:
 	emit_signal("loot_collected")
