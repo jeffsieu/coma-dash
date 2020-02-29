@@ -9,5 +9,8 @@ func set_score(enemies_died: int, crystal_count: int) -> void:
 	_enemies_defeated.text = "Enemies defeated: %d" % enemies_died
 	_crystal_count.text = "Crystals collected: %d" % crystal_count
 
-func _on_TapNext_pressed() -> void:
-	emit_signal("proceed_next")
+func _input(event: InputEvent) -> void:
+	if is_visible_in_tree():
+		if event is InputEventScreenTouch:
+			if not event.is_pressed():
+				emit_signal("proceed_next")
