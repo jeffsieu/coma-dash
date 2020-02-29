@@ -35,7 +35,7 @@ func _ready() -> void:
 func _cleared() -> void:
 	emit_signal("level_cleared", _enemies_died, loot_manager.crystal_count)
 
-func _gameover() -> void:
+func _game_over() -> void:
 	emit_signal("game_over", _enemies_died, loot_manager.crystal_count)
 
 func _start_level() -> void:
@@ -56,7 +56,7 @@ func _on_wave_ended(wave: Wave) -> void:
 
 func _on_player_health_changed(old: int, new: int) -> void:
 	if new <= 0:
-		_gameover()
+		_game_over()
 
 func on_proceed_next() -> void:
 	_prev_level = level
