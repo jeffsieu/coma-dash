@@ -36,6 +36,7 @@ func _ready() -> void:
 	_start_level()
 
 func _cleared() -> void:
+	level.get_tree().call_group("crates", "die")
 	loot_manager.collect_all_items()
 	_joystick.disable()
 

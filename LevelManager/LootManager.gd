@@ -36,6 +36,10 @@ func drop_loot(entity, item: Collectible) -> void:
 	item.transform.origin = entity.global_transform.origin + offset
 	_level_manager.add_child(item)
 	_drops.append(item)
+
+	# if this crate is destroyed after the level is cleared
+	if _cleared:
+		item.fast_fly_to(_player)
 	
 func _on_loot_collected(item: Collectible) -> void:
 	match item.TYPE:
