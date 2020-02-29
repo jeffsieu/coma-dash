@@ -12,6 +12,7 @@ var Player = load("res://Player/Player.gd")
 signal collected
 
 var _is_flying_to_player := false
+var _fly_fast := false
 var _is_collected := false
 var _animation_delta = 0
 var value: int
@@ -32,7 +33,15 @@ func set_value(value: int) -> void:
 func _physics_process(delta: float) -> void:
 	if _is_flying_to_player:
 		var distance_to_player = (_player.transform.origin - transform.origin).length()
-		velocity += (_player.transform.origin - transform.origin).normalized() / pow(distance_to_player, 2) * 50
+		var acceleration: Vector3 = transform.origin.direction_to(_player.transform.origin) / pow(distance_to_player, 2)
+
+		if _fly_fast:
+			acceleration *= 250
+		else:
+			acceleration *= 50
+
+		velocity += acceleration
+
 	velocity *= pow(DAMPING_FACTOR, delta)
 	move_and_slide(velocity)
 	_animate_hover(delta)
@@ -50,7 +59,11 @@ func _on_body_entered(body: PhysicsBody) -> void:
 
 func fly_to(player) -> void:
 	_is_flying_to_player = true
-	self._player = player
+	_player = player
+
+func fast_fly_to(player) -> void:
+	_fly_fast = true
+	fly_to(player)
 
 func _die() -> void:
 	_is_collected =  true
