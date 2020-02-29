@@ -20,12 +20,13 @@ signal crate_died
 signal game_over
 signal loot_collected
 signal level_cleared
-signal new_level
+signal level_loaded
 
 func _ready() -> void:
 	loot_manager = LootManager.new(self)
 
 	_player.connect("health_changed", self, "_on_player_health_changed")
+	_player.connect("fell_off", self, "_on_player_fell_off")
 	loot_manager.connect("player_healed", _player, "on_healed")
 	self.connect("enemy_died", loot_manager, "_on_enemy_died")
 	self.connect("crate_died", loot_manager, "_on_crate_died")
@@ -57,6 +58,9 @@ func _on_wave_ended(wave: Wave) -> void:
 func _on_player_health_changed(old: int, new: int) -> void:
 	if new <= 0:
 		_game_over()
+		
+func _on_player_fell_off() -> void:
+	_game_over()
 
 func on_proceed_next() -> void:
 	_prev_level = level
@@ -84,7 +88,6 @@ func _create_level(level_path: String) -> void:
 	level.transform.origin = _level_position.transform.origin
 	
 	_move_to_next_level()
-	emit_signal("new_level", level)
 
 func _on_reached_new_level() -> void:
 	if _prev_level:
@@ -93,6 +96,7 @@ func _on_reached_new_level() -> void:
 
 	level.set_name("Level")
 	level.spawn_wave(self)
+	emit_signal("level_loaded", level)
 
 func on_loot_collected() -> void:
 	emit_signal("loot_collected")
