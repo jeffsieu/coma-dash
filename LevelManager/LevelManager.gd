@@ -7,7 +7,7 @@ onready var _player: Player = _level_manager.find_node("Player")
 onready var _camera = _level_manager.find_node("Camera")
 onready var _joystick = _level_manager.find_node("Joystick")
 
-var _start_level := "res://Levels/Level1.tscn"
+var _start_level := "res://Levels/Level1/Level1.tscn"
 var _level_floor_distance := Vector3(0, 50, 0)
 var level: Level
 var _prev_level: Level

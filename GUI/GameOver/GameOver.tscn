@@ -1,9 +1,15 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://GUI/Button.tres" type="DynamicFont" id=1]
-[ext_resource path="res://GUI/Heading2.tres" type="DynamicFont" id=2]
-[ext_resource path="res://GUI/Title.tres" type="DynamicFont" id=3]
-[ext_resource path="res://GUI/GameOver.gd" type="Script" id=4]
+[ext_resource path="res://Fonts/Button.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Fonts/Heading2.tres" type="DynamicFont" id=2]
+[ext_resource path="res://Fonts/Title.tres" type="DynamicFont" id=3]
+[ext_resource path="res://GUI/GameOver/GameOver.gd" type="Script" id=4]
+
+
+
+
+
+
 
 [node name="GameOver" type="MarginContainer"]
 margin_right = 582.0

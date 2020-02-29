@@ -2,8 +2,8 @@ extends "res://Enemy/Enemy.gd"
 class_name Zombie
 
 const Collectible = preload("res://Loot/Collectible.gd")
-const Crystal := preload("res://Loot/Crystal.tscn")
-const ExpOrb = preload("res://Loot/ExpOrb.tscn")
+const Crystal := preload("res://Loot/Crystal/Crystal.tscn")
+const ExpOrb = preload("res://Loot/ExpOrb/ExpOrb.tscn")
 
 const MAX_HEALTH = 100
 const MOVEMENT_SPEED := 2
