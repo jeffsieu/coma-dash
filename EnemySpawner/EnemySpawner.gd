@@ -4,14 +4,14 @@ class_name EnemySpawner
 const Spider = preload("res://Enemy/Spider/Spider.tscn")
 const Zombie = preload("res://Enemy/Zombie/Zombie.tscn")
 
-onready var _level = get_tree().get_root().find_node("Level", true, false)
+onready var _level_manager = get_tree().get_root().find_node("LevelManager", true, false)
 
-const max_count := 15
-const _respawn_time := 2
+const _RESPAWN_TIME := 2
 
 var _spawn_cooldown: float = 0
 var _is_running := false
 var _wave: Wave
+var _level: Level
 
 signal spawned
 
@@ -26,16 +26,17 @@ func stop(wave: Wave) -> void:
 func _ready() -> void:
 	randomize()
 	add_to_group("spawners")
+	_level = _level_manager.find_node("Level")
 
 func _process(delta: float) -> void:
 	if _is_running:
 		if _spawn_cooldown <= 0 and _wave.spawned_count < _wave.total_count:
 			var enemy: Enemy = _get_next_enemy_type().instance()
-			enemy.transform.origin = transform.origin + Vector3(randf() * scale.x, -enemy.scale.y, randf() * scale.z)
+			enemy.transform.origin = global_transform.origin + Vector3(randf() * scale.x, -enemy.scale.y, randf() * scale.z)
 			enemy.connect("died", _wave, "on_enemy_died")
-			_level.add_child(enemy)
+			_level_manager.add_child(enemy)
 			emit_signal("spawned", self, enemy)
-			_spawn_cooldown += _respawn_time
+			_spawn_cooldown += _RESPAWN_TIME
 		_spawn_cooldown -= delta
 
 func _get_next_enemy_type():

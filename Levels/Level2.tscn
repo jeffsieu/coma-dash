@@ -1,0 +1,42 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Levels/Level2.gd" type="Script" id=1]
+[ext_resource path="res://Crate/HealthCrate.tscn" type="PackedScene" id=7]
+[ext_resource path="res://EnemySpawner/EnemySpawner.tscn" type="PackedScene" id=10]
+
+[sub_resource type="BoxShape" id=1]
+
+[sub_resource type="CubeMesh" id=2]
+
+[node name="Level2" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="Floor" type="StaticBody" parent="."]
+transform = Transform( 20, 0, 0, 0, 1, 0, 0, 0, 20, 0, -3.24301, 0 )
+collision_layer = 16
+collision_mask = 3
+
+[node name="CollisionShape" type="CollisionShape" parent="Floor"]
+shape = SubResource( 1 )
+
+[node name="CSGMesh" type="CSGMesh" parent="Floor"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+cast_shadow = 0
+mesh = SubResource( 2 )
+
+[node name="EnemySpawner" parent="." instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.12772, -0.774463, 9.4922 )
+
+[node name="EnemySpawner2" parent="." instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.98902, -1.04207, -9.88099 )
+
+[node name="EnemySpawner3" parent="." instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.37261, -0.634198, 10.0636 )
+
+[node name="EnemySpawner4" parent="." instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.55868, -0.634198, -9.78616 )
+
+[node name="HealthCrate" parent="." instance=ExtResource( 7 )]
+transform = Transform( 0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 12.636, -1.52977, 0.603325 )
+
+[node name="PlayerPosition" type="Spatial" parent="."]

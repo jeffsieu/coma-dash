@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Loot/Crystal.png" type="Texture" id=1]
 [ext_resource path="res://GUI/PlayerExpBar/ExpBarFront.png" type="Texture" id=2]
@@ -10,6 +10,8 @@
 [ext_resource path="res://GUI/PlayerHealthBar/healthbarback.png" type="Texture" id=8]
 [ext_resource path="res://GUI/PauseButton/PauseButton.png" type="Texture" id=9]
 [ext_resource path="res://GUI/PauseMenu.tscn" type="PackedScene" id=10]
+[ext_resource path="res://GUI/ClearedMenu.tscn" type="PackedScene" id=11]
+[ext_resource path="res://GUI/GameOver.tscn" type="PackedScene" id=12]
 
 [node name="GUI Layer" type="CanvasLayer"]
 layer = 2
@@ -18,23 +20,29 @@ layer = 2
 pause_mode = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 32.0
-margin_top = 32.0
-margin_right = -32.0
-margin_bottom = -32.0
 script = ExtResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="LevelGUI"]
-margin_right = 543.0
-margin_bottom = 960.0
+[node name="MarginContainer" type="MarginContainer" parent="LevelGUI"]
+margin_right = 607.0
+margin_bottom = 1024.0
+custom_constants/margin_right = 32
+custom_constants/margin_top = 32
+custom_constants/margin_left = 32
+custom_constants/margin_bottom = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LevelGUI/MarginContainer"]
+margin_left = 32.0
+margin_top = 32.0
+margin_right = 575.0
+margin_bottom = 992.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="WaveCounter" type="Label" parent="LevelGUI/VBoxContainer"]
+[node name="WaveCounter" type="Label" parent="LevelGUI/MarginContainer/VBoxContainer"]
 margin_right = 543.0
 margin_bottom = 57.0
 custom_fonts/font = ExtResource( 5 )
@@ -44,7 +52,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="EnemiesLeft" type="Label" parent="LevelGUI/VBoxContainer"]
+[node name="EnemiesLeft" type="Label" parent="LevelGUI/MarginContainer/VBoxContainer"]
 margin_top = 61.0
 margin_right = 543.0
 margin_bottom = 810.0
@@ -53,20 +61,20 @@ custom_fonts/font = ExtResource( 4 )
 text = "ENEMIES LEFT"
 align = 1
 
-[node name="LootDisplay" type="MarginContainer" parent="LevelGUI/VBoxContainer"]
+[node name="LootDisplay" type="MarginContainer" parent="LevelGUI/MarginContainer/VBoxContainer"]
 margin_top = 814.0
 margin_right = 543.0
 margin_bottom = 879.0
 
-[node name="LootContainer" type="HBoxContainer" parent="LevelGUI/VBoxContainer/LootDisplay"]
+[node name="LootContainer" type="HBoxContainer" parent="LevelGUI/MarginContainer/VBoxContainer/LootDisplay"]
 margin_right = 543.0
 margin_bottom = 65.0
 
-[node name="CrystalDisplay" type="CenterContainer" parent="LevelGUI/VBoxContainer/LootDisplay/LootContainer"]
+[node name="CrystalDisplay" type="CenterContainer" parent="LevelGUI/MarginContainer/VBoxContainer/LootDisplay/LootContainer"]
 margin_right = 40.0
 margin_bottom = 65.0
 
-[node name="CrystalImage" type="TextureRect" parent="LevelGUI/VBoxContainer/LootDisplay/LootContainer/CrystalDisplay"]
+[node name="CrystalImage" type="TextureRect" parent="LevelGUI/MarginContainer/VBoxContainer/LootDisplay/LootContainer/CrystalDisplay"]
 margin_top = 12.0
 margin_right = 40.0
 margin_bottom = 52.0
@@ -74,7 +82,7 @@ rect_min_size = Vector2( 40, 40 )
 texture = ExtResource( 1 )
 expand = true
 
-[node name="CrystalCount" type="Label" parent="LevelGUI/VBoxContainer/LootDisplay/LootContainer"]
+[node name="CrystalCount" type="Label" parent="LevelGUI/MarginContainer/VBoxContainer/LootDisplay/LootContainer"]
 margin_left = 44.0
 margin_top = 4.0
 margin_right = 89.0
@@ -83,7 +91,7 @@ rect_min_size = Vector2( 45, 0 )
 custom_fonts/font = ExtResource( 5 )
 text = "x0"
 
-[node name="PlayerExpBar" type="TextureProgress" parent="LevelGUI/VBoxContainer/LootDisplay/LootContainer"]
+[node name="PlayerExpBar" type="TextureProgress" parent="LevelGUI/MarginContainer/VBoxContainer/LootDisplay/LootContainer"]
 margin_left = 93.0
 margin_right = 543.0
 margin_bottom = 65.0
@@ -91,9 +99,9 @@ max_value = 6.0
 texture_under = ExtResource( 3 )
 texture_progress = ExtResource( 2 )
 
-[node name="Tween" type="Tween" parent="LevelGUI/VBoxContainer/LootDisplay/LootContainer/PlayerExpBar"]
+[node name="Tween" type="Tween" parent="LevelGUI/MarginContainer/VBoxContainer/LootDisplay/LootContainer/PlayerExpBar"]
 
-[node name="PlayerHealthBarContainer" type="CenterContainer" parent="LevelGUI/VBoxContainer"]
+[node name="PlayerHealthBarContainer" type="CenterContainer" parent="LevelGUI/MarginContainer/VBoxContainer"]
 margin_top = 883.0
 margin_right = 543.0
 margin_bottom = 960.0
@@ -101,7 +109,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PlayerHealthBar" type="TextureProgress" parent="LevelGUI/VBoxContainer/PlayerHealthBarContainer"]
+[node name="PlayerHealthBar" type="TextureProgress" parent="LevelGUI/MarginContainer/VBoxContainer/PlayerHealthBarContainer"]
 margin_left = 3.0
 margin_right = 539.0
 margin_bottom = 77.0
@@ -113,9 +121,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Tween" type="Tween" parent="LevelGUI/VBoxContainer/PlayerHealthBarContainer/PlayerHealthBar"]
+[node name="Tween" type="Tween" parent="LevelGUI/MarginContainer/VBoxContainer/PlayerHealthBarContainer/PlayerHealthBar"]
 
-[node name="CenterContainer" type="CenterContainer" parent="LevelGUI/VBoxContainer/PlayerHealthBarContainer"]
+[node name="CenterContainer" type="CenterContainer" parent="LevelGUI/MarginContainer/VBoxContainer/PlayerHealthBarContainer"]
 margin_left = 242.0
 margin_top = 18.0
 margin_right = 301.0
@@ -124,7 +132,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HealthPoints" type="Label" parent="LevelGUI/VBoxContainer/PlayerHealthBarContainer/CenterContainer"]
+[node name="HealthPoints" type="Label" parent="LevelGUI/MarginContainer/VBoxContainer/PlayerHealthBarContainer/CenterContainer"]
 margin_right = 59.0
 margin_bottom = 41.0
 custom_fonts/font = ExtResource( 4 )
@@ -133,19 +141,38 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Control" type="Control" parent="LevelGUI"]
-margin_right = 543.0
-margin_bottom = 960.0
+[node name="Control" type="Control" parent="LevelGUI/MarginContainer"]
+margin_left = 32.0
+margin_top = 32.0
+margin_right = 575.0
+margin_bottom = 992.0
 
-[node name="PauseButton" type="TextureButton" parent="LevelGUI/Control"]
+[node name="PauseButton" type="TextureButton" parent="LevelGUI/MarginContainer/Control"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -40.0
-margin_bottom = 40.0
+margin_left = -75.0
+margin_bottom = 75.0
 texture_normal = ExtResource( 9 )
 expand = true
+stretch_mode = 4
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="PauseMenu" parent="LevelGUI" instance=ExtResource( 10 )]
+visible = false
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 607.0
+margin_bottom = 1024.0
+
+[node name="ClearedMenu" parent="LevelGUI" instance=ExtResource( 11 )]
+visible = false
+margin_right = 607.0
+margin_bottom = 1024.0
+
+[node name="GameOver" parent="LevelGUI" instance=ExtResource( 12 )]
+visible = false
+margin_right = 607.0
+margin_bottom = 1024.0
+[connection signal="pressed" from="LevelGUI/MarginContainer/Control/PauseButton" to="LevelGUI" method="_on_pause_button_pressed"]
