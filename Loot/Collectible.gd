@@ -35,9 +35,9 @@ func _physics_process(delta: float) -> void:
 		velocity += (_player.transform.origin - transform.origin).normalized() / pow(distance_to_player, 2) * 50
 	velocity *= pow(DAMPING_FACTOR, delta)
 	move_and_slide(velocity)
-	_animate_bounce(delta)
+	_animate_hover(delta)
 
-func _animate_bounce(delta: float) -> void:
+func _animate_hover(delta: float) -> void:
 	_animation_delta = fmod(_animation_delta + delta, deg2rad(360))
 	var vertical_offset = sin(_animation_delta) -  sin(_animation_delta - delta)
 	rotate_y(delta)
