@@ -19,18 +19,18 @@ custom_constants/separation = 20
 alignment = 1
 
 [node name="ClearedTitle" type="Label" parent="VBoxContainer"]
-margin_top = 287.0
+margin_top = 284.0
 margin_right = 582.0
-margin_bottom = 392.0
+margin_bottom = 389.0
 custom_fonts/font = ExtResource( 2 )
 text = "LEVEL CLEARED"
 align = 1
 uppercase = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
-margin_top = 412.0
+margin_top = 409.0
 margin_right = 582.0
-margin_bottom = 612.0
+margin_bottom = 609.0
 rect_min_size = Vector2( 0, 200 )
 
 [node name="EnemiesDefeated" type="Label" parent="VBoxContainer/VBoxContainer"]
@@ -46,10 +46,10 @@ margin_bottom = 86.0
 custom_fonts/font = ExtResource( 1 )
 text = "Crystals collected: 0"
 
-[node name="TapNext" type="Label" parent="VBoxContainer"]
-margin_top = 632.0
+[node name="TapNext" type="Button" parent="VBoxContainer"]
+margin_top = 629.0
 margin_right = 582.0
-margin_bottom = 673.0
+margin_bottom = 676.0
 custom_fonts/font = ExtResource( 1 )
 text = "TAP TO PROCEED"
-align = 1
+[connection signal="pressed" from="VBoxContainer/TapNext" to="." method="_on_TapNext_pressed"]

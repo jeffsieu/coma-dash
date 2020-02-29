@@ -20,6 +20,7 @@ collision_mask = 3
 shape = SubResource( 1 )
 
 [node name="CSGMesh" type="CSGMesh" parent="Floor"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 cast_shadow = 0
 mesh = SubResource( 2 )
 
