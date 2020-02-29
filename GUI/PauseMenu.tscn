@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://GUI/Title.tres" type="DynamicFont" id=1]
 [ext_resource path="res://GUI/Button.tres" type="DynamicFont" id=2]
+[ext_resource path="res://GUI/PauseMenu.gd" type="Script" id=3]
 
 [sub_resource type="Theme" id=1]
 
@@ -10,6 +11,7 @@ pause_mode = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = SubResource( 1 )
+script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -60,3 +62,5 @@ margin_bottom = 627.0
 rect_min_size = Vector2( 0, 75 )
 custom_fonts/font = ExtResource( 2 )
 text = "QUIT TO MAIN MENU"
+[connection signal="pressed" from="MarginContainer/VBoxContainer/ResumeButton" to="." method="_on_resume_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]

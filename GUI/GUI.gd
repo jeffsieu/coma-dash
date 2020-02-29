@@ -11,9 +11,6 @@ onready var _player_health_bar := _level_manager.find_node("PlayerHealthBar")
 onready var _player_health_points := _level_manager.find_node("HealthPoints")
 onready var _crystal_count := _level_manager.find_node("CrystalCount")
 onready var _player_exp_bar := _level_manager.find_node("PlayerExpBar")
-onready var _pause_button := _level_manager.find_node("PauseButton")
-onready var _resume_button := _level_manager.find_node("ResumeButton")
-onready var _quit_button := _level_manager.find_node("QuitButton")
 onready var _pause_menu := _level_manager.find_node("PauseMenu")
 onready var _cleared_menu := _level_manager.find_node("ClearedMenu")
 onready var _game_over := _level_manager.find_node("GameOver")
@@ -29,9 +26,6 @@ func _ready() -> void:
 	_level_manager.connect("game_over", self, "_on_game_over")
 	_level_manager.connect("level_loaded", self, "_on_level_loaded")
 	_player.connect("health_changed", self, "_on_player_health_changed")
-	_pause_button.connect("pressed", self, "_on_pause_button_pressed")
-	_resume_button.connect("pressed", self, "_on_resume_button_pressed")
-	_quit_button.connect("pressed", self, "_on_quit_button_pressed")
 	_cleared_menu.connect("proceed_next", self, "_on_proceed_next")
 	self.connect("proceed_next", _level_manager, "on_proceed_next")
 
@@ -69,10 +63,6 @@ func _on_pause_button_pressed() -> void:
 	get_tree().paused = true
 	_pause_menu.set_visible(true)
 
-func _on_resume_button_pressed() -> void:
-	_pause_menu.set_visible(false)
-	get_tree().paused = false
-
 func _on_game_over(enemies_died, crystal_count) -> void:
 	get_tree().paused = true
 	_game_over.set_score(enemies_died, crystal_count)
@@ -87,8 +77,3 @@ func _on_proceed_next() -> void:
 	get_tree().paused = false
 	_cleared_menu.set_visible(false)
 	emit_signal("proceed_next")
-
-func _on_quit_button_pressed() -> void:
-	get_tree().paused = false
-	var scene_manager: SceneManager = get_tree().get_root().get_node("SceneManager")
-	scene_manager.load_scene("res://Scene/MainMenuScene.tscn")
