@@ -17,7 +17,7 @@ func _physics_process(delta: float) -> void:
 	$ProgressBar.set_position(screen_pos + Vector2(-size.x * scale.x / 2, -size.y * scale.y))
 
 func _on_health_changed(entity: Enemy, old_health) -> void:
-	$ProgressBar.set_max(entity.max_health)
+	$ProgressBar.set_max(entity.MAX_HEALTH)
 	if not _initialized:
 		$ProgressBar.set_value(entity.health)
 		_initialized = true

@@ -33,7 +33,7 @@ func drop_loot(entity, item: Collectible) -> void:
 	_level_manager.add_child(item)
 	
 func _on_loot_collected(item: Collectible) -> void:
-	match item.type:
+	match item.TYPE:
 		Collectible.CRYSTAL:
 			crystal_count += item.value
 		Collectible.EXPORB:

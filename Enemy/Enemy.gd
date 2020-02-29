@@ -2,7 +2,6 @@ extends KinematicBody
 class_name Enemy
 
 var health: int setget _health_set, _health_get
-var max_health: int
 var velocity: Vector3
 
 onready var _level_manager = get_tree().get_root().find_node("LevelManager", true, false)
