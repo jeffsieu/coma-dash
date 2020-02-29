@@ -1,7 +1,7 @@
 extends MarginContainer
 
-onready var _enemies_defeated: Label = get_node("VBoxContainer/VBoxContainer/EnemiesDefeated")
-onready var _crystal_count: Label = get_node("VBoxContainer/VBoxContainer/CrystalCount")
+onready var _enemies_defeated: Label = find_node("EnemiesDefeated")
+onready var _crystal_count: Label = find_node("CrystalCount")
 
 signal proceed_next
 
