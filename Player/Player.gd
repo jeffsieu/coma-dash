@@ -79,6 +79,7 @@ func on_damaged_by(entity: Enemy) -> void:
 		damage_cooldown = damage_interval
 		var old_health := health
 		health -= entity.damage
+		health = max(health, 0)
 		emit_signal("health_changed", old_health, health)
 
 func on_healed(heal: int) -> void:

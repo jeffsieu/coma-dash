@@ -16,6 +16,7 @@ onready var _resume_button := _level_manager.find_node("ResumeButton")
 onready var _quit_button := _level_manager.find_node("QuitButton")
 onready var _pause_menu := _level_manager.find_node("PauseMenu")
 onready var _cleared_menu := _level_manager.find_node("ClearedMenu")
+onready var _game_over := _level_manager.find_node("GameOver")
 
 var _level: Level
 
@@ -25,6 +26,7 @@ func _ready() -> void:
 	_level_manager.connect("enemy_died", self, "_on_enemy_died")
 	_level_manager.connect("loot_collected", self, "_on_loot_collected")
 	_level_manager.connect("level_cleared", self, "_on_level_cleared")
+	_level_manager.connect("game_over", self, "_on_game_over")
 	_level_manager.connect("new_level", self, "_on_new_level")
 	_player.connect("health_changed", self, "_on_player_health_changed")
 	_pause_button.connect("pressed", self, "_on_pause_button_pressed")
@@ -70,6 +72,11 @@ func _on_pause_button_pressed() -> void:
 func _on_resume_button_pressed() -> void:
 	_pause_menu.set_visible(false)
 	get_tree().paused = false
+
+func _on_game_over(enemies_died, crystal_count) -> void:
+	get_tree().paused = true
+	_game_over.set_score(enemies_died, crystal_count)
+	_game_over.set_visible(true)
 
 func _on_level_cleared(enemies_died, crystal_count) -> void:
 	get_tree().paused = true

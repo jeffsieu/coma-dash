@@ -17,6 +17,7 @@ var loot_manager: LootManager
 
 signal enemy_died
 signal crate_died
+signal game_over
 signal loot_collected
 signal level_cleared
 signal new_level
@@ -31,8 +32,11 @@ func _ready() -> void:
 
 	_start_level()
 
-func _end() -> void:
+func _cleared() -> void:
 	emit_signal("level_cleared", _enemies_died, loot_manager.crystal_count)
+
+func _gameover() -> void:
+	emit_signal("game_over", _enemies_died, loot_manager.crystal_count)
 
 func _start_level() -> void:
 	_create_level(_start_level)
@@ -46,13 +50,13 @@ func _on_enemy_died(enemy: Enemy) -> void:
 
 func _on_wave_ended(wave: Wave) -> void:
 	if level.current_wave_count == level.wave_count:
-		_end()
+		_cleared()
 	else:
 		level.spawn_wave(self)
 
 func _on_player_health_changed(old: int, new: int) -> void:
 	if new <= 0:
-		_end()
+		_gameover()
 
 func on_proceed_next() -> void:
 	_prev_level = level
