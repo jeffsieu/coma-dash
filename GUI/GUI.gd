@@ -27,7 +27,7 @@ func _ready() -> void:
 	_level_manager.connect("loot_collected", self, "_on_loot_collected")
 	_level_manager.connect("level_cleared", self, "_on_level_cleared")
 	_level_manager.connect("game_over", self, "_on_game_over")
-	_level_manager.connect("new_level", self, "_on_new_level")
+	_level_manager.connect("level_loaded", self, "_on_level_loaded")
 	_player.connect("health_changed", self, "_on_player_health_changed")
 	_pause_button.connect("pressed", self, "_on_pause_button_pressed")
 	_resume_button.connect("pressed", self, "_on_resume_button_pressed")
@@ -41,7 +41,7 @@ func _ready() -> void:
 	_pause_menu.set_visible(false)
 	_cleared_menu.set_visible(false)
 
-func _on_new_level(level: Level) -> void:
+func _on_level_loaded(level: Level) -> void:
 	_level = level
 	_level.connect("wave_changed", self, "_on_wave_changed")
 	_wave_counter.text = "WAVE %s/%s" % [_level.current_wave_count, _level.wave_count]
