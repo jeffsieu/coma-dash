@@ -33,9 +33,9 @@ func _ready() -> void:
 	_cleared_menu.connect("proceed_next", self, "_on_proceed_next")
 	self.connect("proceed_next", _level_manager, "on_proceed_next")
 
-	_player_health_bar.max_value = _player.max_health
+	_player_health_bar.max_value = _player.MAX_HEALTH
 	_player_health_bar.value = _player.health
-	_player_health_points.text = "%d/%d" % [_player.health, _player.max_health]
+	_player_health_points.text = "%d/%d" % [_player.health, _player.MAX_HEALTH]
 	_pause_menu.set_visible(false)
 	_cleared_menu.set_visible(false)
 
@@ -54,7 +54,7 @@ func _on_enemy_died(enemy: Enemy) -> void:
 	_enemies_left.text = "%d ENEMIES LEFT" % (wave.total_count - wave.dead_count)
 	
 func _on_player_health_changed(old: int, new: int) -> void:
-	_player_health_points.text = "%d/%d" % [new, _player.max_health]
+	_player_health_points.text = "%d/%d" % [new, _player.MAX_HEALTH]
 	var tween: Tween = _player_health_bar.get_node("Tween")
 	tween.interpolate_method(_player_health_bar, "set_value", old, new, 0.25, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	tween.start()

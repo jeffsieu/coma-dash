@@ -79,11 +79,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scene/SceneManager.gd"
 }, {
-"base": "Area",
-"class": "Spawner",
-"language": "GDScript",
-"path": "res://EnemySpawner/Spawner.gd"
-}, {
 "base": "KinematicBody",
 "class": "Spider",
 "language": "GDScript",
@@ -114,7 +109,6 @@ _global_script_class_icons={
 "LootManager": "",
 "Player": "",
 "SceneManager": "",
-"Spawner": "",
 "Spider": "",
 "Wave": "",
 "Zombie": ""

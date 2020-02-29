@@ -5,20 +5,20 @@ const Bullet = preload("res://Bullet/Bullet.tscn")
 
 onready var _level_manager = get_tree().get_root().find_node("LevelManager", true, false)
 
-const movement_speed := 2.5
-const velocity_limit := 5
-const acceleration := 0.2
-const gravity := 5
-const friction := 0.6
-const max_health := 200
+const MOVEMENT_SPEED := 2.5
+const VELOCITY_LIMIT := 5
+const ACCELERATION := 0.2
+const GRAVITY := 5
+const DAMPING_FACTOR := 0.6
+const MAX_HEALTH := 200
 
-const shoot_interval := 0.1
+const SHOOT_INTERVAL := 0.1
 var shoot_cooldown: float = 0
 
-const damage_interval = 0.5
-var damage_cooldown: float = damage_interval
+const DAMAGE_INTERVAL = 0.5
+var damage_cooldown: float = DAMAGE_INTERVAL
 
-var health: int = max_health
+var health: int = MAX_HEALTH
 var velocity: Vector3 = Vector3()
 var is_shooting := false
 
@@ -33,7 +33,7 @@ func _get_joystick_direction() -> Vector3:
 func _try_shoot(delta: float) -> bool:
 	var has_shot := shoot_cooldown <= 0
 	if has_shot:
-		shoot_cooldown += shoot_interval
+		shoot_cooldown += SHOOT_INTERVAL
 		var bullet := Bullet.instance()
 		bullet.transform.origin = transform.origin + transform.basis.z * 2.2
 		bullet.rotation = rotation
@@ -63,26 +63,26 @@ func _physics_process(delta: float) -> void:
 		direction.z -= joystick_direction.x
 		
 		if has_shot:
-			velocity += direction * movement_speed
+			velocity += direction * MOVEMENT_SPEED
 	else:
-		var deceleration := velocity.normalized() * (friction * velocity.length_squared())
+		var deceleration := velocity.normalized() * (DAMPING_FACTOR * velocity.length_squared())
 		# velocity = velocity * pow((1 - friction), delta)
 		velocity -= deceleration * delta
 		shoot_cooldown = 0
-	velocity.y = -gravity
+	velocity.y = -GRAVITY
 	velocity = move_and_slide(velocity)
 	
 	damage_cooldown -= delta
 
 func on_damaged_by(entity: Enemy) -> void:
 	if damage_cooldown <= 0:
-		damage_cooldown = damage_interval
+		damage_cooldown = DAMAGE_INTERVAL
 		var old_health := health
-		health -= entity.damage
+		health -= entity.DAMAGE
 		emit_signal("health_changed", old_health, health)
 
 func on_healed(heal: int) -> void:
 	var old_health = health
 	health += heal
-	health = min(max_health, health)
+	health = min(MAX_HEALTH, health)
 	emit_signal("health_changed", old_health, health)
