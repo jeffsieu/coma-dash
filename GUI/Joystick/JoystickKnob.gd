@@ -10,7 +10,7 @@ func reset_position() -> void:
 	joystick_direction = Vector2.ZERO
 
 func _input(event: InputEvent) -> void:
-	if not _parent.disabled:
+	if _parent.enabled:
 		if event is InputEventScreenDrag:
 			var new_position = event.position
 			var parent_position = $"..".global_position

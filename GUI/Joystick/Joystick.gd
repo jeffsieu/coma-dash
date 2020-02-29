@@ -4,22 +4,22 @@ onready var _level_manager = get_tree().get_root().find_node("LevelManager", tru
 onready var _player = _level_manager.find_node("Player")
 onready var _knob = find_node("JoystickKnob")
 
-var disabled := false
+var enabled := true
 
 func _ready() -> void:
 	visible = false
 
 func enable() -> void:
-	disabled = false
+	enabled = true
 
 func disable() -> void:
 	_player.is_shooting = false
 	_knob.reset_position()
 	visible = false
-	disabled = true
+	enabled = false
 
 func _input(event: InputEvent) -> void:
-	if not disabled:
+	if enabled:
 		if event is InputEventScreenTouch and event.is_pressed():
 			visible = true
 			set_global_position(event.position)
