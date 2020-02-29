@@ -5,14 +5,18 @@ const Collectible = preload("res://Loot/Collectible.gd")
 
 var _level_manager
 var _player
+var _drops := []
+var _cleared = false
 
 var crystal_count := 0
 var exp_count := 0
 
 signal player_healed
+signal drops_collected
 
 func _init(level_manager) -> void:
 	_level_manager = level_manager
+	_player = level_manager.find_node("Player")
 	randomize()
 	
 func _on_crate_died(crate: Crate) -> void:
@@ -31,6 +35,7 @@ func drop_loot(entity, item: Collectible) -> void:
 	var offset := Vector3((randi() % 10 - 20) / 10.0, 0, (randi() % 20 - 10) / 10.0)
 	item.transform.origin = entity.global_transform.origin + offset
 	_level_manager.add_child(item)
+	_drops.append(item)
 	
 func _on_loot_collected(item: Collectible) -> void:
 	match item.TYPE:
@@ -41,4 +46,14 @@ func _on_loot_collected(item: Collectible) -> void:
 		Collectible.HEAL:
 			emit_signal("player_healed", item.value)
 
+	_drops.remove(_drops.find(item))
 	_level_manager.on_loot_collected()
+
+	if _cleared and _drops.empty():
+		emit_signal("drops_collected")
+		_cleared = false
+
+func collect_all_items() -> void:
+	_cleared = true
+	for item in _drops:
+		item.fast_fly_to(_player)

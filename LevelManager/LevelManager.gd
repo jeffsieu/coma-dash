@@ -28,12 +28,16 @@ func _ready() -> void:
 	_player.connect("health_changed", self, "_on_player_health_changed")
 	_player.connect("fell_off", self, "_on_player_fell_off")
 	loot_manager.connect("player_healed", _player, "on_healed")
+	loot_manager.connect("drops_collected", self, "_on_drops_collected")
 	self.connect("enemy_died", loot_manager, "_on_enemy_died")
 	self.connect("crate_died", loot_manager, "_on_crate_died")
 
 	_start_level()
 
 func _cleared() -> void:
+	loot_manager.collect_all_items()
+
+func _on_drops_collected() -> void:
 	emit_signal("level_cleared", _enemies_died, loot_manager.crystal_count)
 
 func _game_over() -> void:
