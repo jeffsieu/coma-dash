@@ -2,12 +2,12 @@
 
 importer="scene"
 type="PackedScene"
-path="res://.import/Spider.glb-aa7d67216688bd519ea0998717494c2c.scn"
+path="res://.import/Zombie.glb-22a7ed924a673e2b92240e49c6a561d2.scn"
 
 [deps]
 
-source_file="res://Enemy/Spider/Spider.glb"
-dest_files=[ "res://.import/Spider.glb-aa7d67216688bd519ea0998717494c2c.scn" ]
+source_file="res://Enemy/Zombie/Zombie.glb"
+dest_files=[ "res://.import/Zombie.glb-22a7ed924a673e2b92240e49c6a561d2.scn" ]
 
 [params]
 

@@ -17,10 +17,15 @@ func _ready() -> void:
 	health = MAX_HEALTH
 	velocity = Vector3()
 	emit_signal("health_changed", self, health)
+	
+	var anim = find_node("AnimationPlayer").get_animation("Walking")
+	anim.set_loop(true)
+	find_node("AnimationPlayer").set_speed_scale(1)
+	find_node("AnimationPlayer").play("Walking")
 
 func _physics_process(delta: float) -> void:
 	var direction_to_player = transform.origin.direction_to(_player.transform.origin)
-	rotation.y = deg2rad(90) - Vector2(direction_to_player.x, direction_to_player.z).angle()
+	rotation.y = -Vector2(direction_to_player.x, direction_to_player.z).angle()
 	velocity.y = -GRAVITY
 	var collision = move_and_collide(MOVEMENT_SPEED * direction_to_player * delta)
 	if collision and collision.collider is Player:
