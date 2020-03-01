@@ -13,7 +13,7 @@ func _input(event: InputEvent) -> void:
 	if _parent.enabled:
 		if event is InputEventScreenDrag:
 			var new_position = event.position
-			var parent_position = $"..".global_position
+			var parent_position = _parent.global_position
 			var direction_vector = new_position - parent_position
 			direction_vector = direction_vector.clamped(_parent_radius * _parent.scale.x)
 			new_position = parent_position + direction_vector

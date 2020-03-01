@@ -1,8 +1,12 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://GUI/Title.tres" type="DynamicFont" id=1]
-[ext_resource path="res://GUI/Button.tres" type="DynamicFont" id=2]
-[ext_resource path="res://GUI/PauseMenu.gd" type="Script" id=3]
+[ext_resource path="res://Fonts/Title.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Fonts/Button.tres" type="DynamicFont" id=2]
+[ext_resource path="res://GUI/PauseMenu/PauseMenu.gd" type="Script" id=3]
+
+
+
+
 
 [sub_resource type="Theme" id=1]
 

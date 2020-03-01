@@ -32,8 +32,8 @@ func set_value(value: int) -> void:
 
 func _physics_process(delta: float) -> void:
 	if _is_flying_to_player:
-		var distance_to_player = (_player.transform.origin - transform.origin).length()
-		var acceleration: Vector3 = transform.origin.direction_to(_player.transform.origin) / pow(distance_to_player, 2)
+		var distance_squared = transform.origin.distance_squared_to(_player.transform.origin)
+		var acceleration: Vector3 = transform.origin.direction_to(_player.transform.origin) / distance_squared
 
 		if _fly_fast:
 			acceleration *= 250

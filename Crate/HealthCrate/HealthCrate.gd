@@ -1,6 +1,6 @@
 extends Crate
 
-const HealthBoost = preload("res://Loot/HealthBoost.tscn")
+const HealthBoost = preload("res://Loot/HealthBoost/HealthBoost.tscn")
 
 func _ready() -> void:
 	max_health = 20
