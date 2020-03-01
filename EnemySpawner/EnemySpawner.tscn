@@ -7,7 +7,8 @@
 [sub_resource type="CubeMesh" id=2]
 
 [sub_resource type="SpatialMaterial" id=3]
-albedo_color = Color( 0.964706, 0.00392157, 0.00392157, 1 )
+flags_transparent = true
+albedo_color = Color( 0.964706, 0.00392157, 0.00392157, 0.423529 )
 
 [node name="EnemySpawner" type="Area"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.774463, -9.60161 )
@@ -19,6 +20,6 @@ script = ExtResource( 1 )
 shape = SubResource( 1 )
 
 [node name="CSGMesh" type="CSGMesh" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00162125, -1.90735e-06, 0.0430927 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00715351, -2.14577e-06, 0.0626526 )
 mesh = SubResource( 2 )
 material = SubResource( 3 )
