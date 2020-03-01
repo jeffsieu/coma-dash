@@ -3,7 +3,7 @@ class_name GUI
 
 
 onready var _level_manager := get_tree().get_root().find_node("LevelManager", true, false)
-onready var _player: Player = _level_manager.get_node("Player")
+onready var _player: Player = _level_manager.find_node("Player")
 
 onready var _wave_counter := _level_manager.find_node("WaveCounter")
 onready var _enemies_left := _level_manager.find_node("EnemiesLeft")
@@ -51,7 +51,7 @@ func _on_enemy_died(enemy: Enemy) -> void:
 	
 func _on_player_health_changed(old: int, new: int) -> void:
 	_player_health_points.text = "%d/%d" % [new, _player.MAX_HEALTH]
-	var tween: Tween = _player_health_bar.get_node("Tween")
+	var tween: Tween = _player_health_bar.find_node("Tween")
 	tween.interpolate_method(_player_health_bar, "set_value", old, new, 0.25, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	tween.start()
 	

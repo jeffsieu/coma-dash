@@ -34,7 +34,7 @@ func _ready() -> void:
 	_level_manager.connect("level_cleared", self, "_on_level_cleared")
 
 func _get_joystick_direction() -> Vector3:
-	return _level_manager.get_node("Joystick/JoystickKnob").joystick_direction
+	return _level_manager.find_node("JoystickKnob").joystick_direction
 	
 func _try_shoot(delta: float) -> bool:
 	var has_shot := shoot_cooldown <= 0
@@ -78,7 +78,6 @@ func _physics_process(delta: float) -> void:
 			velocity += direction * MOVEMENT_SPEED
 	else:
 		var deceleration := velocity.normalized() * (DAMPING_FACTOR * velocity.length_squared())
-		# velocity = velocity * pow((1 - friction), delta)
 		velocity -= deceleration * delta
 		shoot_cooldown = 0
 	velocity.y = -GRAVITY

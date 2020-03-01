@@ -24,7 +24,7 @@ func _ready() -> void:
 	find_node("AnimationPlayer").play("Walking")
 
 func _physics_process(delta: float) -> void:
-	var direction_to_player = (_player.transform.origin - transform.origin).normalized()
+	var direction_to_player = transform.origin.direction_to(_player.transform.origin)
 	rotation.y = deg2rad(90) - Vector2(direction_to_player.x, direction_to_player.z).angle()
 	velocity.y = -GRAVITY
 	var collision = move_and_collide(MOVEMENT_SPEED * direction_to_player * delta)
