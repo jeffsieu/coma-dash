@@ -1,6 +1,6 @@
 extends MarginContainer
 
-onready var _scene_manager: SceneManager = get_tree().get_root().find_node("SceneManager")
+onready var _scene_manager: SceneManager = get_tree().get_root().find_node("SceneManager", true, false)
 onready var _enemies_defeated: Label = find_node("EnemiesDefeated")
 onready var _crystal_count: Label = find_node("CrystalCount")
 
