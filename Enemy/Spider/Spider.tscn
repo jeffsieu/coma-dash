@@ -9,9 +9,9 @@
 [node name="Spider" instance=ExtResource( 3 )]
 script = ExtResource( 1 )
 
-[node name="CollisionShape" type="CollisionShape" parent="." index="0"]
+[node name="SpiderMesh" parent="." index="0" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
+
+[node name="CollisionShape" type="CollisionShape" parent="." index="1"]
 transform = Transform( 1.753, 0, 0, 0, 1.14, 0, 0, 0, 1.425, 0, 0.131, 0.075 )
 shape = SubResource( 1 )
-
-[node name="SpiderMesh" parent="." index="2" instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
