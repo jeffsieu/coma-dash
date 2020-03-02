@@ -17,7 +17,7 @@ onready var _game_over := _level_manager.find_node("GameOver")
 
 var _level: Level
 
-signal proceed_next
+signal to_next_level_pressed
 
 func _ready() -> void:
 	_level_manager.connect("enemy_died", self, "_on_enemy_died")
@@ -26,8 +26,8 @@ func _ready() -> void:
 	_level_manager.connect("game_over", self, "_on_game_over")
 	_level_manager.connect("level_loaded", self, "_on_level_loaded")
 	_player.connect("health_changed", self, "_on_player_health_changed")
-	_cleared_menu.connect("proceed_next", self, "_on_proceed_next")
-	self.connect("proceed_next", _level_manager, "on_proceed_next")
+	_cleared_menu.connect("to_next_level_pressed", self, "_on_to_next_level_pressed")
+	self.connect("to_next_level_pressed", _level_manager, "on_to_next_level_pressed")
 
 	_player_health_bar.max_value = _player.MAX_HEALTH
 	_player_health_bar.value = _player.health
@@ -73,7 +73,7 @@ func _on_level_cleared(enemies_died, crystal_count) -> void:
 	_cleared_menu.set_score(enemies_died, crystal_count)
 	_cleared_menu.set_visible(true)
 
-func _on_proceed_next() -> void:
+func _on_to_next_level_pressed() -> void:
 	get_tree().paused = false
 	_cleared_menu.set_visible(false)
-	emit_signal("proceed_next")
+	emit_signal("to_next_level_pressed")

@@ -10,7 +10,8 @@ const _THRESHOLD_DISTANCE = 2 # Maximum distance from the player at which the ca
 
 func _physics_process(delta: float) -> void:
 	if not _initialized:
-		transform.origin = _player.transform.origin
+		var player_origin := _player.transform.origin
+		transform.origin = Vector3(player_origin.x, player_origin.y + _CAMERA_HEIGHT * 1.5,  player_origin.z) # Animate camera down from above
 		_initialized = true
 		return
 

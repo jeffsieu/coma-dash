@@ -7,7 +7,7 @@ onready var _player: Player = _level_manager.find_node("Player")
 onready var _camera = _level_manager.find_node("Camera")
 onready var _joystick = _level_manager.find_node("Joystick")
 
-var _start_level := "res://Levels/Level1/Level1.tscn"
+var _first_level := "res://Levels/Level1/Level1.tscn"
 var _level_floor_distance := Vector3(0, 50, 0)
 var level: Level
 var _prev_level: Level
@@ -33,7 +33,7 @@ func _ready() -> void:
 	self.connect("enemy_died", loot_manager, "_on_enemy_died")
 	self.connect("crate_died", loot_manager, "_on_crate_died")
 
-	_start_level()
+	_start()
 
 func _cleared() -> void:
 	level.get_tree().call_group("crates", "die")
@@ -46,8 +46,8 @@ func _on_drops_collected() -> void:
 func _game_over() -> void:
 	emit_signal("game_over", _enemies_died, loot_manager.crystal_count)
 
-func _start_level() -> void:
-	_create_level(_start_level)
+func _start() -> void:
+	_load_level(_first_level)
 
 func _on_crate_died(crate: Crate) -> void:
 	emit_signal("crate_died", crate)
@@ -69,34 +69,40 @@ func _on_player_health_changed(old: int, new: int) -> void:
 func _on_player_fell_off() -> void:
 	_game_over()
 
-func on_proceed_next() -> void:
+func on_to_next_level_pressed() -> void:
 	_prev_level = level
 	
 	if level.next_level:
-		_create_level(level.next_level)
+		_load_level(level.next_level)
 
-func _move_to_next_level() -> void:
+func _animate_to_next_level() -> void:
 	var camera_origin: Vector3 = _camera.transform.origin
 	var player_origin: Vector3 = _player.transform.origin
 	var new_player_origin: Vector3 = level.find_node("PlayerPosition").global_transform.origin
 	var duration := 1.2
 	
 	var tween: Tween = _level_manager.find_node("Tween")
-	tween.interpolate_property(_camera, "translation", camera_origin, camera_origin + new_player_origin - player_origin, duration, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
-	tween.interpolate_property(_player, "translation", player_origin, new_player_origin, duration, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
-	tween.interpolate_callback(self, duration * 1.5, "_on_reached_new_level")
-	tween.start()
+	
+	if _prev_level == null:
+		_camera.translation = camera_origin + new_player_origin - player_origin
+		_player.translation = new_player_origin
+		_on_animated_to_next_level()
+	else:
+		tween.interpolate_property(_camera, "translation", camera_origin, camera_origin + new_player_origin - player_origin, duration, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
+		tween.interpolate_property(_player, "translation", player_origin, new_player_origin, duration, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
+		tween.interpolate_callback(self, duration * 1.5, "_on_animated_to_next_level")
+		tween.start()
 
-func _create_level(level_path: String) -> void:
-	_level_position.transform.origin += _level_floor_distance
+func _load_level(level_path: String) -> void:
 	var LevelScene = load(level_path)
 	level = LevelScene.instance()
 	_level_manager.add_child(level)
+	_level_position.transform.origin += _level_floor_distance
 	level.transform.origin = _level_position.transform.origin
 	
-	_move_to_next_level()
+	_animate_to_next_level()
 
-func _on_reached_new_level() -> void:
+func _on_animated_to_next_level() -> void:
 	if _prev_level:
 		_level_manager.remove_child(_prev_level)
 		_prev_level.queue_free()
