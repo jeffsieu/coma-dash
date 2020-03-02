@@ -124,17 +124,17 @@ __meta__ = {
 [node name="Tween" type="Tween" parent="LevelGUI/MarginContainer/VBoxContainer/PlayerHealthBarContainer/PlayerHealthBar"]
 
 [node name="CenterContainer" type="CenterContainer" parent="LevelGUI/MarginContainer/VBoxContainer/PlayerHealthBarContainer"]
-margin_left = 268.0
-margin_top = 37.0
-margin_right = 274.0
-margin_bottom = 39.0
+margin_left = 242.0
+margin_top = 18.0
+margin_right = 301.0
+margin_bottom = 59.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="HealthPoints" type="Label" parent="LevelGUI/MarginContainer/VBoxContainer/PlayerHealthBarContainer/CenterContainer"]
-margin_right = 6.0
-margin_bottom = 2.0
+margin_right = 59.0
+margin_bottom = 41.0
 custom_fonts/font = ExtResource( 4 )
 text = "50/100"
 __meta__ = {

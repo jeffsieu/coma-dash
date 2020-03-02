@@ -24,10 +24,11 @@ func _health_get() -> int:
 func on_damaged(damage: int) -> void:
 	var old_health := health
 	health -= damage
+
 	emit_signal("health_changed", self, old_health)
 	if health <= 0:
 		_die()
-		
+
 func generate_drops() -> Array:
 	push_error("generate_drops not implemented by %s" % filename)
 	return []
