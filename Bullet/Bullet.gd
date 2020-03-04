@@ -22,20 +22,18 @@ func _physics_process(delta: float) -> void:
 	if collision:
 		if collision.collider.is_in_group("enemies") or collision.collider.is_in_group("crates"):
 			var damage = _get_damage()
-			collision.collider.on_damaged(damage)
 			var effectiveness = (damage - (_MEAN_DAMAGE - _SPREAD / 2)) / _SPREAD
-			_show_damage_number(damage, effectiveness)
+			collision.collider.on_damaged(damage)
+			_show_damage_number(collision.collider.global_transform.origin, damage, effectiveness)
 			queue_free()
 
 func _get_damage() -> int:
-	var lower_bound = _MEAN_DAMAGE - _SPREAD / 2
-	var upper_bound = _MEAN_DAMAGE + _SPREAD / 2
-	var damage_float := randf() * _SPREAD + _MEAN_DAMAGE - _SPREAD / 2
+	var damage_float := _MEAN_DAMAGE + (randf() - 0.5) * _SPREAD
 	return int(round(damage_float))
 
-func _show_damage_number(damage: int, effectiveness: float) -> void:
+func _show_damage_number(position: Vector3, damage: int, effectiveness: float) -> void:
 	var damage_number := DamageNumber.instance()
 	damage_number.set_damage(damage)
 	damage_number.set_damage_effectiveness(effectiveness)
-	damage_number.global_transform.origin = global_transform.origin
+	damage_number.global_transform.origin = position
 	_level_manager.add_child(damage_number)

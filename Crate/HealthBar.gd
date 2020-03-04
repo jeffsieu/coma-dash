@@ -5,7 +5,7 @@ const Crate = preload("res://Crate/Crate.gd")
 var _initialized := false
 
 func _ready() -> void:
-	var entity = $".."
+	var entity = get_parent()
 	entity.connect("health_changed", self, "_on_health_changed")
 
 func _physics_process(delta: float) -> void:
