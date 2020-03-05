@@ -33,7 +33,8 @@ func _get_damage() -> int:
 
 func _show_damage_number(position: Vector3, damage: int, effectiveness: float) -> void:
 	var damage_number := DamageNumber.instance()
+	var transform_offset := Vector3(randf() * damage_number.SPAWN_OFFSET_RANGE, 0, randf() * damage_number.SPAWN_OFFSET_RANGE)
 	damage_number.set_damage(damage)
 	damage_number.set_damage_effectiveness(effectiveness)
-	damage_number.global_transform.origin = position
+	damage_number.global_transform.origin = position + transform_offset
 	_level_manager.add_child(damage_number)
