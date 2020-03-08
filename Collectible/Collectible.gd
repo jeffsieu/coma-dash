@@ -15,6 +15,7 @@ var _is_flying_to_player := false
 var _fly_fast := false
 var _is_collected := false
 var _animation_delta = 0
+
 var value: int
 var velocity: Vector3
 
@@ -27,13 +28,10 @@ func _ready() -> void:
 	var initial_fly_direction = randf() * PI * 2
 	velocity = Vector3(cos(initial_fly_direction) * 15, 2, sin(initial_fly_direction) * 15)
 
-func set_value(value: int) -> void:
-	self.value = value
-
 func _physics_process(delta: float) -> void:
 	if _is_flying_to_player:
-		var distance_squared = transform.origin.distance_squared_to(_player.transform.origin)
-		var acceleration: Vector3 = transform.origin.direction_to(_player.transform.origin) / distance_squared
+		var distance_squared = translation.distance_squared_to(_player.translation)
+		var acceleration: Vector3 = translation.direction_to(_player.translation) / distance_squared
 
 		if _fly_fast:
 			acceleration *= 250

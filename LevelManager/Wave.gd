@@ -14,13 +14,13 @@ func _init(level_manager, total_count: int) -> void:
 
 func start() -> void:
 	level_manager.get_tree().call_group("spawners", "start", self)
-	
+
 func stop_spawners() -> void:
 	level_manager.get_tree().call_group("spawners", "stop", self)
-	
+
 func end() -> void:
 	emit_signal("ended", self)
-	
+
 func on_enemy_spawned(spawner, enemy: Enemy) -> void:
 	spawned_count += 1
 	if spawned_count >= total_count:

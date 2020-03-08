@@ -38,7 +38,7 @@ func _ready() -> void:
 func _on_level_loaded(level: Level) -> void:
 	_level = level
 	_level.connect("wave_changed", self, "_on_wave_changed")
-	_wave_counter.text = "WAVE %s/%s" % [_level.current_wave_count, _level.wave_count]
+	_wave_counter.text = "WAVE %s/%s" % [_level.current_wave_count, _level.total_wave_count]
 	_enemies_left.text = "%d ENEMIES LEFT" % _level.mobs_per_wave
 
 func _on_wave_changed(wave: Wave, wave_count: int, total_wave_count: int) -> void:
@@ -48,13 +48,13 @@ func _on_wave_changed(wave: Wave, wave_count: int, total_wave_count: int) -> voi
 func _on_enemy_died(enemy: Enemy) -> void:
 	var wave: Wave = _level.current_wave
 	_enemies_left.text = "%d ENEMIES LEFT" % (wave.total_count - wave.dead_count)
-	
+
 func _on_player_health_changed(old: int, new: int) -> void:
 	_player_health_points.text = "%d/%d" % [new, _player.MAX_HEALTH]
 	var tween: Tween = _player_health_bar.find_node("Tween")
 	tween.interpolate_method(_player_health_bar, "set_value", old, new, 0.25, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	tween.start()
-	
+
 func _on_loot_collected() -> void:
 	_crystal_count.text = "x%d" % (_level_manager.loot_manager.crystal_count)
 	_player_exp_bar.value = _level_manager.loot_manager.exp_count

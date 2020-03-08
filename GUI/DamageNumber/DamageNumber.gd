@@ -4,6 +4,7 @@ const _LIFETIME := 1.25
 const _APPEAR_DURATION := 0.1
 const _DISAPPEAR_DURATION := 0.25
 const _SPEED := 3.0
+
 const SPAWN_OFFSET_RANGE := 1.0
 
 var _damage: int
@@ -54,7 +55,7 @@ func _update(delta: float) -> void:
 	var scale_factor = time_scale_factor * effectiveness_scale_factor
 	var time_left = _LIFETIME - _total_delta
 	var opacity = clamp(time_left / _DISAPPEAR_DURATION, 0, 1)
-	
+
 	_label.modulate.a = opacity
 	_label.rect_scale = Vector2(scale_factor, scale_factor)
 	translation += _direction * delta * _SPEED

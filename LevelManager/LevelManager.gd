@@ -57,7 +57,7 @@ func _on_enemy_died(enemy: Enemy) -> void:
 	emit_signal("enemy_died", enemy)
 
 func _on_wave_ended(wave: Wave) -> void:
-	if level.current_wave_count == level.wave_count:
+	if level.current_wave_count == level.total_wave_count:
 		_cleared()
 	else:
 		level.spawn_wave(self)
@@ -65,24 +65,24 @@ func _on_wave_ended(wave: Wave) -> void:
 func _on_player_health_changed(old: int, new: int) -> void:
 	if new <= 0:
 		_game_over()
-		
+
 func _on_player_fell_off() -> void:
 	_game_over()
 
 func on_to_next_level_pressed() -> void:
 	_prev_level = level
-	
+
 	if level.next_level:
 		_load_level(level.next_level)
 
 func _animate_to_next_level() -> void:
-	var camera_origin: Vector3 = _camera.transform.origin
-	var player_origin: Vector3 = _player.transform.origin
+	var camera_origin: Vector3 = _camera.translation
+	var player_origin: Vector3 = _player.translation
 	var new_player_origin: Vector3 = level.find_node("PlayerPosition").global_transform.origin
 	var duration := 1.2
-	
+
 	var tween: Tween = _level_manager.find_node("Tween")
-	
+
 	if _prev_level == null:
 		_camera.translation = camera_origin + new_player_origin - player_origin
 		_player.translation = new_player_origin
@@ -97,9 +97,9 @@ func _load_level(level_path: String) -> void:
 	var LevelScene = load(level_path)
 	level = LevelScene.instance()
 	_level_manager.add_child(level)
-	_level_position.transform.origin += _level_floor_distance
-	level.transform.origin = _level_position.transform.origin
-	
+	_level_position.translation += _level_floor_distance
+	level.translation = _level_position.translation
+
 	_animate_to_next_level()
 
 func _on_animated_to_next_level() -> void:
