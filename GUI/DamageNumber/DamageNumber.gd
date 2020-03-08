@@ -29,7 +29,8 @@ func set_damage_effectiveness(effectiveness: float) -> void:
 		_color = Color.orange
 	else:
 		_color = Color.red
-	_effectiveness = effectiveness
+
+	_effectiveness = min(effectiveness, 1.2)
 	$Label.modulate = _color
 
 func _physics_process(delta: float) -> void:

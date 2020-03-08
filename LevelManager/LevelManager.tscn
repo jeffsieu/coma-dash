@@ -17,7 +17,7 @@ script = ExtResource( 2 )
 [node name="LevelPosition" type="Spatial" parent="."]
 
 [node name="Camera" type="Camera" parent="."]
-transform = Transform( -3.89697e-08, 0.970972, -0.239194, 1.58191e-07, 0.239194, 0.970972, 1, 1.49214e-13, -1.6292e-07, -7.022, 25, -0.081 )
+transform = Transform( -1.16815e-07, 0.970972, -0.239194, 1.58191e-07, 0.239194, 0.970972, 1, 7.55854e-08, -1.8154e-07, -7.022, 25, -0.081 )
 fov = 96.0
 script = ExtResource( 1 )
 
