@@ -3,13 +3,14 @@ class_name Enemy
 
 var health: int setget _health_set, _health_get
 var velocity: Vector3
-var _alive := false
+var _active := false
 
 onready var _level_manager = get_tree().get_root().find_node("LevelManager", true, false)
 onready var _player = _level_manager.find_node("Player")
 onready var _tween: Tween = find_node("Tween")
 onready var _health_bar: Sprite3D = find_node("HealthBar")
 onready var _collider: CollisionShape = find_node("Collider")
+onready var _animation_player: AnimationPlayer = find_node("Mesh").find_node("AnimationPlayer")
 
 const _TWEEN_DURATION = 1.2
 
@@ -18,10 +19,11 @@ signal died
 
 func _ready() -> void:
 	_spawn()
+	_animation_player.playback_active = false
 
 func _physics_process(delta: float) -> void:
 	_face_player()
-	if _alive:
+	if _active:
 		_move(delta)
 
 func _move(delta: float) -> void:
@@ -54,7 +56,7 @@ func generate_drops() -> Array:
 	return []
 
 func _spawn() -> void:
-	_health_bar.find_node("ProgressBar").hide()
+	_health_bar.hide()
 	_collider.disabled = true
 
 	# placeholder for now, when we got spawn animations we can replace this with that
@@ -64,35 +66,35 @@ func _spawn() -> void:
 	target_origin.y += 2
 
 	_tween.interpolate_property(self, "translation", origin, target_origin, _TWEEN_DURATION, Tween.TRANS_QUAD, Tween.EASE_OUT)
-	_tween.interpolate_callback(self, _TWEEN_DURATION, "_enable")
+	_tween.interpolate_callback(self, _TWEEN_DURATION, "_activate")
 	_tween.start()
 
-func _enable() -> void:
-	_health_bar.find_node("ProgressBar").show()
-	_collider.disabled = false
-	add_to_group("enemies")
-	_alive = true
-
 func _die() -> void:
+	emit_signal("died", self)
 	# placeholder for now, when we got death animations we can replace this with that
 	var origin = transform.origin
 	var target_origin = origin
 	target_origin.y -= 2
 
 	_tween.interpolate_property(self, "translation", origin, target_origin, _TWEEN_DURATION, Tween.TRANS_QUAD, Tween.EASE_OUT)
-	_tween.interpolate_callback(self, _TWEEN_DURATION, "_on_finish_death_anim")
+	_tween.interpolate_callback(self, _TWEEN_DURATION, "_on_death_animation_finished")
 	_tween.start()
 
-	_disable()
-	_alive = false
+	_deactivate()
 
-func _on_finish_death_anim() -> void:
-	emit_signal("died", self)
+func _on_death_animation_finished() -> void:
 	queue_free()
 
-func _disable() -> void:
-	var animation_player: AnimationPlayer = find_node("Mesh").find_node("AnimationPlayer")
+func _activate() -> void:
+	_active = true
+	_health_bar.show()
+	_collider.disabled = false
+	_animation_player.playback_active = true
+	add_to_group("enemies")
 
-	_health_bar.find_node("ProgressBar").hide()
+func _deactivate() -> void:
+	_active = false
+
+	_health_bar.hide()
 	_collider.disabled = true
-	animation_player.stop()
+	_animation_player.playback_active = false
