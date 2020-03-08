@@ -38,7 +38,6 @@ func _physics_process(delta: float) -> void:
 		var acceleration := direction / distance_squared
 
 		if _fly_fast:
-			print(distance_squared)
 			if distance_squared >= DISTANCE_SQUARED_THRESHOLD:
 				var distance := transform.origin.distance_to(_player.transform.origin)
 				acceleration = direction * distance * 0.05
