@@ -7,6 +7,7 @@ const _DECAY_DELTA := 2.0
 const _SPEED := 100
 const _MEAN_DAMAGE := 30.0
 const _SPREAD := 10.0
+const _KNOCKBACK := 0.5
 
 onready var _level_manager = get_tree().get_root().find_node("LevelManager", true, false)
 var timer: float = 0.0
@@ -20,10 +21,16 @@ func _physics_process(delta: float) -> void:
 	var velocity := transform.basis.z * _SPEED
 	var collision := move_and_collide(velocity * delta)
 	if collision:
-		if collision.collider.is_in_group("enemies") or collision.collider.is_in_group("crates"):
+		var collider := collision.collider
+		if collider.is_in_group("enemies") or collider.is_in_group("crates"):
 			var damage = _get_damage()
 			var effectiveness = (damage - (_MEAN_DAMAGE - _SPREAD / 2)) / _SPREAD
-			collision.collider.on_damaged(damage)
+
+			if collider.is_in_group("enemies"):
+				collider.on_damaged(damage, velocity.normalized() * _KNOCKBACK)
+			else:
+				collider.on_damaged(damage)
+
 			_show_damage_number(collision.collider.global_transform.origin, damage, effectiveness)
 			queue_free()
 

@@ -4,6 +4,8 @@ const Enemy = preload("res://Enemy/Enemy.gd")
 
 var _initialized := false
 
+onready var _progress_bar = $ProgressBar
+
 func _ready() -> void:
 	var entity = get_parent()
 	entity.connect("health_changed", self, "_on_health_changed")
@@ -28,3 +30,11 @@ func _on_health_changed(entity: Enemy, old_health) -> void:
 		var tween := $Tween
 		tween.interpolate_method($ProgressBar, "set_value", old_health, entity.health, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		tween.start()
+
+func show() -> void:
+	.show()
+	_progress_bar.show()
+
+func hide() -> void:
+	.hide()
+	_progress_bar.hide()
