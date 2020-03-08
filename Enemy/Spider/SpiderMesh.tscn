@@ -3,9 +3,7 @@
 [ext_resource path="res://Enemy/Spider/Spider.glb" type="PackedScene" id=1]
 [ext_resource path="res://Enemy/Spider/SpiderTextureMaterial.material" type="Material" id=2]
 
-
-
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=1]
 resource_name = "Walking"
 length = 1.25
 tracks/0/type = "transform"
@@ -554,4 +552,4 @@ tracks/76/keys = PoolRealArray( 0, 1, 0, 0, 0, 5.96046e-08, -1.49012e-08, 4.4703
 material/0 = ExtResource( 2 )
 
 [node name="AnimationPlayer" parent="." index="1"]
-anims/Walking = SubResource( 3 )
+anims/Walking = SubResource( 1 )

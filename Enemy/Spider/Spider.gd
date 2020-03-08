@@ -22,10 +22,9 @@ func _ready() -> void:
 	find_node("AnimationPlayer").set_speed_scale(1.8)
 	find_node("AnimationPlayer").play("Walking")
 
-func _physics_process(delta: float) -> void:
-	var direction_to_player = translation.direction_to(_player.translation)
-	rotation.y = deg2rad(90) - Vector2(direction_to_player.x, direction_to_player.z).angle()
+func _move(delta: float) -> void:
 	velocity.y = -_GRAVITY
+	var direction_to_player = transform.origin.direction_to(_player.transform.origin)
 	var collision = move_and_collide(_MOVEMENT_SPEED * direction_to_player * delta)
 	if collision and collision.collider is Player:
 		_damage_player(collision.collider)

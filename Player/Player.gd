@@ -90,7 +90,7 @@ func _physics_process(delta: float) -> void:
 	damage_cooldown -= delta
 
 func stop_moving() -> void:
-	velocity *= 0.1
+	_velocity *= 0.1
 
 func on_damaged_by(entity: Enemy) -> void:
 	if damage_cooldown <= 0:
