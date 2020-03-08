@@ -6,11 +6,17 @@ const DamageNumber := preload("res://GUI/DamageNumber/DamageNumber.tscn")
 const _DECAY_DELTA := 2.0
 const _SPEED := 100
 const _MEAN_DAMAGE := 30.0
+const _CRIT_CHANCE := 0.1
 const _SPREAD := 10.0
 const _KNOCKBACK := 0.5
 
 onready var _level_manager = get_tree().get_root().find_node("LevelManager", true, false)
 var timer: float = 0.0
+
+signal damaged
+
+func _ready() -> void:
+	connect("damaged", _level_manager, "on_bullet_damaged")
 
 func _process(delta: float) -> void:
 	timer += delta
@@ -24,7 +30,7 @@ func _physics_process(delta: float) -> void:
 		var collider := collision.collider
 		if collider.is_in_group("enemies") or collider.is_in_group("crates"):
 			var damage = _get_damage()
-			var effectiveness = (damage - (_MEAN_DAMAGE - _SPREAD / 2)) / _SPREAD
+			var effectiveness := _get_effectiveness(damage)
 
 			if collider.is_in_group("enemies"):
 				collider.on_damaged(damage, velocity.normalized() * _KNOCKBACK)
@@ -32,11 +38,17 @@ func _physics_process(delta: float) -> void:
 				collider.on_damaged(damage)
 
 			_show_damage_number(collision.collider.global_transform.origin, damage, effectiveness)
+			emit_signal("damaged", effectiveness)
 			queue_free()
 
 func _get_damage() -> int:
 	var damage_float := _MEAN_DAMAGE + (randf() - 0.5) * _SPREAD
+	if randf() <= _CRIT_CHANCE:
+		damage_float *= 2;
 	return int(round(damage_float))
+
+func _get_effectiveness(damage: int) -> float:
+	return (damage - (_MEAN_DAMAGE - _SPREAD / 2)) / _SPREAD;
 
 func _show_damage_number(position: Vector3, damage: int, effectiveness: float) -> void:
 	var damage_number := DamageNumber.instance()

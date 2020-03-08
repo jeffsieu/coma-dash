@@ -116,3 +116,6 @@ func _on_animated_to_next_level() -> void:
 
 func on_loot_collected() -> void:
 	emit_signal("loot_collected")
+
+func on_bullet_damaged(effectiveness: float) -> void:
+	_camera.apply_damage_trauma(effectiveness)
