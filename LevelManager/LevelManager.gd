@@ -39,6 +39,7 @@ func _cleared() -> void:
 	level.get_tree().call_group("crates", "die")
 	loot_manager.collect_all_items()
 	_joystick.disable()
+	_player.stop_moving()
 
 func _on_drops_collected() -> void:
 	emit_signal("level_cleared", _enemies_died, loot_manager.crystal_count)
