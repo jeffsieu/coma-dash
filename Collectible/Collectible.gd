@@ -20,6 +20,7 @@ var value: int
 var velocity: Vector3
 
 const DAMPING_FACTOR = 0.01
+const DISTANCE_SQUARED_THRESHOLD = 400
 
 var _player
 
@@ -30,11 +31,16 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if _is_flying_to_player:
-		var distance_squared = translation.distance_squared_to(_player.translation)
-		var acceleration: Vector3 = translation.direction_to(_player.translation) / distance_squared
+		var distance_squared := transform.origin.distance_squared_to(_player.translation)
+		var direction := transform.origin.direction_to(_player.translation)
+		var acceleration := direction / distance_squared
 
 		if _fly_fast:
-			acceleration *= 250
+			if distance_squared >= DISTANCE_SQUARED_THRESHOLD:
+				var distance := transform.origin.distance_to(_player.transform.origin)
+				acceleration = direction * distance * 0.05
+			else:
+				acceleration *= 250
 		else:
 			acceleration *= 50
 
