@@ -39,19 +39,21 @@ func _physics_process(delta: float) -> void:
 	else:
 		_update(delta)
 
-func _update(delta: float) -> void:
+func _update_2d_position() -> void:
 	var pos = get_global_transform().origin
 	var cam = get_tree().get_root().get_camera()
 	var screen_pos = cam.unproject_position(pos)
 	var position = screen_pos - Vector2(_label.rect_size.x * 0.5, _label.rect_size.y * 0.75)
-	
+	_label.set_position(position)
+
+func _update(delta: float) -> void:
+	_update_2d_position()
 	var time_scale_factor = clamp(_total_delta / _APPEAR_DURATION, 0, 1)
 	var effectiveness_scale_factor = 0.5 + 0.5 * pow(_effectiveness, 2)
 	var scale_factor = time_scale_factor * effectiveness_scale_factor
-	
 	var time_left = _LIFETIME - _total_delta
 	var opacity = clamp(time_left / _DISAPPEAR_DURATION, 0, 1)
-	_label.set_position(position)
+	
 	_label.modulate.a = opacity
 	_label.rect_scale = Vector2(scale_factor, scale_factor)
 	translation += _direction * delta * _SPEED
