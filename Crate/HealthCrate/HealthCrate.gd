@@ -1,15 +1,16 @@
 extends Crate
 
-const HealthBoost = preload("res://Loot/HealthBoost/HealthBoost.tscn")
+const HealthBoost = preload("res://Collectible/HealthBoost/HealthBoost.tscn")
+
+const MAX_HEALTH = 20
 
 func _ready() -> void:
-	max_health = 20
-	health = max_health
+	health = MAX_HEALTH
 	emit_signal("health_changed", self, health)
 
 func generate_drops() -> Array:
 	var drops := Array()
 	var healthBoost := HealthBoost.instance()
-	healthBoost.set_value(20)
+	healthBoost.value = 20
 	drops.append(healthBoost)
 	return drops

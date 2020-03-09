@@ -10,7 +10,7 @@ const _CRIT_CHANCE := 0.1
 const _SPREAD := 10.0
 
 onready var _level_manager = get_tree().get_root().find_node("LevelManager", true, false)
-var timer: float = 0.0
+var _timer: float = 0.0
 
 signal damaged
 
@@ -18,8 +18,8 @@ func _ready() -> void:
 	connect("damaged", _level_manager, "on_bullet_damaged")
 
 func _process(delta: float) -> void:
-	timer += delta
-	if timer > _DECAY_DELTA:
+	_timer += delta
+	if _timer > _DECAY_DELTA:
 		queue_free()
 
 func _physics_process(delta: float) -> void:

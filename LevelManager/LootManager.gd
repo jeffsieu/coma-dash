@@ -1,7 +1,7 @@
 extends Node
 class_name LootManager
 
-const Collectible = preload("res://Loot/Collectible.gd")
+const Collectible = preload("res://Collectible/Collectible.gd")
 
 var _level_manager
 var _player
@@ -18,29 +18,29 @@ func _init(level_manager) -> void:
 	_level_manager = level_manager
 	_player = level_manager.find_node("Player")
 	randomize()
-	
+
 func _on_crate_died(crate: Crate) -> void:
 	drop_loots(crate)
-	
+
 func _on_enemy_died(enemy: Enemy) -> void:
 	drop_loots(enemy)
 
 func drop_loots(entity) -> void:
 	for drop_item in entity.generate_drops():
 		drop_loot(entity, drop_item)
-	
+
 func drop_loot(entity, item: Collectible) -> void:
 	item.connect("collected", self, "_on_loot_collected")
 	# offset the item position by a random amount so that the exp orb doesnt sit right under the crystal
 	var offset := Vector3((randi() % 10 - 20) / 10.0, 0, (randi() % 20 - 10) / 10.0)
-	item.transform.origin = entity.global_transform.origin + offset
+	item.translation = entity.global_transform.origin + offset
 	_level_manager.add_child(item)
 	_drops.append(item)
 
 	# if this crate is destroyed after the level is cleared
 	if _cleared:
 		item.fast_fly_to(_player)
-	
+
 func _on_loot_collected(item: Collectible) -> void:
 	match item.TYPE:
 		Collectible.CRYSTAL:

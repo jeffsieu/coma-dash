@@ -17,7 +17,6 @@ func _health_set(new_health: int) -> void:
 	if health != new_health:
 		emit_signal("health_changed", self, health)
 	health = new_health
-	
 func _health_get() -> int:
 	return health
 
@@ -32,7 +31,6 @@ func on_damaged(damage: int) -> void:
 func generate_drops() -> Array:
 	push_error("generate_drops not implemented by %s" % filename)
 	return []
-	
 func _die() -> void:
 	emit_signal("died", self)
 	queue_free()

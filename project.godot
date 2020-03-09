@@ -17,7 +17,7 @@ _global_script_classes=[ {
 "base": "KinematicBody",
 "class": "Collectible",
 "language": "GDScript",
-"path": "res://Loot/Collectible.gd"
+"path": "res://Collectible/Collectible.gd"
 }, {
 "base": "KinematicBody",
 "class": "Crate",
@@ -27,7 +27,7 @@ _global_script_classes=[ {
 "base": "Collectible",
 "class": "Crystal",
 "language": "GDScript",
-"path": "res://Loot/Crystal/Crystal.gd"
+"path": "res://Collectible/Crystal/Crystal.gd"
 }, {
 "base": "KinematicBody",
 "class": "Enemy",
@@ -42,7 +42,7 @@ _global_script_classes=[ {
 "base": "Collectible",
 "class": "ExpOrb",
 "language": "GDScript",
-"path": "res://Loot/ExpOrb/ExpOrb.gd"
+"path": "res://Collectible/ExpOrb/ExpOrb.gd"
 }, {
 "base": "Control",
 "class": "GUI",
@@ -52,7 +52,7 @@ _global_script_classes=[ {
 "base": "Collectible",
 "class": "HealthBoost",
 "language": "GDScript",
-"path": "res://Loot/HealthBoost/HealthBoost.gd"
+"path": "res://Collectible/HealthBoost/HealthBoost.gd"
 }, {
 "base": "Node",
 "class": "Level",

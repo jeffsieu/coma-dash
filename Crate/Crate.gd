@@ -2,7 +2,6 @@ extends KinematicBody
 class_name Crate
 
 var health: int setget _health_set, _health_get
-var max_health: int
 
 onready var _level_manager = get_tree().get_root().find_node("LevelManager", true, false)
 onready var _player = _level_manager.find_node("Player")
@@ -18,7 +17,7 @@ func _health_set(new_health: int) -> void:
 	if health != new_health:
 		emit_signal("health_changed", self, health)
 	health = new_health
-	
+
 func _health_get() -> int:
 	return health
 
