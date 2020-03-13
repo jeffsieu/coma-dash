@@ -20,7 +20,7 @@ var velocity: Vector3
 
 const DAMPING_FACTOR = 0.01
 const _BASE_DISTANCE = 5
-const _BASE_ACCELERATION = 50
+const _BASE_ACCELERATION = 3000
 const _FAST_FLY_BOOST_FACTOR = 20
 
 var _player
@@ -36,7 +36,7 @@ func _physics_process(delta: float) -> void:
 		var direction := transform.origin.direction_to(_player.transform.origin)
 		var acceleration := _acceleration * direction / distance_squared
 
-		velocity += acceleration
+		velocity += acceleration * delta
 
 	velocity *= pow(DAMPING_FACTOR, delta)
 	move_and_slide(velocity)
