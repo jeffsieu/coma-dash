@@ -32,8 +32,8 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if _is_flying_to_player:
-		var distance_squared := transform.origin.distance_squared_to(_player.transform.origin)
-		var direction := transform.origin.direction_to(_player.transform.origin)
+		var distance_squared := translation.distance_squared_to(_player.translation)
+		var direction := translation.direction_to(_player.translation)
 		var acceleration := _acceleration * direction / distance_squared
 
 		velocity += acceleration * delta
@@ -54,7 +54,7 @@ func _on_body_entered(body: PhysicsBody) -> void:
 		_die()
 
 func fly_to(player) -> void:
-	var distance := transform.origin.distance_to(player.transform.origin)
+	var distance := translation.distance_to(player.translation)
 	_is_flying_to_player = true
 	_acceleration = _BASE_ACCELERATION * pow(distance / _BASE_DISTANCE, 1.8)
 	_player = player
