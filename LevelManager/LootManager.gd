@@ -39,8 +39,8 @@ func drop_loot(entity, item: Collectible) -> void:
 
 	# if this crate is destroyed after the level is cleared
 	if _cleared:
-		item.fast_fly_to(_player)
-
+		item.fly_to(_player)
+	
 func _on_loot_collected(item: Collectible) -> void:
 	match item.TYPE:
 		Collectible.CRYSTAL:
@@ -60,4 +60,4 @@ func _on_loot_collected(item: Collectible) -> void:
 func collect_all_items() -> void:
 	_cleared = true
 	for item in _drops:
-		item.fast_fly_to(_player)
+		item.fly_to(_player)

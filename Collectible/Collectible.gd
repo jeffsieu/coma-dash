@@ -12,14 +12,16 @@ var Player = load("res://Player/Player.gd")
 signal collected
 
 var _is_flying_to_player := false
-var _fly_fast := false
 var _is_collected := false
 var _animation_delta = 0
-
+var _acceleration: int
 var value: int
 var velocity: Vector3
 
 const DAMPING_FACTOR = 0.01
+const _BASE_DISTANCE = 5
+const _BASE_ACCELERATION = 3000
+const _FAST_FLY_BOOST_FACTOR = 20
 
 var _player
 
@@ -30,15 +32,11 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if _is_flying_to_player:
-		var distance_squared = translation.distance_squared_to(_player.translation)
-		var acceleration: Vector3 = translation.direction_to(_player.translation) / distance_squared
+		var distance_squared := translation.distance_squared_to(_player.translation)
+		var direction := translation.direction_to(_player.translation)
+		var acceleration := _acceleration * direction / distance_squared
 
-		if _fly_fast:
-			acceleration *= 250
-		else:
-			acceleration *= 50
-
-		velocity += acceleration
+		velocity += acceleration * delta
 
 	velocity *= pow(DAMPING_FACTOR, delta)
 	move_and_slide(velocity)
@@ -56,12 +54,10 @@ func _on_body_entered(body: PhysicsBody) -> void:
 		_die()
 
 func fly_to(player) -> void:
+	var distance := translation.distance_to(player.translation)
 	_is_flying_to_player = true
+	_acceleration = _BASE_ACCELERATION * pow(distance / _BASE_DISTANCE, 1.8)
 	_player = player
-
-func fast_fly_to(player) -> void:
-	_fly_fast = true
-	fly_to(player)
 
 func _die() -> void:
 	_is_collected =  true
