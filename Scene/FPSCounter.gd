@@ -1,10 +1,10 @@
 extends Label
 
-const TIMER_LIMIT := 1.0
-var timer := 0.0
+const _TIMER_LIMIT := 1.0
+var _timer := 0.0
 
 func _process(delta: float) -> void:
-	timer += delta
-	if timer > TIMER_LIMIT: # Prints every 2 seconds
-		timer = 0.0
+	_timer += delta
+	if _timer > _TIMER_LIMIT: # Prints every 2 seconds
+		_timer = 0.0
 		text = "fps: " + str(Engine.get_frames_per_second())

@@ -4,11 +4,16 @@ const Enemy = preload("res://Enemy/Enemy.gd")
 
 var _initialized := false
 
+onready var _progress_bar = $ProgressBar
+
 func _ready() -> void:
-	var entity = $".."
+	var entity = get_parent()
 	entity.connect("health_changed", self, "_on_health_changed")
 
 func _physics_process(delta: float) -> void:
+	_display_health_bar()
+
+func _display_health_bar() -> void:
 	var pos = get_global_transform().origin
 	var cam = get_tree().get_root().get_camera()
 	var screen_pos = cam.unproject_position(pos)
@@ -17,7 +22,7 @@ func _physics_process(delta: float) -> void:
 	$ProgressBar.set_position(screen_pos + Vector2(-size.x * scale.x / 2, -size.y * scale.y))
 
 func _on_health_changed(entity: Enemy, old_health) -> void:
-	$ProgressBar.set_max(entity.max_health)
+	$ProgressBar.set_max(entity.MAX_HEALTH)
 	if not _initialized:
 		$ProgressBar.set_value(entity.health)
 		_initialized = true
@@ -25,3 +30,11 @@ func _on_health_changed(entity: Enemy, old_health) -> void:
 		var tween := $Tween
 		tween.interpolate_method($ProgressBar, "set_value", old_health, entity.health, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		tween.start()
+
+func show() -> void:
+	.show()
+	_progress_bar.show()
+
+func hide() -> void:
+	.hide()
+	_progress_bar.hide()

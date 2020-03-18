@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Scene/MainMenuScene.gd" type="Script" id=1]
-[ext_resource path="res://GUI/Button.tres" type="DynamicFont" id=2]
-[ext_resource path="res://GUI/Heading1.tres" type="DynamicFont" id=3]
+[ext_resource path="res://Fonts/Button.tres" type="DynamicFont" id=2]
+[ext_resource path="res://Fonts/Heading1.tres" type="DynamicFont" id=3]
 
 [node name="MainMenu" type="VBoxContainer"]
 anchor_top = 0.3

@@ -17,7 +17,7 @@ _global_script_classes=[ {
 "base": "KinematicBody",
 "class": "Collectible",
 "language": "GDScript",
-"path": "res://Loot/Collectible.gd"
+"path": "res://Collectible/Collectible.gd"
 }, {
 "base": "KinematicBody",
 "class": "Crate",
@@ -27,7 +27,7 @@ _global_script_classes=[ {
 "base": "Collectible",
 "class": "Crystal",
 "language": "GDScript",
-"path": "res://Loot/Crystal.gd"
+"path": "res://Collectible/Crystal/Crystal.gd"
 }, {
 "base": "KinematicBody",
 "class": "Enemy",
@@ -42,7 +42,7 @@ _global_script_classes=[ {
 "base": "Collectible",
 "class": "ExpOrb",
 "language": "GDScript",
-"path": "res://Loot/ExpOrb.gd"
+"path": "res://Collectible/ExpOrb/ExpOrb.gd"
 }, {
 "base": "Control",
 "class": "GUI",
@@ -52,7 +52,12 @@ _global_script_classes=[ {
 "base": "Collectible",
 "class": "HealthBoost",
 "language": "GDScript",
-"path": "res://Loot/HealthBoost.gd"
+"path": "res://Collectible/HealthBoost/HealthBoost.gd"
+}, {
+"base": "Node",
+"class": "Level",
+"language": "GDScript",
+"path": "res://Levels/Level.gd"
 }, {
 "base": "Node",
 "class": "LevelManager",
@@ -74,10 +79,10 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scene/SceneManager.gd"
 }, {
-"base": "Area",
-"class": "Spawner",
+"base": "KinematicBody",
+"class": "Spider",
 "language": "GDScript",
-"path": "res://EnemySpawner/Spawner.gd"
+"path": "res://Enemy/Spider/Spider.gd"
 }, {
 "base": "Reference",
 "class": "Wave",
@@ -87,7 +92,7 @@ _global_script_classes=[ {
 "base": "KinematicBody",
 "class": "Zombie",
 "language": "GDScript",
-"path": "res://Enemy/Zombie.gd"
+"path": "res://Enemy/Zombie/Zombie.gd"
 } ]
 _global_script_class_icons={
 "Bullet": "",
@@ -99,11 +104,12 @@ _global_script_class_icons={
 "ExpOrb": "",
 "GUI": "",
 "HealthBoost": "",
+"Level": "",
 "LevelManager": "",
 "LootManager": "",
 "Player": "",
 "SceneManager": "",
-"Spawner": "",
+"Spider": "",
 "Wave": "",
 "Zombie": ""
 }
