@@ -8,166 +8,16 @@
 
 config_version=4
 
-_global_script_classes=[ {
-"base": "KinematicBody",
-"class": "Bullet",
-"language": "GDScript",
-"path": "res://Bullet/Bullet.gd"
-}, {
-"base": "KinematicBody",
-"class": "Collectible",
-"language": "GDScript",
-"path": "res://Collectible/Collectible.gd"
-}, {
-"base": "KinematicBody",
-"class": "Crate",
-"language": "GDScript",
-"path": "res://Crate/Crate.gd"
-}, {
-"base": "Collectible",
-"class": "Crystal",
-"language": "GDScript",
-"path": "res://Collectible/Crystal/Crystal.gd"
-}, {
-"base": "KinematicBody",
-"class": "Enemy",
-"language": "GDScript",
-"path": "res://Enemy/Enemy.gd"
-}, {
-"base": "Area",
-"class": "EnemySpawner",
-"language": "GDScript",
-"path": "res://EnemySpawner/EnemySpawner.gd"
-}, {
-"base": "Collectible",
-"class": "ExpOrb",
-"language": "GDScript",
-"path": "res://Collectible/ExpOrb/ExpOrb.gd"
-}, {
-"base": "Control",
-"class": "GUI",
-"language": "GDScript",
-"path": "res://GUI/GUI.gd"
-}, {
-"base": "Collectible",
-"class": "HealthBoost",
-"language": "GDScript",
-"path": "res://Collectible/HealthBoost/HealthBoost.gd"
-}, {
-"base": "Node",
-"class": "Level",
-"language": "GDScript",
-"path": "res://Levels/Level.gd"
-}, {
-"base": "Node",
-"class": "LevelManager",
-"language": "GDScript",
-"path": "res://LevelManager/LevelManager.gd"
-}, {
-"base": "Node",
-"class": "LootManager",
-"language": "GDScript",
-"path": "res://LevelManager/LootManager.gd"
-}, {
-"base": "KinematicBody",
-"class": "Player",
-"language": "GDScript",
-"path": "res://Player/Player.gd"
-}, {
-"base": "Spatial",
-"class": "SceneManager",
-"language": "GDScript",
-"path": "res://Scene/SceneManager.gd"
-}, {
-"base": "KinematicBody",
-"class": "Spider",
-"language": "GDScript",
-"path": "res://Enemy/Spider/Spider.gd"
-}, {
-"base": "Reference",
-"class": "Wave",
-"language": "GDScript",
-"path": "res://LevelManager/Wave.gd"
-}, {
-"base": "KinematicBody",
-"class": "Zombie",
-"language": "GDScript",
-"path": "res://Enemy/Zombie/Zombie.gd"
-} ]
+_global_script_classes=[  ]
 _global_script_class_icons={
-"Bullet": "",
-"Collectible": "",
-"Crate": "",
-"Crystal": "",
-"Enemy": "",
-"EnemySpawner": "",
-"ExpOrb": "",
-"GUI": "",
-"HealthBoost": "",
-"Level": "",
-"LevelManager": "",
-"LootManager": "",
-"Player": "",
-"SceneManager": "",
-"Spider": "",
-"Wave": "",
-"Zombie": ""
+
 }
 
 [application]
 
-config/name="Last Man Sitting"
-run/main_scene="res://Scene/Game.tscn"
+config/name="Coma Dash"
 config/icon="res://icon.png"
-
-[display]
-
-window/size/width=600
-window/size/height=1024
-window/handheld/orientation="portrait"
-window/stretch/mode="2d"
-window/stretch/aspect="keep_width"
-
-[input]
-
-move_left={
-"deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":65,"unicode":0,"echo":false,"script":null)
- ]
-}
-move_right={
-"deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":68,"unicode":0,"echo":false,"script":null)
- ]
-}
-move_up={
-"deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":87,"unicode":0,"echo":false,"script":null)
- ]
-}
-move_down={
-"deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":83,"unicode":0,"echo":false,"script":null)
- ]
-}
-
-[input_devices]
-
-pointing/emulate_touch_from_mouse=true
-
-[layer_names]
-
-3d_physics/layer_1="Player"
-3d_physics/layer_2="Enemies"
-3d_physics/layer_3="PlayerProjectiles"
-3d_physics/layer_4="Collectibles"
-3d_physics/layer_5="Environment"
-
-[physics]
-
-common/physics_fps=120
 
 [rendering]
 
-vram_compression/import_etc=true
 environment/default_environment="res://default_env.tres"
