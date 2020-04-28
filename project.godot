@@ -50,10 +50,6 @@ movement_right={
  ]
 }
 
-[mono]
-
-debugger_agent/wait_for_debugger=true
-
 [rendering]
 
 environment/default_environment="res://default_env.tres"

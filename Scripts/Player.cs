@@ -15,19 +15,19 @@ public class Player : KinematicBody
     /// <param name="delta">The time passed.</param>
     public void Move(Vector3 direction, float delta)
     {
-        this.MoveAndSlide(    direction.Normalized() * Speed * delta);
+        this.MoveAndSlide(direction.Normalized() * Speed * delta);
     }
 
     public Vector2 CorrectJoystick(Vector2 rawInput, float deadZone)
     {
-        return 
+        return
         rawInput.Length() > deadZone ? rawInput : default;
     }
 
     /// <inheritdoc/>
     public override void _Process(float delta)
     {
-        Vector3 movementDirection =      GetMovementDirection();
+        Vector3 movementDirection = GetMovementDirection();
         Move(movementDirection, delta);
     }
 
@@ -46,8 +46,8 @@ public class Player : KinematicBody
 
         if (Input.IsActionPressed("movement_left"))
         {
-            direction 
-            
+            direction
+
             += Vector3.Left;
         }
 
