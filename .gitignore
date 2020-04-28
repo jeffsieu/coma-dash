@@ -16,3 +16,4 @@ packages/
 
 # Visual Studio
 .vs/
+*.sln
