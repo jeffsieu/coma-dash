@@ -46,9 +46,7 @@ public class Player : KinematicBody
 
         if (Input.IsActionPressed("movement_left"))
         {
-            direction
-
-            += Vector3.Left;
+            direction += Vector3.Left;
         }
 
         if (Input.IsActionPressed("movement_right"))
