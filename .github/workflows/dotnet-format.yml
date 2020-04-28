@@ -1,0 +1,2 @@
+- name: dotnet-format
+  uses: xt0rted/dotnet-format@v1.0.1

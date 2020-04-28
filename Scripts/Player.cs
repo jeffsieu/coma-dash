@@ -15,24 +15,19 @@ public class Player : KinematicBody
     /// <param name="delta">The time passed.</param>
     public void Move(Vector3 direction, float delta)
     {
-        this.MoveAndSlide(direction.Normalized() * Speed * delta);
+        this.MoveAndSlide(    direction.Normalized() * Speed * delta);
     }
 
-    /// <summary>
-    /// Corrects raw joystick input based on a dead zone value. When the joystick is within the deadzone, its input will be ignored.
-    /// </summary>
-    /// <param name="rawInput">The raw joystick input to correct.</param>
-    /// <param name="deadZone">A float from 0 to 1 representing the portion of the joystick to be ignored.</param>
-    /// <returns>The corrected input.</returns>
     public Vector2 CorrectJoystick(Vector2 rawInput, float deadZone)
     {
-        return rawInput.Length() > deadZone ? rawInput : default;
+        return 
+        rawInput.Length() > deadZone ? rawInput : default;
     }
 
     /// <inheritdoc/>
     public override void _Process(float delta)
     {
-        Vector3 movementDirection = GetMovementDirection();
+        Vector3 movementDirection =      GetMovementDirection();
         Move(movementDirection, delta);
     }
 
@@ -51,7 +46,9 @@ public class Player : KinematicBody
 
         if (Input.IsActionPressed("movement_left"))
         {
-            direction += Vector3.Left;
+            direction 
+            
+            += Vector3.Left;
         }
 
         if (Input.IsActionPressed("movement_right"))
