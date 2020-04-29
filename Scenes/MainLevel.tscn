@@ -1,16 +1,60 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Scripts/Player.cs" type="Script" id=1]
 
 [sub_resource type="CylinderMesh" id=1]
+
+[sub_resource type="SpatialMaterial" id=3]
+albedo_color = Color( 1, 0.0117647, 0.0117647, 1 )
+
+[sub_resource type="PrismMesh" id=4]
+size = Vector3( 2, 7.39, 2 )
+
+[sub_resource type="SpatialMaterial" id=8]
+flags_transparent = true
+albedo_color = Color( 1, 1, 1, 0.501961 )
+
+[sub_resource type="CylinderMesh" id=5]
+
+[sub_resource type="SpatialMaterial" id=7]
+albedo_color = Color( 0.384314, 0.384314, 0.384314, 1 )
+
+[sub_resource type="CubeMesh" id=2]
+
+[sub_resource type="BoxShape" id=6]
 
 [node name="Spatial" type="Spatial"]
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 18.1391, 0 )
 
-[node name="KinematicBody" type="KinematicBody" parent="."]
+[node name="Player" type="KinematicBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
 script = ExtResource( 1 )
 
-[node name="CSGMesh" type="CSGMesh" parent="KinematicBody"]
+[node name="CSGMesh" type="CSGMesh" parent="Player"]
 mesh = SubResource( 1 )
+material = SubResource( 3 )
+
+[node name="Aiming" type="Spatial" parent="Player"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
+
+[node name="ArcIndicator" type="CSGMesh" parent="Player/Aiming"]
+transform = Transform( -1.00011, -1.27101e-07, 4.17653e-07, 1.62938e-07, 1.03537e-14, 2.56354, -3.25876e-07, 0.390071, 6.80443e-14, 0, 0.297, -1.40811 )
+mesh = SubResource( 4 )
+material = SubResource( 8 )
+
+[node name="RangeIndicator" type="CSGMesh" parent="Player/Aiming"]
+transform = Transform( 3, 0, 0, 0, 0.033, 0, 0, 0, 3, 0, 0, 0 )
+mesh = SubResource( 5 )
+material = SubResource( 7 )
+
+[node name="Floor" type="StaticBody" parent="."]
+transform = Transform( 100, 0, 0, 0, 1, 0, 0, 0, 100, 0, -2.02824, 0 )
+
+[node name="CSGMesh" type="CSGMesh" parent="Floor"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.901901, 0 )
+mesh = SubResource( 2 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Floor"]
+shape = SubResource( 6 )
