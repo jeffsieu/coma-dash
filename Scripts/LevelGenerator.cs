@@ -40,13 +40,13 @@ public class LevelGenerator : Spatial
          * BACK
          * 
          * So we subtract the wall thickness from the length of the wall, and offset the center
-         * of the wall by half the thickness.
+         * of the wall to the side by half the wall thickness.
          */
         Vector3 frontBackWallSize = new Vector3(roomSize.x - wallThickness, wallHeight, wallThickness);
         Vector3 leftRightWallSize = new Vector3(roomSize.y - wallThickness, wallHeight, wallThickness);
         Vector3 left = Vector3.Up.Cross(front);
 
-        // Base of the wall is origin + half the size of the room - half the wall's thickness.
+        // Base of the wall is origin offset in the direction of the wall(i.e. front) by a length of half the size of the room - half the wall's thickness.
         // Also, we need to offset the wall's center to the side by half the wall's thickness.
         PhysicsBody frontWall = GenerateWall(origin + ((roomSize.y - wallThickness) / 2) * front + (wallThickness / 2) * left, frontBackWallSize, -front);
         PhysicsBody backWall = GenerateWall(origin - ((roomSize.y - wallThickness) / 2) * front - (wallThickness / 2) * left, frontBackWallSize, front);
@@ -60,7 +60,7 @@ public class LevelGenerator : Spatial
     }
 
     /// <summary>
-    /// Returns a PhysicsBody representing a wall of a given size.
+    /// Returns a <c>PhysicsBody</c> representing a wall of a given size.
     /// </summary>
     /// <param name="wallBase">The center of the wall's base.</param>
     /// <param name="size">The length, height, and thickness of the wall.</param>
