@@ -67,8 +67,8 @@ shape = SubResource( 9 )
 
 [node name="RoomGenerator" type="Spatial" parent="."]
 script = ExtResource( 2 )
-wallHeight = 3.0
-wallThickness = 4.0
+WallHeight = 4.251
+WallThickness = 0.267
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
 transform = Transform( 0.618224, -0.112404, 0.777923, -0.784334, -0.152666, 0.601259, 0.0511787, -0.981865, -0.182544, 8.25041, 20.7953, -4.0208 )

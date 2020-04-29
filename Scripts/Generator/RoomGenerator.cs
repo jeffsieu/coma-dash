@@ -4,29 +4,44 @@ using System.Diagnostics;
 
 public class RoomGenerator : Spatial
 {
+    [Export]
+    public float WallHeight
+    {
+        get
+        {
+            return wallHeight;
+        }
+        set
+        {
+            wallHeight = value;
+            GenerateRoom(default, new Vector2(30, 20), Vector3.Forward);
+        }
+    }
+    [Export]
+    public float WallThickness
+    {
+        get
+        {
+            return wallThickness;
+        }
+        set
+        {
+            wallThickness = value;
+            GenerateRoom(default, new Vector2(30, 20), Vector3.Forward);
+        }
+    }
+
     readonly SpatialMaterial wallMaterial = new SpatialMaterial
     {
         AlbedoColor = Colors.Gray
     };
-    [Export]
-    float wallHeight = 4.0f;
-    [Export]
-    float wallThickness = 1.0f;
-    [Export]
-    bool debug = false;
-    private bool firstTime = true;
-    private PhysicsBody[] walls = new PhysicsBody[4];
+    private float wallHeight = 4.0f;
+    private float wallThickness = 1.0f;
+    private readonly PhysicsBody[] walls = new PhysicsBody[4];
 
     public override void _Ready()
     {
         GenerateRoom(default, new Vector2(30, 20), Vector3.Forward);
-        firstTime = false;
-    }
-
-    public override void _Process(float delta)
-    {
-        if (debug)
-            GenerateRoom(default, new Vector2(30, 20), Vector3.Forward);
     }
 
     /// <summary>
@@ -59,8 +74,11 @@ public class RoomGenerator : Spatial
         Vector3 leftRightWallSize = new Vector3(roomSize.y - wallThickness, wallHeight, wallThickness);
         Vector3 left = Vector3.Up.Cross(front);
 
-        if (!firstTime)
-            foreach (PhysicsBody wall in walls) RemoveChild(wall);
+        foreach (PhysicsBody wall in walls)
+        {
+            if (wall != null)
+                wall.QueueFree();
+        }
 
         // Base of the wall is origin offset in the direction of the wall (i.e. front) by a length of half the size of the room - half the wall's thickness.
         // Also, we need to offset the wall's center to the side by half the wall's thickness.
