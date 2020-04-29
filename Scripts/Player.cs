@@ -2,9 +2,6 @@ using System;
 using Godot;
 using Godot.Collections;
 
-/// <summary>
-/// A class controlling the Player's movement and interactions.
-/// </summary>
 public class Player : KinematicBody
 {
     private const float Speed = 2000f;
@@ -16,17 +13,11 @@ public class Player : KinematicBody
     private InputMode inputMode = InputMode.Keyboard;
     private Vector3 previousFaceDirection = Vector3.Forward;
 
-    /// <inheritdoc/>
     public override void _Ready()
     {
         camera = GetParent().GetNode<Camera>("Camera");
     }
 
-    /// <summary>
-    /// Move the player after every delta.
-    /// </summary>
-    /// <param name="direction">The direction to move the player.</param>
-    /// <param name="delta">The time passed.</param>
     public void Move(Vector3 direction, float delta)
     {
         this.MoveAndSlide(direction.Normalized() * Speed * delta);
@@ -38,7 +29,6 @@ public class Player : KinematicBody
         rawInput.Length() > deadZone ? rawInput : default;
     }
 
-    /// <inheritdoc/>
     public override void _Input(InputEvent @event)
     {
         // Mouse in viewport coordinates
@@ -49,7 +39,6 @@ public class Player : KinematicBody
         }
     }
 
-    /// <inheritdoc/>
     public override void _PhysicsProcess(float delta)
     {
         Vector3 movementDirection = GetMovementDirection();
