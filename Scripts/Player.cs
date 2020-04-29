@@ -4,7 +4,7 @@ using Godot.Collections;
 
 public class Player : KinematicBody
 {
-    private const float Speed = 2000f;
+    private const float Speed = 20f;
     private const float DeadZone = 0.5f;
     private const float RotationSpeed = 30f;
 
@@ -20,7 +20,7 @@ public class Player : KinematicBody
 
     public void Move(Vector3 direction, float delta)
     {
-        this.MoveAndSlide(direction.Normalized() * Speed * delta);
+        this.MoveAndCollide(direction.Normalized() * Speed * delta);
     }
 
     public Vector2 CorrectJoystick(Vector2 rawInput, float deadZone)
