@@ -15,7 +15,7 @@ public class LevelGenerator : Spatial
     {
         GenerateRoom(default, new Vector2(30, 20), Vector3.Forward);
     }
-    
+
     /// <summary>
     /// Generates a rectangular room of a given size.
     /// </summary>
@@ -80,9 +80,6 @@ public class LevelGenerator : Spatial
         CollisionShape collisionShape = new CollisionShape()
         {
             Shape = new BoxShape()
-            {
-                
-            }
         };
         wall.AddChild(meshInstance);
         wall.AddChild(collisionShape);
