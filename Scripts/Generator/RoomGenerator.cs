@@ -8,12 +8,25 @@ public class RoomGenerator : Spatial
     {
         AlbedoColor = Colors.Gray
     };
-    readonly float wallHeight = 4.0f;
-    readonly float wallThickness = 1.0f;
+    [Export]
+    float wallHeight = 4.0f;
+    [Export]
+    float wallThickness = 1.0f;
+    [Export]
+    bool debug = false;
+    private bool firstTime = true;
+    private PhysicsBody[] walls = new PhysicsBody[4];
 
     public override void _Ready()
     {
         GenerateRoom(default, new Vector2(30, 20), Vector3.Forward);
+        firstTime = false;
+    }
+
+    public override void _Process(float delta)
+    {
+        if (debug)
+            GenerateRoom(default, new Vector2(30, 20), Vector3.Forward);
     }
 
     /// <summary>
@@ -46,6 +59,9 @@ public class RoomGenerator : Spatial
         Vector3 leftRightWallSize = new Vector3(roomSize.y - wallThickness, wallHeight, wallThickness);
         Vector3 left = Vector3.Up.Cross(front);
 
+        if (!firstTime)
+            foreach (PhysicsBody wall in walls) RemoveChild(wall);
+
         // Base of the wall is origin offset in the direction of the wall (i.e. front) by a length of half the size of the room - half the wall's thickness.
         // Also, we need to offset the wall's center to the side by half the wall's thickness.
         PhysicsBody frontWall = GenerateWall(origin + ((roomSize.y - wallThickness) / 2) * front + (wallThickness / 2) * left, frontBackWallSize, -front);
@@ -57,6 +73,11 @@ public class RoomGenerator : Spatial
         AddChild(backWall);
         AddChild(leftWall);
         AddChild(rightWall);
+
+        walls[0] = frontWall;
+        walls[1] = backWall;
+        walls[2] = leftWall;
+        walls[3] = rightWall;
     }
 
     /// <summary>
