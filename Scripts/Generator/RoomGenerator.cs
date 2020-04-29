@@ -4,12 +4,40 @@ using System.Diagnostics;
 
 public class RoomGenerator : Spatial
 {
+    [Export]
+    public float WallHeight
+    {
+        get
+        {
+            return wallHeight;
+        }
+        set
+        {
+            wallHeight = value;
+            GenerateRoom(default, new Vector2(30, 20), Vector3.Forward);
+        }
+    }
+    [Export]
+    public float WallThickness
+    {
+        get
+        {
+            return wallThickness;
+        }
+        set
+        {
+            wallThickness = value;
+            GenerateRoom(default, new Vector2(30, 20), Vector3.Forward);
+        }
+    }
+
     readonly SpatialMaterial wallMaterial = new SpatialMaterial
     {
         AlbedoColor = Colors.Gray
     };
-    readonly float wallHeight = 4.0f;
-    readonly float wallThickness = 1.0f;
+    private float wallHeight = 4.0f;
+    private float wallThickness = 1.0f;
+    private readonly PhysicsBody[] walls = new PhysicsBody[4];
 
     public override void _Ready()
     {
@@ -46,6 +74,12 @@ public class RoomGenerator : Spatial
         Vector3 leftRightWallSize = new Vector3(roomSize.y - wallThickness, wallHeight, wallThickness);
         Vector3 left = Vector3.Up.Cross(front);
 
+        foreach (PhysicsBody wall in walls)
+        {
+            if (wall != null)
+                wall.QueueFree();
+        }
+
         // Base of the wall is origin offset in the direction of the wall (i.e. front) by a length of half the size of the room - half the wall's thickness.
         // Also, we need to offset the wall's center to the side by half the wall's thickness.
         PhysicsBody frontWall = GenerateWall(origin + ((roomSize.y - wallThickness) / 2) * front + (wallThickness / 2) * left, frontBackWallSize, -front);
@@ -57,6 +91,11 @@ public class RoomGenerator : Spatial
         AddChild(backWall);
         AddChild(leftWall);
         AddChild(rightWall);
+
+        walls[0] = frontWall;
+        walls[1] = backWall;
+        walls[2] = leftWall;
+        walls[3] = rightWall;
     }
 
     /// <summary>
