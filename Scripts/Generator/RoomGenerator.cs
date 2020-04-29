@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Diagnostics;
 
-public class LevelGenerator : Spatial
+public class RoomGenerator : Spatial
 {
     readonly SpatialMaterial wallMaterial = new SpatialMaterial
     {
@@ -46,7 +46,7 @@ public class LevelGenerator : Spatial
         Vector3 leftRightWallSize = new Vector3(roomSize.y - wallThickness, wallHeight, wallThickness);
         Vector3 left = Vector3.Up.Cross(front);
 
-        // Base of the wall is origin offset in the direction of the wall(i.e. front) by a length of half the size of the room - half the wall's thickness.
+        // Base of the wall is origin offset in the direction of the wall (i.e. front) by a length of half the size of the room - half the wall's thickness.
         // Also, we need to offset the wall's center to the side by half the wall's thickness.
         PhysicsBody frontWall = GenerateWall(origin + ((roomSize.y - wallThickness) / 2) * front + (wallThickness / 2) * left, frontBackWallSize, -front);
         PhysicsBody backWall = GenerateWall(origin - ((roomSize.y - wallThickness) / 2) * front - (wallThickness / 2) * left, frontBackWallSize, front);

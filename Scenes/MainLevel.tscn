@@ -1,7 +1,7 @@
 [gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Scripts/Player.cs" type="Script" id=1]
-[ext_resource path="res://Scripts/LevelGenerator.cs" type="Script" id=2]
+[ext_resource path="res://Scripts/Generator/RoomGenerator.cs" type="Script" id=2]
 
 [sub_resource type="CylinderMesh" id=1]
 
@@ -20,11 +20,11 @@ albedo_color = Color( 1, 1, 1, 0.501961 )
 [sub_resource type="SpatialMaterial" id=6]
 albedo_color = Color( 0.384314, 0.384314, 0.384314, 1 )
 
-[sub_resource type="CylinderShape" id=9]
+[sub_resource type="CylinderShape" id=7]
 
-[sub_resource type="CubeMesh" id=7]
+[sub_resource type="CubeMesh" id=8]
 
-[sub_resource type="BoxShape" id=8]
+[sub_resource type="BoxShape" id=9]
 
 [node name="Spatial" type="Spatial"]
 
@@ -53,19 +53,19 @@ mesh = SubResource( 5 )
 material = SubResource( 6 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Player"]
-shape = SubResource( 9 )
+shape = SubResource( 7 )
 
 [node name="Floor" type="StaticBody" parent="."]
 transform = Transform( 100, 0, 0, 0, 1, 0, 0, 0, 100, 0, 0, 0 )
 
 [node name="CSGMesh" type="CSGMesh" parent="Floor"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.901901, 0 )
-mesh = SubResource( 7 )
+mesh = SubResource( 8 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Floor"]
-shape = SubResource( 8 )
+shape = SubResource( 9 )
 
-[node name="LevelGenerator" type="Spatial" parent="."]
+[node name="RoomGenerator" type="Spatial" parent="."]
 script = ExtResource( 2 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
