@@ -5,6 +5,20 @@ using System.Diagnostics;
 public class RoomGenerator : Spatial
 {
     [Export]
+    public Vector2 RoomSize
+    {
+        get
+        {
+            return roomSize;
+        }
+        set
+        {
+            roomSize = value;
+            GenerateRoom();
+        }
+    }
+
+    [Export]
     public float WallHeight
     {
         get
@@ -17,6 +31,7 @@ public class RoomGenerator : Spatial
             GenerateRoom();
         }
     }
+
     [Export]
     public float WallThickness
     {
@@ -32,7 +47,7 @@ public class RoomGenerator : Spatial
     }
 
     [Export]
-    public Vector2 TileSize
+    public Vector3 TileSize
     {
         get
         {
@@ -45,7 +60,7 @@ public class RoomGenerator : Spatial
         }
     }
 
-    [Export]
+    [Export(PropertyHint.Range, "0, 1")]
     public float TileOffset
     {
         get
@@ -59,28 +74,84 @@ public class RoomGenerator : Spatial
         }
     }
 
-    readonly SpatialMaterial wallMaterial = new SpatialMaterial
+    [Export]
+    public float TileSpacing
     {
-        AlbedoColor = Colors.Gray
-    };
-    private Vector2 roomSize;
-    private Vector3 origin;
-    private Vector3 front;
-    private Vector3 left;
-    private Vector2 tileSize = new Vector2(5, 5);
-    private float tileOffset = 0.0f;
+        get
+        {
+            return tileSpacing;
+        }
+        set
+        {
+            tileSpacing = value;
+            GenerateFloor();
+        }
+    }
+
+    [Export]
+    public SpatialMaterial WallMaterial
+    {
+        get
+        {
+            return wallMaterial;
+        }
+        set
+        {
+            wallMaterial = value;
+            GenerateRoom();
+        }
+    }
+
+    [Export]
+    public SpatialMaterial TileMaterial
+    {
+        get
+        {
+            return tileMaterial;
+        }
+        set
+        {
+            tileMaterial = value;
+            GenerateFloor();
+        }
+    }
+
+    [Export]
+    public SpatialMaterial GroutMaterial
+    {
+        get
+        {
+            return groutMaterial;
+        }
+        set
+        {
+            groutMaterial = value;
+            GenerateGrout();
+        }
+    }
+
+    public Vector2 RoomSpaceSize
+    {
+        get
+        {
+            return roomSize - 2 * wallThickness * Vector2.One;
+        }
+    }
+
+    private Vector2 roomSize = new Vector2(50, 30);
     private float wallHeight = 4.0f;
     private float wallThickness = 1.0f;
+    private Vector3 tileSize = new Vector3(5, 0.2f, 5);
+    private float tileOffset = 0.0f;
+    private float tileSpacing = 4.0f;
+    private SpatialMaterial wallMaterial;
+    private SpatialMaterial tileMaterial;
+    private SpatialMaterial groutMaterial;
     private readonly PhysicsBody[] walls = new PhysicsBody[4];
-    private Spatial floor;
+    private readonly Spatial floor = new Spatial();
 
     public override void _Ready()
     {
-        floor = new Spatial();
-        roomSize = new Vector2(50, 30);
-        origin = new Vector3(0, 0, 0);
-        front = Vector3.Forward;
-        left = Vector3.Up.Cross(front);
         AddChild(floor);
         GenerateRoom();
     }
@@ -88,14 +159,10 @@ public class RoomGenerator : Spatial
     /// <summary>
     /// Generates a rectangular room of a given size.
     /// </summary>
-    /// <param name="origin">The center of the base of the room.</param>
-    /// <param name="roomSize">The width and height of the room, inclusive of walls.</param>
-    /// <param name="front">The front direction the room is facing</param>
     public void GenerateRoom()
     {
-        //Debug.Assert(roomSize.Length() > 0, "Room size cannot be zero.");
-        //Debug.Assert(wallThickness * 2 <= Math.Min(roomSize.x, roomSize.y), "Walls cannot be thicker than half the width/height of the room (there must be space within the room).");
-        front = front.Normalized();
+        Debug.Assert(roomSize.Length() > 0, "Room size cannot be zero.");
+        Debug.Assert(wallThickness * 2 <= Math.Min(roomSize.x, roomSize.y), "Walls cannot be thicker than half the width/height of the room (there must be space within the room).");
 
         /* We wish to generate walls in this manner:
          *
@@ -122,10 +189,10 @@ public class RoomGenerator : Spatial
 
         // Base of the wall is origin offset in the direction of the wall (i.e. front) by a length of half the size of the room - half the wall's thickness.
         // Also, we need to offset the wall's center to the side by half the wall's thickness.
-        PhysicsBody frontWall = GenerateWall(origin + ((roomSize.y - wallThickness) / 2) * front + (wallThickness / 2) * left, frontBackWallSize, -front);
-        PhysicsBody backWall = GenerateWall(origin - ((roomSize.y - wallThickness) / 2) * front - (wallThickness / 2) * left, frontBackWallSize, front);
-        PhysicsBody leftWall = GenerateWall(origin + ((roomSize.x - wallThickness) / 2) * left - (wallThickness / 2) * front, leftRightWallSize, -left);
-        PhysicsBody rightWall = GenerateWall(origin - ((roomSize.x - wallThickness) / 2) * left + (wallThickness / 2) * front, leftRightWallSize, left);
+        PhysicsBody frontWall = GenerateWall(((roomSize.y - wallThickness) / 2) * Vector3.Forward + (wallThickness / 2) * Vector3.Left, frontBackWallSize, -Vector3.Forward);
+        PhysicsBody backWall = GenerateWall(-((roomSize.y - wallThickness) / 2) * Vector3.Forward - (wallThickness / 2) * Vector3.Left, frontBackWallSize, Vector3.Forward);
+        PhysicsBody leftWall = GenerateWall(((roomSize.x - wallThickness) / 2) * Vector3.Left - (wallThickness / 2) * Vector3.Forward, leftRightWallSize, -Vector3.Left);
+        PhysicsBody rightWall = GenerateWall(-((roomSize.x - wallThickness) / 2) * Vector3.Left + (wallThickness / 2) * Vector3.Forward, leftRightWallSize, Vector3.Left);
 
         AddChild(frontWall);
         AddChild(backWall);
@@ -146,7 +213,7 @@ public class RoomGenerator : Spatial
     /// <param name="size">The length, height, and thickness of the wall.</param>
     /// <param name="normal">The direction the wall's front is facing</param>
     /// <returns></returns>
-    public PhysicsBody GenerateWall(Vector3 wallBase, Vector3 size, Vector3 normal)
+    private PhysicsBody GenerateWall(Vector3 wallBase, Vector3 size, Vector3 normal)
     {
         Vector3 wallUp = Vector3.Up;
         Mesh wallMesh = new CubeMesh();
@@ -172,8 +239,6 @@ public class RoomGenerator : Spatial
 
     public void GenerateFloor()
     {
-        if (floor == null)
-            return;
         Debug.Assert(tileOffset >= 0 && tileOffset <= 1);
         Debug.Assert(tileSize.Length() > 0);
         foreach (Node tile in floor.GetChildren())
@@ -181,9 +246,8 @@ public class RoomGenerator : Spatial
             if (tile != null)
                 tile.QueueFree();
         }
-        Vector2 roomSpaceSize = roomSize - 2 * wallThickness * Vector2.One;
-        Vector3 startingCorner = origin - roomSpaceSize.x / 2 * left - roomSpaceSize.y / 2 * front;
-        for (int x = 0; x < roomSpaceSize.x / tileSize.x; x++)
+        Vector3 startingCorner = -RoomSpaceSize.x / 2 * Vector3.Left - RoomSpaceSize.y / 2 * Vector3.Forward;
+        for (int x = 0; x < RoomSpaceSize.x / (tileSize.x + tileSpacing); x++)
         {
             float rowTileOffset = (tileOffset * x) % 1;
             int y = 0;
@@ -191,27 +255,33 @@ public class RoomGenerator : Spatial
             {
                 y = -1;
             }
-            while (y < roomSpaceSize.y / tileSize.y)
+            for (; y < RoomSpaceSize.y / (tileSize.z + tileSpacing); y++)
             {
-                Vector2 currentTileOffset = new Vector2(x * tileSize.x, (y + rowTileOffset) * tileSize.y);
-                Vector2 currentTileSize = new Vector2(tileSize);
+                Vector2 currentTileOffset = new Vector2(x * (tileSize.x + tileSpacing), (y + rowTileOffset) * (tileSize.z + tileSpacing));
+                Vector3 currentTileSize = new Vector3(tileSize);
+
+                // Clip tiles protruding out the back wall
                 if (currentTileOffset.y < 0)
                 {
-                    currentTileSize.y += currentTileOffset.y;
+                    currentTileSize.z += currentTileOffset.y;
                     currentTileOffset.y = 0f;
                 }
-                if (currentTileOffset.y + tileSize.y > roomSize.y - wallThickness)
+
+                // Clip tiles protruding out the front wall
+                if (currentTileOffset.y + tileSize.z > roomSize.y - wallThickness)
                 {
-                    float extraHeight = currentTileOffset.y + tileSize.y - (roomSize.y - wallThickness);
-                    currentTileSize.y -= extraHeight;
+                    float extraHeight = currentTileOffset.y + tileSize.z - (roomSize.y - wallThickness);
+                    currentTileSize.z -= extraHeight;
                 }
+
+                // Clip tiles protruding out the left wall (tiles are created from the right)
                 if (currentTileOffset.x + tileSize.x > roomSize.x - wallThickness)
                 {
                     float extraWidth = currentTileOffset.x + tileSize.x - (roomSize.x - wallThickness);
                     currentTileSize.x -= extraWidth;
                 }
 
-                Mesh tileMesh = new PlaneMesh()
+                Mesh tileMesh = new CubeMesh()
                 {
                     Size = currentTileSize
                 };
@@ -220,23 +290,32 @@ public class RoomGenerator : Spatial
                     Mesh = tileMesh
                 };
 
-                Vector3 currentTileCorner = startingCorner + currentTileOffset.x * left + currentTileOffset.y * front + 0.01f * Vector3.Up;
+                Vector3 currentTileCorner = startingCorner + currentTileOffset.x * Vector3.Left + currentTileOffset.y * Vector3.Forward + 0.01f * Vector3.Up;
 
                 // Place tile in the center instead of the corner.
-                Vector3 translation = currentTileCorner + (currentTileSize.x / 2) * left + (currentTileSize.y / 2) * front;
+                Vector3 translation = currentTileCorner + (currentTileSize.x / 2) * Vector3.Left + (currentTileSize.z / 2) * Vector3.Forward;
                 meshInstance.Translation = translation;
-
-                SpatialMaterial floorMaterial = new SpatialMaterial()
-                {
-                    AlbedoColor = Colors.White.LinearInterpolate(Colors.Black, (currentTileOffset.x / roomSize.x + currentTileOffset.y / roomSize.y) * 0.5f)
-                };
-                meshInstance.SetSurfaceMaterial(0, floorMaterial);
+                meshInstance.SetSurfaceMaterial(0, tileMaterial);
 
                 floor.AddChild(meshInstance);
-
-                y++;
             }
         }
+        GenerateGrout();
+    }
 
+    public void GenerateGrout()
+    {
+        floor.GetNodeOrNull<MeshInstance>("Grout")?.QueueFree();
+        Mesh groutMesh = new PlaneMesh()
+        {
+            Size = RoomSpaceSize
+        };
+        MeshInstance meshInstance = new MeshInstance()
+        {
+            Mesh = groutMesh
+        };
+        meshInstance.Name = "Grout";
+        meshInstance.SetSurfaceMaterial(0, groutMaterial);
+        floor.AddChild(meshInstance);
     }
 }
