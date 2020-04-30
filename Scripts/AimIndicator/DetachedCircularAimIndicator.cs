@@ -43,8 +43,6 @@ public class DetachedCircularAimIndicator : AimIndicator
 
     protected override void UpdateIndicatorTransform(Vector2 correctedJoyAxis)
     {
-        GD.Print(correctedJoyAxis);
-        GD.Print(correctedJoyAxis.Length());
         indicator.Translation = new Vector3(correctedJoyAxis.Length() * range, height / 2, 0);
     }
 }
