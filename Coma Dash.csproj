@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scripts\Floor.cs" />
     <Compile Include="Scripts\Generator\RoomGenerator.cs" />
     <Compile Include="Scripts\InputMode.cs" />
     <Compile Include="Scripts\Player.cs" />
