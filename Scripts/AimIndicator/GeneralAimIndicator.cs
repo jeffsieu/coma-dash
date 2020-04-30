@@ -52,23 +52,23 @@ public class GeneralAimIndicator : AimIndicator
         }
     }
 
-    public enum AimIndicatorType
-    {
-        CONICAL, DETACHED_CIRCULAR, STRAIGHT
-    }
-
     [Export(PropertyHint.Enum)]
     public AimIndicatorType IndicatorType
     {
-        set
-        {
-            indicatorType = value;
-            BuildIndicator();
-        }
         get
         {
             return indicatorType;
         }
+        set
+        {
+            indicatorType = value;
+            RebuildIndicator();
+        }
+    }
+
+    public enum AimIndicatorType
+    {
+        CONICAL, DETACHED_CIRCULAR, STRAIGHT
     }
 
     protected float spreadDegrees = 90.0f;
@@ -81,23 +81,42 @@ public class GeneralAimIndicator : AimIndicator
         switch (indicatorType)
         {
             case AimIndicatorType.CONICAL:
-                indicator = new ConicalAimIndicator();
+                indicator = new ConicalAimIndicator
+                {
+                    Range = range,
+                    Height = height,
+                    SpreadDegrees = spreadDegrees
+                };
                 break;
             case AimIndicatorType.DETACHED_CIRCULAR:
-                indicator = new DetachedCircularAimIndicator();
+                indicator = new DetachedCircularAimIndicator
+                {
+                    Range = range,
+                    Height = height,
+                    Radius = radius
+                };
                 break;
             case AimIndicatorType.STRAIGHT:
-                indicator = new StraightAimIndicator();
+                indicator = new StraightAimIndicator
+                {
+                    Range = range,
+                    Height = height,
+                    Width = width
+                };
                 break;
             default:
-                indicator = new ConicalAimIndicator();
+                indicator = new ConicalAimIndicator
+                {
+                    Range = range,
+                    Height = height,
+                    SpreadDegrees = spreadDegrees
+                };
                 break;
         }
     }
 
     protected override void UpdateTransform(Vector2 correctedJoyAxis)
     {
-        GD.Print("Sir");
     }
 
     protected override void UpdateIndicatorTransform(Vector2 correctedJoyAxis)

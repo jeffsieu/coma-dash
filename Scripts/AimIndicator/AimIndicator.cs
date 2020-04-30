@@ -76,8 +76,7 @@ public abstract class AimIndicator : Spatial
 
     public override void _Ready()
     {
-        BuildIndicator();
-        AddChild(indicator);
+        RebuildIndicator();
     }
 
     protected abstract void BuildIndicator();
