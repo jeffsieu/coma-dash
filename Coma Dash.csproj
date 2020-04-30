@@ -54,9 +54,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scripts\AimIndicator\AimIndicator.cs" />
+    <Compile Include="Scripts\AimIndicator\ConicalAimIndicator.cs" />
+    <Compile Include="Scripts\AimIndicator\DetachedCircularAimIndicator.cs" />
+    <Compile Include="Scripts\AimIndicator\StraightAimIndicator.cs" />
     <Compile Include="Scripts\Generator\RoomGenerator.cs" />
     <Compile Include="Scripts\InputMode.cs" />
     <Compile Include="Scripts\Player.cs" />
+    <Compile Include="Scripts\Weapon.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

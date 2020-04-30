@@ -224,7 +224,7 @@ public class RoomGenerator : Spatial
         meshInstance.SetSurfaceMaterial(0, wallMaterial);
 
         StaticBody wall = new StaticBody();
-        CollisionShape collisionShape = new CollisionShape()
+        CollisionShape collisionShape = new CollisionShape
         {
             Shape = new BoxShape()
         };
@@ -281,11 +281,11 @@ public class RoomGenerator : Spatial
                     currentTileSize.x -= extraWidth;
                 }
 
-                Mesh tileMesh = new CubeMesh()
+                Mesh tileMesh = new CubeMesh
                 {
                     Size = currentTileSize
                 };
-                MeshInstance meshInstance = new MeshInstance()
+                MeshInstance meshInstance = new MeshInstance
                 {
                     Mesh = tileMesh
                 };
@@ -306,11 +306,11 @@ public class RoomGenerator : Spatial
     public void GenerateGrout()
     {
         floor.GetNodeOrNull<MeshInstance>("Grout")?.QueueFree();
-        Mesh groutMesh = new PlaneMesh()
+        Mesh groutMesh = new PlaneMesh
         {
             Size = RoomSpaceSize
         };
-        MeshInstance meshInstance = new MeshInstance()
+        MeshInstance meshInstance = new MeshInstance
         {
             Mesh = groutMesh
         };
