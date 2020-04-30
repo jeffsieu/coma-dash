@@ -6,10 +6,11 @@ using Godot;
 /// A <see cref="Spatial"/> that displays a mesh representing the trajectory of a <see cref="Weapon"/>.
 /// The mesh is positioned such that it rests on, and is projected outward from the origin of the <see cref="AimIndicator"/>.
 /// </para>
-/// 
+///
 /// The following classes implement this class
 /// <seealso cref="ConicalAimIndicator"/>,
 /// <seealso cref="DetachedCircularAimIndicator"/>,
+/// <seealso cref="GeneralAimIndicator"/>,
 /// <seealso cref="StraightAimIndicator"/>
 /// </summary>
 public abstract class AimIndicator : Spatial
@@ -75,8 +76,7 @@ public abstract class AimIndicator : Spatial
 
     public override void _Ready()
     {
-        BuildIndicator();
-        AddChild(indicator);
+        RebuildIndicator();
     }
 
     protected abstract void BuildIndicator();
@@ -88,7 +88,7 @@ public abstract class AimIndicator : Spatial
         AddChild(indicator);
     }
 
-    private void UpdateTransform(Vector2 correctedJoyAxis)
+    protected virtual void UpdateTransform(Vector2 correctedJoyAxis)
     {
         if (correctedJoyAxis.Length() == 0)
             indicator.Hide();

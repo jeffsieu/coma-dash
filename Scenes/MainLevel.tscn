@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Scripts/Player.cs" type="Script" id=1]
 [ext_resource path="res://Scripts/Generator/RoomGenerator.cs" type="Script" id=2]
-[ext_resource path="res://Scripts/AimIndicator/ConicalAimIndicator.cs" type="Script" id=3]
+[ext_resource path="res://Scripts/AimIndicator/GeneralAimIndicator.cs" type="Script" id=3]
 [ext_resource path="res://Scripts/Weapon.cs" type="Script" id=4]
 
 [sub_resource type="CylinderMesh" id=1]
@@ -48,6 +48,7 @@ script = ExtResource( 4 )
 [node name="AimIndicator" type="Spatial" parent="Player/Weapon"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
 script = ExtResource( 3 )
+IndicatorType = 1
 
 [node name="Floor" type="StaticBody" parent="."]
 transform = Transform( 100, 0, 0, 0, 1, 0, 0, 0, 100, 0, -2, 0 )

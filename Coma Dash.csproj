@@ -57,6 +57,7 @@
     <Compile Include="Scripts\AimIndicator\AimIndicator.cs" />
     <Compile Include="Scripts\AimIndicator\ConicalAimIndicator.cs" />
     <Compile Include="Scripts\AimIndicator\DetachedCircularAimIndicator.cs" />
+    <Compile Include="Scripts\AimIndicator\GeneralAimIndicator.cs" />
     <Compile Include="Scripts\AimIndicator\StraightAimIndicator.cs" />
     <Compile Include="Scripts\Generator\RoomGenerator.cs" />
     <Compile Include="Scripts\InputMode.cs" />
