@@ -4,7 +4,7 @@ using Godot;
 /// <para>
 /// An <see cref="AimIndicator"/> that displays a circle that is not centred on the player.
 /// </para>
-/// 
+///
 /// <para>
 /// This is used for area-of-effect weapons that could be thrown away from the player.
 /// As such. its position is determined by how far the player aims the projectile.
@@ -26,7 +26,7 @@ public class DetachedCircularAimIndicator : AimIndicator
         }
     }
 
-    private float radius = 2.5f;
+    protected float radius = 2.5f;
 
     protected override void BuildIndicator()
     {
