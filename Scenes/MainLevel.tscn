@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Scripts/Player.cs" type="Script" id=1]
 [ext_resource path="res://Scripts/Generator/RoomGenerator.cs" type="Script" id=2]
@@ -31,10 +31,100 @@ subdivide_width = 4
 albedo_color = Color( 0.878431, 0.313726, 0.313726, 1 )
 
 [sub_resource type="SpatialMaterial" id=11]
-albedo_color = Color( 0.764706, 0.47451, 0.137255, 1 )
+albedo_color = Color( 0.909804, 0.686275, 0.211765, 1 )
 
 [sub_resource type="SpatialMaterial" id=12]
 albedo_color = Color( 0.12549, 0.0823529, 0.00784314, 1 )
+
+[sub_resource type="BoxShape" id=13]
+
+[sub_resource type="Shader" id=17]
+code = "shader_type spatial;
+
+const float PI = 3.1415926535f;
+const float EPS = 0.00001f;
+uniform vec3 camPos = vec3(0, 0, -5);
+uniform vec3 lookAt = vec3(0, 0, 0);
+uniform float fov = 90.0f;
+uniform vec3 lightPos = vec3(-10, 5, -4);
+
+vec3 get_direction(vec2 uv) {
+	float extrPt = tan(radians(fov)/2.0f);
+	uv = (uv - vec2(0.5f)) * 2.0f * extrPt;
+	vec3 ret = vec3(uv, 1);
+	ret = normalize(ret);
+	return ret;
+}
+
+float sign_dist_circle(vec3 point, vec4 circle) {
+	return distance(point, circle.xyz) - circle.w;
+}
+
+float sign_dist_cube(vec3 point, vec3 cube_mid, vec3 cube_scale) {
+	return 0.0f;
+}
+
+float sdf(vec3 point) {
+	float mn = 10000.0f;
+	mn = min(mn, sign_dist_circle(point, vec4(0, 0, 0, 2.5)));
+	mn = min(mn, sign_dist_circle(point, vec4(5, -5, 5, 1)));
+	return mn;
+} 
+
+vec3 est_normal(vec3 point) {
+	vec3 dx = vec3(EPS, 0, 0);
+	vec3 dy = vec3(0, EPS, 0);
+	vec3 dz = vec3(0, 0, EPS);
+	return normalize(vec3(
+		sdf(point + dx) - sdf(point - dx), 
+		sdf(point + dy) - sdf(point - dy), 
+		sdf(point + dz) - sdf(point - dz)
+	));
+}
+
+vec3 shading(vec3 color, vec3 pos, vec3 normal) {
+	float lighting = max(0, dot(normal, normalize(lightPos - pos)));
+	return vec3(1, 1, 1) * lighting;
+}
+
+bool raymarch(vec3 direction, out vec3 color, out vec3 normal) {
+	int MAX_STEPS = 20;
+	float MAX_DIST = 10000.0f;
+	float dist;
+	for (int i = 0; i < MAX_STEPS && dist < MAX_DIST; i++) {
+		vec3 pt = camPos + dist * direction;
+		float sdf1 = sdf(pt);
+		if (sdf1 < EPS) {
+			normal = est_normal(pt);
+			color = shading(vec3(1, 0, 0), pt, normal);
+			return true;
+		}
+		else {
+			dist += sdf1;
+		}
+	}
+	color = vec3(1, 1, 1);
+	return false;
+}
+
+void fragment() {
+	vec3 direction = get_direction(UV);
+	vec3 color;
+	vec3 normal;
+	bool result = raymarch(direction, color, normal);
+	ALBEDO = color;
+}"
+
+[sub_resource type="ShaderMaterial" id=18]
+shader = SubResource( 17 )
+shader_param/camPos = Vector3( 0, 0, -5 )
+shader_param/lookAt = Vector3( 0, 0, 0 )
+shader_param/fov = 90.0
+shader_param/lightPos = Vector3( -10, 5, -4 )
+
+[sub_resource type="PlaneMesh" id=14]
+material = SubResource( 18 )
+size = Vector2( 20, 20 )
 
 [node name="Spatial" type="Spatial"]
 
@@ -78,9 +168,8 @@ shape = SubResource( 9 )
 script = ExtResource( 2 )
 RoomSize = Vector2( 50, 40 )
 WallThickness = 2.0
-TileSize = Vector3( 2, 0.2, 5 )
 TileOffset = 0.5
-TileSpacing = 0.25
+TileSpacing = 1.0
 WallMaterial = SubResource( 10 )
 TileMaterial = SubResource( 11 )
 GroutMaterial = SubResource( 12 )
@@ -88,3 +177,15 @@ GroutMaterial = SubResource( 12 )
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
 transform = Transform( 0.618224, -0.112404, 0.777923, -0.784334, -0.152666, 0.601259, 0.0511787, -0.981865, -0.182544, 8.25041, 20.7953, -4.0208 )
 shadow_enabled = true
+
+[node name="ProjectorScreen" type="StaticBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, -16 )
+
+[node name="CollisionShape" type="CollisionShape" parent="ProjectorScreen"]
+transform = Transform( 5, 0, 0, 0, 0.34202, -4.69846, 0, 0.939693, 1.7101, 0, 0, 0 )
+shape = SubResource( 13 )
+
+[node name="MeshInstance" type="MeshInstance" parent="ProjectorScreen"]
+transform = Transform( 1, 0, 0, 0, 0.642788, -0.766044, 0, 0.766044, 0.642788, 0, 0, 0 )
+mesh = SubResource( 14 )
+material/0 = null
