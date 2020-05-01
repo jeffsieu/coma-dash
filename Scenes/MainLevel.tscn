@@ -1,9 +1,9 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Scripts/Player.cs" type="Script" id=1]
 [ext_resource path="res://Scripts/Generator/RoomGenerator.cs" type="Script" id=2]
 [ext_resource path="res://Scripts/AimIndicator/GeneralAimIndicator.cs" type="Script" id=3]
-[ext_resource path="res://Scripts/Weapon/Gun.cs" type="Script" id=4]
+[ext_resource path="res://Scripts/Weapon/OverheatingGun.cs" type="Script" id=4]
 
 [sub_resource type="CylinderMesh" id=1]
 
@@ -24,6 +24,9 @@ albedo_color = Color( 1, 0.576471, 0.431373, 1 )
 
 [sub_resource type="SpatialMaterial" id=8]
 albedo_color = Color( 0.392157, 0.505882, 0.537255, 1 )
+
+[sub_resource type="StyleBoxFlat" id=9]
+bg_color = Color( 0.854902, 0.431373, 0.0941176, 1 )
 
 [node name="Level" type="Spatial"]
 
@@ -73,3 +76,21 @@ GroutMaterial = SubResource( 8 )
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
 transform = Transform( 0.618224, -0.112404, 0.777923, -0.784334, -0.152666, 0.601259, 0.0511787, -0.981865, -0.182544, 8.25041, 20.7953, -4.0208 )
 shadow_enabled = true
+
+[node name="Control" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HeatLevel" type="ProgressBar" parent="Control"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -14.0
+custom_styles/fg = SubResource( 9 )
+max_value = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}

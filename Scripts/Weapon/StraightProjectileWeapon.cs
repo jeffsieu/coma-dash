@@ -3,18 +3,22 @@ using Godot;
 public abstract class StraightProjectileWeapon : Weapon
 {
     // 0.5s cooldown
-    private readonly float coolDownDuration;
-    private readonly float projectileSpeed;
+    protected readonly float coolDownDuration;
+    protected readonly float projectileSpeed;
     protected PackedScene projectileScene;
-    private Spatial projectileContainer;
-    private bool isShooting = false;
-    private float cooldown = 0.0f;
-
+    protected Spatial projectileContainer;
+    protected bool isTryingToFire = false;
+    protected float cooldown = 0.0f;
 
     public StraightProjectileWeapon(float range, float projectileSpeed, float coolDownDuration) : base(range)
     {
         this.projectileSpeed = projectileSpeed;
         this.coolDownDuration = coolDownDuration;
+    }
+
+    protected virtual bool CanFire()
+    {
+        return cooldown <= 0;
     }
 
     public override void _Ready()
@@ -38,7 +42,7 @@ public abstract class StraightProjectileWeapon : Weapon
         cooldown -= delta;
         cooldown = Mathf.Max(0, cooldown);
 
-        if (isShooting && cooldown == 0)
+        if (isTryingToFire && CanFire())
         {
             cooldown = coolDownDuration;
             Spatial projectile = new Projectile(range, projectileSpeed, -GlobalTransform.basis.z.Normalized(), projectileScene)
@@ -46,16 +50,19 @@ public abstract class StraightProjectileWeapon : Weapon
                 GlobalTransform = GlobalTransform
             };
             projectileContainer.AddChild(projectile);
+            OnProjectileFired();
         }
     }
 
+    protected abstract void OnProjectileFired();
+
     protected override void OnAttackButtonPressed()
     {
-        isShooting = true;
+        isTryingToFire = true;
     }
 
     protected override void OnAttackButtonReleased()
     {
-        isShooting = false;
+        isTryingToFire = false;
     }
 }
