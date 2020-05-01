@@ -4,9 +4,55 @@ using Godot.Collections;
 
 public class Player : KinematicBody
 {
-    private const float Speed = 20f;
-    private const float RotationSpeed = 30f;
+    [Export]
+    protected float MaxSpeed = 25f;
+
+    [Export]
+    protected float TurningResistance = 0.2f;
+
+    [Export]
+    protected float MaxAccelerationFactor = 0.3f;
+
+    [Export]
+    protected float MaxDecelerationFactor = 0.1f;
+
+    [Export]
+    protected float WalkingSlowFactor = 0.7f;
+    protected float RotationSpeed = 30f;
+
+    private float WalkingSpeed
+    {
+        get
+        {
+            return WalkingSlowFactor * MaxSpeed;
+        }
+    }
+
+    private float MaxAcceleration
+    {
+        get
+        {
+            return MaxAccelerationFactor * MaxSpeed;
+        }
+    }
+    private float MaxDeceleration
+    {
+        get
+        {
+            return MaxDecelerationFactor * MaxSpeed;
+        }
+    }
+
+    private bool IsSprinting
+    {
+        get
+        {
+            return Input.IsActionPressed("movement_sprint");
+        }
+    }
+
     private Vector2 mousePosition;
+    private Vector3 velocity;
     private Camera camera;
     private InputMode inputMode = InputMode.Keyboard;
     private Vector3 previousFaceDirection = Vector3.Forward;
@@ -16,16 +62,6 @@ public class Player : KinematicBody
     {
         camera = GetParent().GetNode<Camera>("Camera");
         weapon = GetNode<Weapon>("Weapon");
-    }
-
-    public void Move(Vector3 direction, float delta)
-    {
-        this.MoveAndCollide(direction.Normalized() * Speed * delta);
-    }
-
-    public Vector2 CorrectJoystick(Vector2 rawInput, float deadZone)
-    {
-        return rawInput.Length() > deadZone ? rawInput : default;
     }
 
     public override void _Input(InputEvent @event)
@@ -40,8 +76,8 @@ public class Player : KinematicBody
 
     public override void _PhysicsProcess(float delta)
     {
-        Vector3 movementDirection = GetMovementDirection();
-        Move(movementDirection, delta);
+        Vector2 weightedDirection = GetWeightedMovementDirection();
+        Move(weightedDirection, delta);
         float angle = GetFaceDirection().AngleTo(previousFaceDirection);
         angle = Math.Min(angle, RotationSpeed * delta);
         Vector3 newFaceDirection = previousFaceDirection.Rotated(GetFaceDirection().Cross(previousFaceDirection), -angle);
@@ -53,15 +89,86 @@ public class Player : KinematicBody
         weapon.AttackDirection = GetAttackDirection();
     }
 
-    private Vector3 GetMovementDirection()
+    public void Move(Vector2 weightedDirection, float delta)
     {
-        Vector3 direction = default;
-        direction += (Vector3.Forward * Input.GetActionStrength("movement_up")).Normalized();
-        direction += (Vector3.Back * Input.GetActionStrength("movement_down")).Normalized();
-        direction += (Vector3.Left * Input.GetActionStrength("movement_left")).Normalized();
-        direction += (Vector3.Right * Input.GetActionStrength("movement_right")).Normalized();
+        float targetSpeed = IsSprinting ? MaxSpeed : WalkingSpeed;
+        Vector3 targetVelocity = targetSpeed * new Vector3(weightedDirection.x, 0, weightedDirection.y);
 
-        return direction;
+        Vector3 targetAcceleration = targetVelocity - velocity;
+
+
+        Vector3 actualAcceleration = targetAcceleration;
+
+        // Player trying to accelerate in the same direction
+        if (targetVelocity.Dot(targetAcceleration) > 0)
+        {
+            if (targetAcceleration.Length() > MaxAcceleration)
+            {
+                actualAcceleration = targetAcceleration.Normalized() * MaxAcceleration;
+            }
+        }
+        // Player trying to slow down/switch direction
+        else
+        {
+            if (targetAcceleration.Length() > MaxDeceleration)
+            {
+                actualAcceleration = targetAcceleration.Normalized() * MaxDeceleration;
+            }
+        }
+
+        // 1.0 when player is continuing forward/trying to go backward,
+        // 0.0 when player is trying to turn 90 degrees
+        float directionSpeedFactor = Mathf.Abs(Mathf.Cos(targetVelocity.AngleTo(velocity)));
+
+        // Map speed factor to [1 - resistance, 1], so player is slowed by <resistance> when he is turning 90 degrees
+        directionSpeedFactor = Mathf.Lerp(1 - TurningResistance, 1.0f, directionSpeedFactor);
+
+        // Slow player when he is turning
+        actualAcceleration *= directionSpeedFactor;
+
+        Vector3 newVelocity = velocity + actualAcceleration;
+        velocity = newVelocity;
+        this.MoveAndCollide(newVelocity * delta);
+    }
+
+    public Vector2 CorrectJoystick(Vector2 rawInput, float deadZone)
+    {
+        return rawInput.Length() > deadZone ? rawInput : default;
+    }
+
+    public Vector2 GetAttackDirection()
+    {
+        if (Input.GetConnectedJoypads().Count > 0)
+        {
+            float horizontal = Input.GetActionStrength("aim_right") - Input.GetActionStrength("aim_left");
+            float vertical = Input.GetActionStrength("aim_down") - Input.GetActionStrength("aim_up");
+            Vector2 joystick = new Vector2(horizontal, vertical).Clamped(1.0f);
+            if (joystick.Length() > 0)
+            {
+                inputMode = InputMode.Controller;
+                return joystick;
+            }
+        }
+
+        if (inputMode == InputMode.Keyboard)
+        {
+            Vector3? cursorPosition = GetCursorPointOnPlayerPlane();
+            if (cursorPosition.HasValue)
+            {
+                Vector3 displacement = cursorPosition.Value - Translation;
+                return weapon.GetAttackJoyAxisFromMouseDisplacement(displacement);
+            }
+        }
+        return Vector2.Zero;
+    }
+
+    private Vector2 GetWeightedMovementDirection()
+    {
+        float horizontal = Input.GetActionStrength("movement_right") - Input.GetActionStrength("movement_left");
+        float vertical = Input.GetActionStrength("movement_down") - Input.GetActionStrength("movement_up");
+        Vector2 direction = new Vector2(horizontal, vertical);
+
+        return direction.Clamped(1.0f);
     }
 
     private Vector3 GetFaceDirection()
@@ -91,34 +198,6 @@ public class Player : KinematicBody
 
         return direction.Normalized();
     }
-
-    public Vector2 GetAttackDirection()
-    {
-        if (Input.GetConnectedJoypads().Count > 0)
-        {
-            float horizontal = Input.GetActionStrength("aim_right") - Input.GetActionStrength("aim_left");
-            float vertical = Input.GetActionStrength("aim_down") - Input.GetActionStrength("aim_up");
-            Vector2 joystick = new Vector2(horizontal, vertical).Clamped(1.0f);
-            if (joystick.Length() > 0)
-            {
-                inputMode = InputMode.Controller;
-                return joystick;
-            }
-        }
-
-        if (inputMode == InputMode.Keyboard)
-        {
-            Vector3? cursorPosition = GetCursorPointOnPlayerPlane();
-            if (cursorPosition.HasValue)
-            {
-                Vector3 displacement = cursorPosition.Value - Translation;
-                return weapon.GetAttackJoyAxisFromMouseDisplacement(displacement);
-            }
-        }
-
-        return Vector2.Zero;
-    }
-
 
     /// <summary>
     /// Returns the point above the floor that the cursor is pointing at, which is at the same height as the origin of the player.
