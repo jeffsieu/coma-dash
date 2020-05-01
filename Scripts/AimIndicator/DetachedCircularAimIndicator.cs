@@ -41,8 +41,8 @@ public class DetachedCircularAimIndicator : AimIndicator
         };
     }
 
-    protected override void UpdateIndicatorTransform(Vector2 correctedJoyAxis)
+    protected override void UpdateIndicatorTransform(Vector2 weightedAttackDirection)
     {
-        indicator.Translation = new Vector3(correctedJoyAxis.Length() * range, height / 2, 0);
+        indicator.Translation = new Vector3(weightedAttackDirection.Length() * range, height / 2, 0);
     }
 }

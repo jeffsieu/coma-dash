@@ -56,7 +56,7 @@ public abstract class AimIndicator : Spatial
         }
     }
 
-    public Vector2 JoyAxis
+    public Vector2 WeightedAttackDirection
     {
         set
         {
@@ -88,19 +88,16 @@ public abstract class AimIndicator : Spatial
         AddChild(indicator);
     }
 
-    protected virtual void UpdateTransform(Vector2 correctedJoyAxis)
+    protected virtual void UpdateTransform(Vector2 weightedAttackDirection)
     {
-        if (correctedJoyAxis.Length() == 0)
+        if (weightedAttackDirection.Length() == 0)
             indicator.Hide();
         else
             indicator.Show();
 
-        float attackAngleDegrees = (float)(new Vector2(correctedJoyAxis.x, -correctedJoyAxis.y).Angle() * 180 / Math.PI);
+        float attackAngleDegrees = (float)(new Vector2(weightedAttackDirection.x, -weightedAttackDirection.y).Angle() * 180 / Math.PI);
         RotationDegrees = new Vector3(0, attackAngleDegrees, 0);
     }
 
-    protected virtual void UpdateIndicatorTransform(Vector2 correctedJoyAxis)
-    {
-
-    }
+    protected virtual void UpdateIndicatorTransform(Vector2 weightedAttackDirection) { }
 }

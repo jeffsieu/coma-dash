@@ -115,12 +115,12 @@ public class GeneralAimIndicator : AimIndicator
         }
     }
 
-    protected override void UpdateTransform(Vector2 correctedJoyAxis)
+    protected override void UpdateTransform(Vector2 weightedAttackDirection)
     {
     }
 
-    protected override void UpdateIndicatorTransform(Vector2 correctedJoyAxis)
+    protected override void UpdateIndicatorTransform(Vector2 weightedAttackDirection)
     {
-        (indicator as AimIndicator).JoyAxis = correctedJoyAxis;
+        (indicator as AimIndicator).WeightedAttackDirection = weightedAttackDirection;
     }
 }

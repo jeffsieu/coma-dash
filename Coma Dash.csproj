@@ -62,7 +62,10 @@
     <Compile Include="Scripts\Generator\RoomGenerator.cs" />
     <Compile Include="Scripts\InputMode.cs" />
     <Compile Include="Scripts\Player.cs" />
-    <Compile Include="Scripts\Weapon.cs" />
+    <Compile Include="Scripts\Projectile.cs" />
+    <Compile Include="Scripts\Weapon\Gun.cs" />
+    <Compile Include="Scripts\Weapon\StraightProjectileWeapon.cs" />
+    <Compile Include="Scripts\Weapon\Weapon.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -51,6 +51,14 @@ public class Player : KinematicBody
         }
     }
 
+    private bool IsPrimaryAttackPressed
+    {
+        get
+        {
+            return Input.IsActionPressed("attack_primary");
+        }
+    }
+
     private Vector2 mousePosition;
     private Vector3 velocity;
     private Camera camera;
@@ -62,6 +70,9 @@ public class Player : KinematicBody
     {
         camera = GetParent().GetNode<Camera>("Camera");
         weapon = GetNode<Weapon>("Weapon");
+
+        // Move weapon to the front of the player
+        weapon.Translation = Vector3.Forward * Scale.z;
     }
 
     public override void _Input(InputEvent @event)
@@ -85,8 +96,9 @@ public class Player : KinematicBody
         previousFaceDirection = newFaceDirection.Normalized();
 
         // So that the global rotation of the weapon will be zero
-        weapon.Rotation = -Rotation;
-        weapon.AttackDirection = GetAttackDirection();
+        weapon.AimIndicator.Rotation = -Rotation;
+        weapon.WeightedAttackDirection = GetWeightedAttackDirection();
+        weapon.IsAttackButtonPressed = IsPrimaryAttackPressed;
     }
 
     public void Move(Vector2 weightedDirection, float delta)
@@ -136,7 +148,7 @@ public class Player : KinematicBody
         return rawInput.Length() > deadZone ? rawInput : default;
     }
 
-    public Vector2 GetAttackDirection()
+    public Vector2 GetWeightedAttackDirection()
     {
         if (Input.GetConnectedJoypads().Count > 0)
         {
