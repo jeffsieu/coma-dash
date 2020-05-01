@@ -8,7 +8,6 @@
 [sub_resource type="CylinderMesh" id=1]
 
 [sub_resource type="SpatialMaterial" id=2]
-albedo_color = Color( 1, 0.0117647, 0.0117647, 1 )
 
 [sub_resource type="CylinderShape" id=3]
 
@@ -17,19 +16,20 @@ subdivide_width = 4
 
 [sub_resource type="BoxShape" id=5]
 
-[sub_resource type="SpatialMaterial" id=6]
-albedo_color = Color( 0.878431, 0.313726, 0.313726, 1 )
+[sub_resource type="SpatialMaterial" id=9]
+albedo_color = Color( 0.266667, 0.25098, 0.329412, 1 )
 
 [sub_resource type="SpatialMaterial" id=7]
-albedo_color = Color( 0.765625, 0.476132, 0.137573, 1 )
+albedo_color = Color( 1, 0.576471, 0.431373, 1 )
 
 [sub_resource type="SpatialMaterial" id=8]
-albedo_color = Color( 0.12549, 0.0823529, 0.00784314, 1 )
+albedo_color = Color( 0.392157, 0.505882, 0.537255, 1 )
 
 [node name="Spatial" type="Spatial"]
 
 [node name="Camera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.273624, 0.961837, 0, -0.961837, 0.273624, 0, 41.1317, 16.6626 )
+transform = Transform( 1, 0, 0, 0, 0.513272, 0.858226, 0, -0.858226, 0.513272, 1.34645, 47.0822, 25.3017 )
+fov = 36.6
 
 [node name="Player" type="KinematicBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0 )
@@ -61,12 +61,12 @@ shape = SubResource( 5 )
 
 [node name="RoomGenerator" type="Spatial" parent="."]
 script = ExtResource( 2 )
-RoomSize = Vector2( 50, 40 )
-WallThickness = 2.0
-TileSize = Vector3( 2, 0.2, 5 )
-TileOffset = 0.5
-TileSpacing = 0.25
-WallMaterial = SubResource( 6 )
+RoomSize = Vector2( 60, 40 )
+WallThickness = 1.5
+TileSize = Vector3( 2, 0.2, 9 )
+TileOffset = 0.75
+TileSpacing = 1.0
+WallMaterial = SubResource( 9 )
 TileMaterial = SubResource( 7 )
 GroutMaterial = SubResource( 8 )
 

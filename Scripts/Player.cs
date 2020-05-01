@@ -129,7 +129,7 @@ public class Player : KinematicBody
     {
         Vector3 cameraRayOrigin = camera.ProjectRayOrigin(mousePosition);
         Vector3 cameraRayTarget = cameraRayOrigin + (camera.ProjectRayNormal(mousePosition) * 1000);
-        Dictionary ray = GetWorld().DirectSpaceState.IntersectRay(cameraRayOrigin, cameraRayTarget, null);
+        Dictionary ray = GetWorld().DirectSpaceState.IntersectRay(cameraRayOrigin, cameraRayTarget, new Godot.Collections.Array { this });
         if (ray.Count > 0)
         {
             Vector3 cursorPointOnFloor = (Vector3)ray["position"];
