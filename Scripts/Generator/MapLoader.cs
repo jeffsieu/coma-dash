@@ -16,6 +16,8 @@ public class MapLoader : Spatial
         set
         {
             unitSize = value;
+            if (ready)
+                RebuildMap();
         }
     }
 
@@ -29,6 +31,8 @@ public class MapLoader : Spatial
         set
         {
             mapPath = value;
+            if (ready)
+                RebuildMap();
         }
     }
 
@@ -42,11 +46,13 @@ public class MapLoader : Spatial
         set
         {
             wallMaterial = value;
+            if (ready)
+                RebuildMap();
         }
     }
 
     [Export]
-    public Material FloorMaterial
+    public ShaderMaterial FloorMaterial
     {
         get
         {
@@ -55,6 +61,8 @@ public class MapLoader : Spatial
         set
         {
             floorMaterial = value;
+            if (ready)
+                RebuildMap();
         }
     }
 
@@ -65,18 +73,34 @@ public class MapLoader : Spatial
 
     private int unitSize;
     private Material wallMaterial;
-    private Material floorMaterial;
-    private String mapPath;
-    private File mapFile;
+    private ShaderMaterial floorMaterial;
+    private string mapPath;
 
-    private List<int> pixels = new List<int>();
     private int size;
-    private List<Bounds> bounds = new List<Bounds>();
-    private int[] groupings;
+    private List<StaticBody> children = new List<StaticBody>();
+    private bool ready = false;
 
     public override void _Ready()
     {
-        mapFile = new File();
+        BuildMap(ParseMap());
+        ready = true;
+    }
+
+    private void RebuildMap()
+    {
+        foreach (var child in children)
+        {
+            child.QueueFree();
+            RemoveChild(child);
+        }
+        children.Clear();
+        BuildMap(ParseMap());
+    }
+
+    private List<int> ParseMap()
+    {
+        List<int> pixels = new List<int>();
+        File mapFile = new File();
         mapFile.Open(mapPath, File.ModeFlags.Read);
         while (!mapFile.EofReached())
         {
@@ -86,13 +110,13 @@ public class MapLoader : Spatial
             pixels.Add(pixel);
         }
         size = (int)Math.Sqrt(pixels.Count);
-
-        parseMap();
+        return pixels;
     }
 
-    private void parseMap()
+    private void BuildMap(List<int> pixels)
     {
-        groupings = new int[size * size];
+        List<Bounds> bounds = new List<Bounds>();
+        int[] groupings = new int[size * size];
 
         for (int i = 0; i < size * size; ++i)
             groupings[i] = -1;
@@ -102,7 +126,6 @@ public class MapLoader : Spatial
             for (int x = 0; x < size; ++x)
             {
                 int index = y * size + x;
-                int upIndex = (y - 1) * size + x;
                 int leftIndex = y * size + x - 1;
 
                 int pixel = pixels[index];
@@ -114,17 +137,19 @@ public class MapLoader : Spatial
                 if (pixel == 0xff0000)
                 {
                     Vector2 cellPosition = new Vector2(x - size / 2, y - size / 2) * unitSize;
-                    Vector2 cellSize = new Vector2(1, 1) * unitSize;
-                    AddChild(new Wall(cellPosition, cellSize, wallMaterial));
+                    Vector2 cellSize = Vector2.One * unitSize;
+                    Wall wall = new Wall(cellPosition, cellSize, wallMaterial);
+                    AddChild(wall);
+                    children.Add(wall);
                     continue;
                 }
 
                 // group up adjacent pixels that are not walls
                 // very naive algorithm for now
                 if (x > 0 && pixels[leftIndex] == pixels[index])
-                    updateBounds(leftIndex, x, y);
+                    UpdateBounds(leftIndex, x, y, bounds, groupings);
                 else
-                    addNewBounds(x, y);
+                    AddBounds(x, y, bounds, groupings);
             }
         }
 
@@ -135,11 +160,13 @@ public class MapLoader : Spatial
 
             Vector2 cellPosition = new Vector2(x - size / 2, y - size / 2) * unitSize;
             Vector2 cellSize = new Vector2(bounds[i].right - x + 1, bounds[i].bottom - y + 1) * unitSize;
-            AddChild(new Floor(cellPosition, cellSize, floorMaterial));
+            Floor floor = new Floor(cellPosition, cellSize, floorMaterial);
+            AddChild(floor);
+            children.Add(floor);
         }
     }
 
-    private void addNewBounds(int x, int y)
+    private void AddBounds(int x, int y, List<Bounds> bounds, int[] groupings)
     {
         int index = y * size + x;
         groupings[index] = bounds.Count;
@@ -152,7 +179,7 @@ public class MapLoader : Spatial
         });
     }
 
-    private void updateBounds(int prevIndex, int x, int y)
+    private void UpdateBounds(int prevIndex, int x, int y, List<Bounds> bounds, int[] groupings)
     {
         int index = y * size + x;
         int group = groupings[index] = groupings[prevIndex];

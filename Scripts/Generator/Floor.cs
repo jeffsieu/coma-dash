@@ -3,13 +3,15 @@ using System;
 
 public class Floor : StaticBody
 {
-    public Floor(Vector2 position, Vector2 dimensions, Material material)
+    public Floor(Vector2 position, Vector2 dimensions, ShaderMaterial material)
     {
-        Vector3 wallUp = Vector3.Up;
-        Mesh wallMesh = new CubeMesh();
+        Mesh floorMesh = new CubeMesh
+        {
+            Size = Vector3.One
+        };
         MeshInstance meshInstance = new MeshInstance
         {
-            Mesh = wallMesh
+            Mesh = floorMesh
         };
 
         // make a duplicate of the shader so that can customize the `size` uniform
@@ -19,19 +21,17 @@ public class Floor : StaticBody
         dupMaterial.SetShaderParam("size", new Vector2(dimensions.x, dimensions.y));
         meshInstance.SetSurfaceMaterial(0, dupMaterial);
 
-        CollisionShape collisionShape = new CollisionShape()
+        CollisionShape collisionShape = new CollisionShape
         {
-            Shape = new BoxShape()
+            Shape = new BoxShape
+            {
+                Extents = 0.5f * Vector3.One
+            }
         };
         AddChild(meshInstance);
         AddChild(collisionShape);
 
-        // divide scale by 2 because not sure why godot seems to double the effect
-        Scale = new Vector3(dimensions.x / 2, 1, dimensions.y / 2);
+        Scale = new Vector3(dimensions.x, 1, dimensions.y);
         Translation = new Vector3(position.x + dimensions.x / 2, -1, position.y + dimensions.y / 2);
-    }
-
-    public override void _Process(float delta)
-    {
     }
 }

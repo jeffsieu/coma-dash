@@ -73,7 +73,7 @@ shadow_enabled = true
 
 [node name="MapLoader" type="Spatial" parent="."]
 script = ExtResource( 5 )
-UnitSize = 5
-MapPath = "res://Maps/basic4.data"
+UnitSize = 4
+MapPath = "res://Maps/basic2.data"
 WallMaterial = SubResource( 4 )
 FloorMaterial = SubResource( 6 )
