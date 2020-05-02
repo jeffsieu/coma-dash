@@ -7,6 +7,10 @@ public class OverheatingGun : StraightProjectileWeapon
     private readonly float coolDownSpeed = 0.4f;
     [Export]
     private readonly float heatPerProjectile = 0.1f;
+    [Export]
+    private readonly float markChance = 0.3f;
+    [Export]
+    public readonly float MarkDuration = 3.0f;
 
     private float heatLevel = 0.0f;
     private bool isOverheated = false;
@@ -57,8 +61,10 @@ public class OverheatingGun : StraightProjectileWeapon
 
     protected override void OnProjectileHit(Enemy enemy)
     {
-        base.OnProjectileHit(enemy);
-
         // TODO: Mark enemy
+        RandomNumberGenerator rng = new RandomNumberGenerator();
+        if (rng.Randf() < markChance)
+            enemy.ApplyStatus<MarkStatus>(MarkDuration);
+        base.OnProjectileHit(enemy);
     }
 }

@@ -64,6 +64,9 @@
     <Compile Include="Scripts\InputMode.cs" />
     <Compile Include="Scripts\Player.cs" />
     <Compile Include="Scripts\Projectile.cs" />
+    <Compile Include="Scripts\Status\MarkStatus.cs" />
+    <Compile Include="Scripts\Status\Status.cs" />
+    <Compile Include="Scripts\Status\IStatusHolder.cs" />
     <Compile Include="Scripts\Weapon\DashSkill.cs" />
     <Compile Include="Scripts\Weapon\OverheatingGun.cs" />
     <Compile Include="Scripts\Weapon\StraightProjectileWeapon.cs" />

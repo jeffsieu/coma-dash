@@ -95,6 +95,9 @@ public class DashSkill : Weapon
             if (degreesDifference > spreadDegrees / 2)
                 continue;
 
+            if (!(body as Enemy).HasStatus<MarkStatus>())
+                continue;
+
             if (closestEnemy == null || degreesDifference < lowestDegreesDifference)
             {
                 closestEnemy = body as Enemy;
@@ -109,6 +112,9 @@ public class DashSkill : Weapon
             foreach (PhysicsBody body in sideBodies)
             {
                 if (!(body is Enemy))
+                    continue;
+
+                if (!(body as Enemy).HasStatus<MarkStatus>())
                     continue;
                 Vector3 bodyDisplacement = body.GlobalTransform.origin - GlobalTransform.origin;
                 Plane upFacingPlane = new Plane(GlobalTransform.basis.y, 0);
