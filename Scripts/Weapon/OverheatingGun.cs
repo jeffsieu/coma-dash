@@ -17,7 +17,7 @@ public class OverheatingGun : StraightProjectileWeapon
         return base.CanFire() && !isOverheated;
     }
 
-    public OverheatingGun() : base(20.0f, 50.0f, 0.1f)
+    public OverheatingGun() : base(20.0f, 10.0f, 50.0f, 0.1f)
     {
         projectileScene = ResourceLoader.Load<PackedScene>("res://Scenes/Bullet.tscn");
     }
@@ -53,5 +53,12 @@ public class OverheatingGun : StraightProjectileWeapon
             isOverheated = true;
             heatLevel = 1;
         }
+    }
+
+    protected override void OnProjectileHit(Enemy enemy)
+    {
+        base.OnProjectileHit(enemy);
+
+        // TODO: Mark enemy
     }
 }

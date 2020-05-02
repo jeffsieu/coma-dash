@@ -94,9 +94,6 @@ public abstract class AimIndicator : Spatial
             indicator.Hide();
         else
             indicator.Show();
-
-        float attackAngleDegrees = (float)(new Vector2(weightedAttackDirection.x, -weightedAttackDirection.y).Angle() * 180 / Math.PI);
-        RotationDegrees = new Vector3(0, attackAngleDegrees, 0);
     }
 
     protected virtual void UpdateIndicatorTransform(Vector2 weightedAttackDirection) { }

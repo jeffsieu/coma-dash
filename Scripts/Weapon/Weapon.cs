@@ -54,7 +54,12 @@ public abstract class Weapon : Spatial
 
     public override void _Ready()
     {
-        AimIndicator = GetNode<AimIndicator>("AimIndicator");
+        AimIndicator = GetNodeOrNull<AimIndicator>("AimIndicator");
+        if (AimIndicator == null)
+        {
+            AimIndicator = new GeneralAimIndicator();
+            AddChild(AimIndicator);
+        }
         AimIndicator.Range = range;
     }
 

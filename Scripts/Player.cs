@@ -20,6 +20,8 @@ public class Player : KinematicBody
     protected float WalkingSlowFactor = 0.7f;
     protected float RotationSpeed = 30f;
 
+    public bool IsMovementLocked = false;
+
     private float WalkingSpeed
     {
         get
@@ -59,17 +61,27 @@ public class Player : KinematicBody
         }
     }
 
+    private bool IsSecondaryAttackPressed
+    {
+        get
+        {
+            return Input.IsActionPressed("attack_secondary");
+        }
+    }
+
     private Vector2 mousePosition;
     private Vector3 velocity;
     private Camera camera;
     private InputMode inputMode = InputMode.Keyboard;
     private Vector3 previousFaceDirection = Vector3.Forward;
     private Weapon weapon;
+    private Weapon skill;
 
     public override void _Ready()
     {
         camera = GetParent().GetNode<Camera>("Camera");
         weapon = GetNode<Weapon>("Weapon");
+        skill = GetNode<Weapon>("Skill");
 
         // Move weapon to the front of the player
         weapon.Translation = Vector3.Forward * Scale.z;
@@ -87,8 +99,11 @@ public class Player : KinematicBody
 
     public override void _PhysicsProcess(float delta)
     {
-        Vector2 weightedDirection = GetWeightedMovementDirection();
-        Move(weightedDirection, delta);
+        if (!IsMovementLocked)
+        {
+            Vector2 weightedDirection = GetWeightedMovementDirection();
+            Move(weightedDirection, delta);
+        }
         float angle = GetFaceDirection().AngleTo(previousFaceDirection);
         angle = Math.Min(angle, RotationSpeed * delta);
         Vector3 newFaceDirection = previousFaceDirection.Rotated(GetFaceDirection().Cross(previousFaceDirection), -angle);
@@ -96,19 +111,22 @@ public class Player : KinematicBody
         previousFaceDirection = newFaceDirection.Normalized();
 
         // So that the global rotation of the weapon will be zero
-        weapon.AimIndicator.Rotation = -Rotation;
         weapon.WeightedAttackDirection = GetWeightedAttackDirection();
         weapon.IsAttackButtonPressed = IsPrimaryAttackPressed;
+
+        skill.WeightedAttackDirection = GetWeightedAttackDirection();
+        skill.IsAttackButtonPressed = IsSecondaryAttackPressed;
+
+        bool showSkillAimIndicator = IsSecondaryAttackPressed;
+        weapon.AimIndicator.Visible = !showSkillAimIndicator;
+        skill.AimIndicator.Visible = showSkillAimIndicator;
     }
 
     public void Move(Vector2 weightedDirection, float delta)
     {
         float targetSpeed = IsSprinting ? MaxSpeed : WalkingSpeed;
         Vector3 targetVelocity = targetSpeed * new Vector3(weightedDirection.x, 0, weightedDirection.y);
-
         Vector3 targetAcceleration = targetVelocity - velocity;
-
-
         Vector3 actualAcceleration = targetAcceleration;
 
         // Player trying to accelerate in the same direction
@@ -140,12 +158,11 @@ public class Player : KinematicBody
 
         Vector3 newVelocity = velocity + actualAcceleration;
         velocity = newVelocity;
-        this.MoveAndCollide(newVelocity * delta);
-    }
-
-    public Vector2 CorrectJoystick(Vector2 rawInput, float deadZone)
-    {
-        return rawInput.Length() > deadZone ? rawInput : default;
+        KinematicCollision collision = this.MoveAndCollide(newVelocity * delta);
+        if (collision != null)
+        {
+            velocity = velocity.Slide(collision.Normal);
+        }
     }
 
     public Vector2 GetWeightedAttackDirection()
@@ -220,7 +237,7 @@ public class Player : KinematicBody
     {
         Vector3 cameraRayOrigin = camera.ProjectRayOrigin(mousePosition);
         Vector3 cameraRayTarget = cameraRayOrigin + (camera.ProjectRayNormal(mousePosition) * 1000);
-        Dictionary ray = GetWorld().DirectSpaceState.IntersectRay(cameraRayOrigin, cameraRayTarget, new Godot.Collections.Array { this });
+        Dictionary ray = GetWorld().DirectSpaceState.IntersectRay(cameraRayOrigin, cameraRayTarget, collisionMask: 1);
         if (ray.Count > 0)
         {
             Vector3 cursorPointOnFloor = (Vector3)ray["position"];

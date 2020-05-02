@@ -15,8 +15,8 @@ public class Projectile : Spatial
 {
     private float distanceTravelled;
     private readonly float range;
-    private readonly Vector3 direction;
     private readonly float speed;
+    private readonly Vector3 direction;
     private readonly PackedScene projectileScene;
     private float projectileLength;
 
@@ -26,12 +26,15 @@ public class Projectile : Spatial
         this.speed = speed;
         this.direction = direction;
         this.projectileScene = projectileScene;
+        AddUserSignal("hit_enemy");
     }
 
     public override void _Ready()
     {
-        CollisionObject projectileInstance = projectileScene.Instance() as CollisionObject;
+        Area projectileInstance = projectileScene.Instance() as Area;
         projectileLength = projectileInstance.Scale.z;
+
+        projectileInstance.Connect("body_entered", this, "OnBodyEnteredProjectile");
 
         // To make the bullet's origin at the edge of the projectile weapon
         Vector3 weaponFrontDirection = -GlobalTransform.basis.z;
@@ -50,5 +53,15 @@ public class Projectile : Spatial
             QueueFree();
 
         Translation += displacementToTravel;
+    }
+
+    public void OnBodyEnteredProjectile(Node body)
+    {
+        if (body is Enemy)
+        {
+            Enemy enemy = body as Enemy;
+            EmitSignal("hit_enemy", enemy);
+            QueueFree();
+        }
     }
 }

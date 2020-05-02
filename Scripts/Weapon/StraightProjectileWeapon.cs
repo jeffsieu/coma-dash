@@ -4,14 +4,16 @@ public abstract class StraightProjectileWeapon : Weapon
 {
     // 0.5s cooldown
     protected readonly float coolDownDuration;
+    protected readonly float projectileDamage;
     protected readonly float projectileSpeed;
     protected PackedScene projectileScene;
     protected Spatial projectileContainer;
     protected bool isTryingToFire = false;
     protected float cooldown = 0.0f;
 
-    public StraightProjectileWeapon(float range, float projectileSpeed, float coolDownDuration) : base(range)
+    public StraightProjectileWeapon(float range, float projectileDamage, float projectileSpeed, float coolDownDuration) : base(range)
     {
+        this.projectileDamage = projectileDamage;
         this.projectileSpeed = projectileSpeed;
         this.coolDownDuration = coolDownDuration;
     }
@@ -45,16 +47,22 @@ public abstract class StraightProjectileWeapon : Weapon
         if (isTryingToFire && CanFire())
         {
             cooldown = coolDownDuration;
-            Spatial projectile = new Projectile(range, projectileSpeed, -GlobalTransform.basis.z.Normalized(), projectileScene)
+            Projectile projectile = new Projectile(range, projectileSpeed, -GlobalTransform.basis.z.Normalized(), projectileScene)
             {
                 GlobalTransform = GlobalTransform
             };
             projectileContainer.AddChild(projectile);
+            projectile.Connect("hit_enemy", this, "OnProjectileHit");
             OnProjectileFired();
         }
     }
 
     protected abstract void OnProjectileFired();
+
+    protected virtual void OnProjectileHit(Enemy enemy)
+    {
+        enemy.Damage(projectileDamage);
+    }
 
     protected override void OnAttackButtonPressed()
     {

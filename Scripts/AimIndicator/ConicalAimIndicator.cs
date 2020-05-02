@@ -35,7 +35,7 @@ public class ConicalAimIndicator : AimIndicator
             Mode = CSGPolygon.ModeEnum.Spin,
             SpinDegrees = spreadDegrees,
             SpinSides = (int)(spreadDegrees / 5),
-            RotationDegrees = new Vector3(0, -spreadDegrees / 2, 0),
+            RotationDegrees = new Vector3(0, 90 - spreadDegrees / 2, 0),
             Translation = new Vector3(0, height / 2, 0),
             Material = material
         };
