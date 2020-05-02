@@ -89,7 +89,7 @@ public class RoomGenerator : Spatial
     }
 
     [Export]
-    public SpatialMaterial WallMaterial
+    public Material WallMaterial
     {
         get
         {
@@ -103,7 +103,7 @@ public class RoomGenerator : Spatial
     }
 
     [Export]
-    public SpatialMaterial TileMaterial
+    public Material TileMaterial
     {
         get
         {
@@ -117,7 +117,7 @@ public class RoomGenerator : Spatial
     }
 
     [Export]
-    public SpatialMaterial GroutMaterial
+    public Material GroutMaterial
     {
         get
         {
@@ -144,9 +144,9 @@ public class RoomGenerator : Spatial
     private Vector3 tileSize = new Vector3(5, 0.2f, 5);
     private float tileOffset = 0.0f;
     private float tileSpacing = 4.0f;
-    private SpatialMaterial wallMaterial;
-    private SpatialMaterial tileMaterial;
-    private SpatialMaterial groutMaterial;
+    private Material wallMaterial;
+    private Material tileMaterial;
+    private Material groutMaterial;
     private readonly PhysicsBody[] walls = new PhysicsBody[4];
     private readonly Spatial floor = new Spatial();
 
