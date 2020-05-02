@@ -1,5 +1,8 @@
 using Godot;
 
+/// <summary>
+/// Represents status effects induced by weapons or skills. Can be carried by <see cref="IStatusHolder"/>.
+/// </summary>
 public class Status : Node
 {
     public float TimeLeft

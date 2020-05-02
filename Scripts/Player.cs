@@ -74,14 +74,14 @@ public class Player : KinematicBody
     private Camera camera;
     private InputMode inputMode = InputMode.Keyboard;
     private Vector3 previousFaceDirection = Vector3.Forward;
-    private Weapon weapon;
-    private Weapon skill;
+    private AimableAttack weapon;
+    private AimableAttack skill;
 
     public override void _Ready()
     {
         camera = GetParent().GetNode<Camera>("Camera");
-        weapon = GetNode<Weapon>("Weapon");
-        skill = GetNode<Weapon>("Skill");
+        weapon = GetNode<AimableAttack>("Weapon");
+        skill = GetNode<AimableAttack>("Skill");
 
         // Move weapon to the front of the player
         weapon.Translation = Vector3.Forward * Scale.z;
@@ -120,6 +120,9 @@ public class Player : KinematicBody
         bool showSkillAimIndicator = IsSecondaryAttackPressed;
         weapon.AimIndicator.Visible = !showSkillAimIndicator;
         skill.AimIndicator.Visible = showSkillAimIndicator;
+
+        weapon.AimIndicator.Translation = Vector3.Down;
+        skill.AimIndicator.Translation = Vector3.Down;
     }
 
     public void Move(Vector2 weightedDirection, float delta)
@@ -236,14 +239,19 @@ public class Player : KinematicBody
     private Vector3? GetCursorPointOnPlayerPlane()
     {
         Vector3 cameraRayOrigin = camera.ProjectRayOrigin(mousePosition);
-        Vector3 cameraRayTarget = cameraRayOrigin + (camera.ProjectRayNormal(mousePosition) * 1000);
+        Vector3 rayDirection = camera.ProjectRayNormal(mousePosition);
+        Vector3 cameraRayTarget = cameraRayOrigin + (rayDirection * 1000);
         Dictionary ray = GetWorld().DirectSpaceState.IntersectRay(cameraRayOrigin, cameraRayTarget, collisionMask: 1);
         if (ray.Count > 0)
         {
             Vector3 cursorPointOnFloor = (Vector3)ray["position"];
-            cursorPointOnFloor.y = GlobalTransform.origin.y;
+            Vector3 directionToCamera = -rayDirection;
+            float heightDifference = Mathf.Abs(GlobalTransform.origin.y - cursorPointOnFloor.y);
 
-            return cursorPointOnFloor;
+            // Backtrack ray to camera such that cursorPosition.y = player.y
+            Vector3 cursorPointOnPlayerPlane = cursorPointOnFloor + (heightDifference / directionToCamera.y) * directionToCamera;
+
+            return cursorPointOnPlayerPlane;
         }
         return null;
     }

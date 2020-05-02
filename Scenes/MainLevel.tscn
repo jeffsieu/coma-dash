@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Scripts/Player.cs" type="Script" id=1]
 [ext_resource path="res://Scripts/Generator/RoomGenerator.cs" type="Script" id=2]
@@ -7,14 +7,7 @@
 [ext_resource path="res://Scenes/Enemy.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scripts/Weapon/DashSkill.cs" type="Script" id=6]
 
-[sub_resource type="CylinderMesh" id=1]
-
-[sub_resource type="SpatialMaterial" id=2]
-
-[sub_resource type="CylinderShape" id=3]
-
-[sub_resource type="PlaneMesh" id=4]
-subdivide_width = 4
+[sub_resource type="CylinderShape" id=10]
 
 [sub_resource type="BoxShape" id=5]
 
@@ -33,7 +26,7 @@ bg_color = Color( 0.854902, 0.431373, 0.0941176, 1 )
 [node name="Level" type="Spatial"]
 
 [node name="Camera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.513272, 0.858226, 0, -0.858226, 0.513272, 1.34645, 47.0822, 25.3017 )
+transform = Transform( 1, 0, 0, 0, 0.461393, 0.887196, 0, -0.887196, 0.461393, 1.34645, 50.4642, 26.7106 )
 fov = 36.6
 
 [node name="Player" type="KinematicBody" parent="."]
@@ -42,18 +35,16 @@ collision_layer = 2
 collision_mask = 9
 script = ExtResource( 1 )
 
-[node name="CSGMesh" type="CSGMesh" parent="Player"]
-mesh = SubResource( 1 )
-material = SubResource( 2 )
+[node name="CSGCylinder" type="CSGCylinder" parent="Player"]
+height = 2.0
 
 [node name="CollisionShape" type="CollisionShape" parent="Player"]
-shape = SubResource( 3 )
+shape = SubResource( 10 )
 
 [node name="Weapon" type="Spatial" parent="Player"]
 script = ExtResource( 4 )
 
 [node name="AimIndicator" type="Spatial" parent="Player/Weapon"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
 script = ExtResource( 3 )
 IndicatorType = 2
 
@@ -61,11 +52,8 @@ IndicatorType = 2
 script = ExtResource( 6 )
 
 [node name="Floor" type="StaticBody" parent="."]
-transform = Transform( 100, 0, 0, 0, 1, 0, 0, 0, 100, 0, -2, 0 )
+transform = Transform( 100, 0, 0, 0, 1, 0, 0, 0, 100, 0, 0, 0 )
 collision_mask = 15
-
-[node name="CSGMesh" type="CSGMesh" parent="Floor"]
-mesh = SubResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Floor"]
 shape = SubResource( 5 )
@@ -104,9 +92,16 @@ __meta__ = {
 }
 
 [node name="Enemy" parent="." instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.81554, 2.16162, -1.22923 )
 
 [node name="Enemy2" parent="." instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 2, 0, 0, 0, 1, 1.78837, 2.16162, 3.68648 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.78837, 2.16162, 7.87757 )
 
 [node name="Enemy3" parent="." instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 2, 0, 0, 0, 1, 4.88411, 2.16162, 2.84288 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.88411, 2.16162, 2.84288 )
+
+[node name="Enemy4" parent="." instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.36592, 2.16162, -7.50016 )
+
+[node name="Enemy5" parent="." instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.91746, 2.16162, -3.4431 )

@@ -67,10 +67,10 @@
     <Compile Include="Scripts\Status\MarkStatus.cs" />
     <Compile Include="Scripts\Status\Status.cs" />
     <Compile Include="Scripts\Status\IStatusHolder.cs" />
+    <Compile Include="Scripts\Weapon\AimableAttack.cs" />
     <Compile Include="Scripts\Weapon\DashSkill.cs" />
     <Compile Include="Scripts\Weapon\OverheatingGun.cs" />
     <Compile Include="Scripts\Weapon\StraightProjectileWeapon.cs" />
-    <Compile Include="Scripts\Weapon\Weapon.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

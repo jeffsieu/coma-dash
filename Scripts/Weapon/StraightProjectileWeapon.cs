@@ -1,6 +1,6 @@
 using Godot;
 
-public abstract class StraightProjectileWeapon : Weapon
+public abstract class StraightProjectileWeapon : AimableAttack
 {
     // 0.5s cooldown
     protected readonly float coolDownDuration;

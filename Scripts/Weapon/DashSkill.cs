@@ -1,30 +1,48 @@
 using Godot;
 using Godot.Collections;
 
-public class DashSkill : Weapon
+/// <summary>
+/// A skill that allows the player to dash forwards.
+/// Dashing to an enemy marked (see <see cref="MarkStatus"/>) by the <see cref="OverheatingGun"/>
+/// will deal damage to it upon impact, as well as damaging other enemies within the area of impact.
+/// The damaged enemies are also knocked back.
+/// </summary>
+public class DashSkill : AimableAttack
 {
     private readonly float spreadDegrees;
     private readonly float dashSpeed;
+    private readonly float damage;
+    private readonly float impactRange;
+    private readonly float coolAmount;
 
     private Area targetArea;
     private Area coneSides;
+    private Area impactArea;
     private Spatial hintReticle;
+    private Spatial impactAimIndicator;
     private bool showTargetHint = false;
     private Player player;
     private Enemy targetEnemy;
     private bool isRunning = false;
 
+    private OverheatingGun overheatingGun;
+
     public DashSkill() : base(10.0f)
     {
         dashSpeed = 50.0f;
         spreadDegrees = 25.0f;
+        damage = 30.0f;
+        impactRange = 5.0f;
+        coolAmount = 0.4f;
     }
 
     public override void _Ready()
     {
         base._Ready();
         player = GetParent<Player>();
-        (AimIndicator as GeneralAimIndicator).IndicatorType = GeneralAimIndicator.AimIndicatorType.CONICAL;
+        overheatingGun = player.GetNode<OverheatingGun>("Weapon");
+
+        (AimIndicator as GeneralAimIndicator).IndicatorType = GeneralAimIndicator.AimIndicatorType.STRAIGHT;
         (AimIndicator as GeneralAimIndicator).SpreadDegrees = spreadDegrees;
         targetArea = new Area();
         targetArea.AddChild(new CollisionShape() { Shape = new CylinderShape { Radius = range } });
@@ -43,10 +61,25 @@ public class DashSkill : Weapon
             Translation = range / 2 * Vector3.Forward.Rotated(Vector3.Up, Mathf.Deg2Rad(-spreadDegrees / 2))
         });
 
-        hintReticle = new CSGBox { Scale = 0.5f * Vector3.One };
+        impactArea = new Area();
+        impactArea.AddChild(new CollisionShape() { Shape = new CylinderShape { Radius = impactRange } });
+
+        hintReticle = new Spatial();
+        hintReticle.AddChild(new CSGBox
+        {
+            Scale = 0.5f * Vector3.One,
+            Translation = 2 * Vector3.Up,
+            Material = new SpatialMaterial
+            {
+                AlbedoColor = Colors.Green
+            }
+        });
+        impactAimIndicator = new ConicalAimIndicator { SpreadDegrees = 360, Range = impactRange };
+        hintReticle.AddChild(impactAimIndicator);
 
         AddChild(targetArea);
         AddChild(coneSides);
+        AddChild(impactArea);
         AddChild(hintReticle);
     }
 
@@ -61,8 +94,18 @@ public class DashSkill : Weapon
 
             if (targetEnemy != null)
             {
+
+                Vector3 enemyLocation = targetEnemy.GlobalTransform.origin;
+                Dictionary ray = GetWorld().DirectSpaceState.IntersectRay(GlobalTransform.origin, enemyLocation, collisionMask: 4);
+
+                if (ray.Count == 0)
+                    return;
+                Vector3 enemyBoundary = (Vector3)ray["position"];
+
+                impactAimIndicator.Translation = enemyBoundary - enemyLocation;
+
                 Transform hintReticleGlobalTransform = hintReticle.GlobalTransform;
-                hintReticleGlobalTransform.origin = targetEnemy.GlobalTransform.origin + Vector3.Up * 2;
+                hintReticleGlobalTransform.origin = enemyLocation;
                 hintReticle.GlobalTransform = hintReticleGlobalTransform;
             }
         }
@@ -71,7 +114,6 @@ public class DashSkill : Weapon
             hintReticle.Hide();
             targetEnemy = null;
         }
-
     }
 
     private Enemy GetTargetEnemy()
@@ -177,8 +219,24 @@ public class DashSkill : Weapon
     {
         if (targetEnemy != null)
         {
-            targetEnemy.Velocity.y += 50f;
-            // TODO: Add AOE effects
+            Vector3 targetEnemyDirection = (targetEnemy.GlobalTransform.origin - GlobalTransform.origin).Normalized();
+            Vector3 accelerationOntargetEnemy = 50.0f * targetEnemyDirection + 40.0f * Vector3.Up;
+            targetEnemy.Velocity += accelerationOntargetEnemy;
+            targetEnemy.Damage(damage);
+
+            foreach (PhysicsBody body in impactArea.GetOverlappingBodies())
+            {
+                if (!(body is Enemy))
+                    continue;
+
+                Enemy enemy = body as Enemy;
+                Vector3 enemyDirection = (enemy.GlobalTransform.origin - GlobalTransform.origin).Normalized();
+                Vector3 accelerationOnEnemy = 25.0f * enemyDirection + 20.0f * Vector3.Up;
+                enemy.Velocity += accelerationOnEnemy;
+                enemy.Damage(damage / 2);
+            }
+
+            overheatingGun.Cool(coolAmount);
         }
         player.IsMovementLocked = false;
         isRunning = false;

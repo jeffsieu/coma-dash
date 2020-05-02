@@ -1,6 +1,9 @@
 using Godot;
 
-public abstract class Weapon : Spatial
+/// <summary>
+/// A class representing attacks that require aiming.
+/// </summary>
+public abstract class AimableAttack : Spatial
 {
     public Vector2 WeightedAttackDirection
     {
@@ -44,10 +47,10 @@ public abstract class Weapon : Spatial
     }
 
     public AimIndicator AimIndicator;
-    protected float range = 5.0f;
+    protected float range;
     protected bool isAttackButtonPressed;
 
-    public Weapon(float range)
+    public AimableAttack(float range)
     {
         this.range = range;
     }

@@ -9,12 +9,12 @@ public class Enemy : KinematicBody, IStatusHolder
     private SpatialMaterial material;
     private List<Status> statuses;
 
-
     public override void _Ready()
     {
         material = new SpatialMaterial()
         {
-            AlbedoColor = Colors.White
+            AlbedoColor = Colors.White,
+            FlagsTransparent = true
         };
 
         CSGCylinder cylinder = GetNode<CSGCylinder>("CSGCylinder");
@@ -24,9 +24,9 @@ public class Enemy : KinematicBody, IStatusHolder
 
     public override void _PhysicsProcess(float delta)
     {
+        Velocity.x *= 0.9f;
         Velocity.y -= gravity;
-        Velocity.x = 0;
-        Velocity.z = 0;
+        Velocity.z *= 0.9f;
         Velocity = MoveAndSlide(Velocity);
         Color baseColor = Colors.Red.LinearInterpolate(Colors.Blue, GetPercentLeft<MarkStatus>());
         Color healthColor = baseColor.LinearInterpolate(Colors.White, 1 - health / 100);
@@ -35,10 +35,22 @@ public class Enemy : KinematicBody, IStatusHolder
 
     public void Damage(float damage)
     {
-        health -= damage;
+        health = Mathf.Max(health - damage, 0);
+        if (health == 0)
+            Die();
+    }
 
-        if (health <= 0)
-            QueueFree();
+    public void Die()
+    {
+        Tween tween = new Tween();
+        AddChild(tween);
+        Color initialColor = material.AlbedoColor;
+        initialColor.a = 0.5f;
+        Color finalColor = material.AlbedoColor;
+        finalColor.a = 0;
+        tween.InterpolateProperty(material, "albedo_color", initialColor, finalColor, 1.0f);
+        tween.InterpolateCallback(this, 1.0f, "queue_free");
+        tween.Start();
     }
 
     public bool HasStatus<S>() where S : Status

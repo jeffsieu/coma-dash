@@ -1,5 +1,5 @@
 /// <summary>
-/// Represents an entity that can hold status effects.
+/// Represents an entity that can hold <see cref="Status"/> effects, which are induced by weapons or skills.
 /// </summary>
 public interface IStatusHolder
 {

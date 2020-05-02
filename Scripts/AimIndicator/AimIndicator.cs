@@ -3,7 +3,7 @@ using Godot;
 
 /// <summary>
 /// <para>
-/// A <see cref="Spatial"/> that displays a mesh representing the trajectory of a <see cref="Weapon"/>.
+/// A <see cref="Spatial"/> that displays a mesh representing the trajectory of a <see cref="AimableAttack"/>.
 /// The mesh is positioned such that it rests on, and is projected outward from the origin of the <see cref="AimIndicator"/>.
 /// </para>
 ///
