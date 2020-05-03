@@ -61,7 +61,9 @@ public class Enemy : KinematicBody, IStatusHolder
 
     public S GetStatusOrNull<S>() where S : Status
     {
-        return statuses[typeof(S)] as S;
+        if (statuses.ContainsKey(typeof(S)))
+            return statuses[typeof(S)] as S;
+        return null;
     }
 
     public float GetPercentLeft<S>() where S : Status
