@@ -1,6 +1,7 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Scripts/Player.cs" type="Script" id=1]
+[ext_resource path="res://Scripts/PlayerCamera.cs" type="Script" id=2]
 [ext_resource path="res://Scripts/AimIndicator/GeneralAimIndicator.cs" type="Script" id=3]
 [ext_resource path="res://Scripts/Weapon/OverheatingGun.cs" type="Script" id=4]
 [ext_resource path="res://Scenes/Enemy.tscn" type="PackedScene" id=5]
@@ -11,12 +12,12 @@
 
 [sub_resource type="BoxShape" id=2]
 
-[sub_resource type="StyleBoxFlat" id=6]
+[sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 0.854902, 0.431373, 0.0941176, 1 )
 
-[sub_resource type="SpatialMaterial" id=7]
+[sub_resource type="SpatialMaterial" id=4]
 
-[sub_resource type="Shader" id=8]
+[sub_resource type="Shader" id=5]
 code = "shader_type spatial;
 
 uniform vec2 size;
@@ -38,8 +39,8 @@ void fragment()
 	ALBEDO = color;
 }"
 
-[sub_resource type="ShaderMaterial" id=9]
-shader = SubResource( 8 )
+[sub_resource type="ShaderMaterial" id=6]
+shader = SubResource( 5 )
 shader_param/size = Vector2( 20, 0 )
 shader_param/tile_color = Color( 1, 0.58, 0.43, 1 )
 shader_param/grout_color = Color( 0.39, 0.51, 0.54, 1 )
@@ -49,6 +50,7 @@ shader_param/grout_color = Color( 0.39, 0.51, 0.54, 1 )
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.461393, 0.887196, 0, -0.887196, 0.461393, 1.34645, 50.4642, 26.7106 )
 fov = 36.6
+script = ExtResource( 2 )
 
 [node name="Player" type="KinematicBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0 )
@@ -97,7 +99,7 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = -14.0
-custom_styles/fg = SubResource( 6 )
+custom_styles/fg = SubResource( 3 )
 max_value = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -122,5 +124,5 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.91746, 2.16162, -3.4431 )
 script = ExtResource( 7 )
 UnitSize = 4
 MapPath = "res://Maps/basic2.data"
-WallMaterial = SubResource( 7 )
-FloorMaterial = SubResource( 9 )
+WallMaterial = SubResource( 4 )
+FloorMaterial = SubResource( 6 )
