@@ -42,7 +42,7 @@ public class DashSkill : AimableAttack
         player = GetParent<Player>();
         overheatingGun = player.GetNode<OverheatingGun>("Weapon");
 
-        (AimIndicator as GeneralAimIndicator).IndicatorType = GeneralAimIndicator.AimIndicatorType.STRAIGHT;
+        (AimIndicator as GeneralAimIndicator).IndicatorType = GeneralAimIndicator.AimIndicatorType.CONICAL;
         (AimIndicator as GeneralAimIndicator).SpreadDegrees = spreadDegrees;
         targetArea = new Area();
         targetArea.AddChild(new CollisionShape() { Shape = new CylinderShape { Radius = range } });
