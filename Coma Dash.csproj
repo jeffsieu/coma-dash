@@ -59,13 +59,21 @@
     <Compile Include="Scripts\AimIndicator\DetachedCircularAimIndicator.cs" />
     <Compile Include="Scripts\AimIndicator\GeneralAimIndicator.cs" />
     <Compile Include="Scripts\AimIndicator\StraightAimIndicator.cs" />
+    <Compile Include="Scripts\Enemy\Enemy.cs" />
     <Compile Include="Scripts\Generator\MapLoader.cs" />
     <Compile Include="Scripts\Generator\RoomGenerator.cs" />
     <Compile Include="Scripts\Generator\Floor.cs" />
     <Compile Include="Scripts\Generator\Wall.cs" />
     <Compile Include="Scripts\InputMode.cs" />
     <Compile Include="Scripts\Player.cs" />
-    <Compile Include="Scripts\Weapon.cs" />
+    <Compile Include="Scripts\Projectile.cs" />
+    <Compile Include="Scripts\Status\MarkStatus.cs" />
+    <Compile Include="Scripts\Status\Status.cs" />
+    <Compile Include="Scripts\Status\IStatusHolder.cs" />
+    <Compile Include="Scripts\Weapon\AimableAttack.cs" />
+    <Compile Include="Scripts\Weapon\DashSkill.cs" />
+    <Compile Include="Scripts\Weapon\OverheatingGun.cs" />
+    <Compile Include="Scripts\Weapon\StraightProjectileWeapon.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

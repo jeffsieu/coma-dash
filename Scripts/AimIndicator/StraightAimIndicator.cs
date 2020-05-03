@@ -34,8 +34,7 @@ public class StraightAimIndicator : AimIndicator
             Height = height,
             Depth = range,
             Material = material,
-            Translation = new Vector3(range / 2, height, 0),
-            RotationDegrees = new Vector3(0, 90, 0)
+            Translation = new Vector3(0, height, -range / 2)
         };
     }
 }
