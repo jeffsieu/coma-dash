@@ -60,7 +60,10 @@
     <Compile Include="Scripts\AimIndicator\GeneralAimIndicator.cs" />
     <Compile Include="Scripts\AimIndicator\StraightAimIndicator.cs" />
     <Compile Include="Scripts\Enemy\Enemy.cs" />
+    <Compile Include="Scripts\Generator\MapLoader.cs" />
     <Compile Include="Scripts\Generator\RoomGenerator.cs" />
+    <Compile Include="Scripts\Generator\Floor.cs" />
+    <Compile Include="Scripts\Generator\Wall.cs" />
     <Compile Include="Scripts\InputMode.cs" />
     <Compile Include="Scripts\Player.cs" />
     <Compile Include="Scripts\Projectile.cs" />
