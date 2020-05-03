@@ -41,8 +41,7 @@ public abstract class StraightProjectileWeapon : AimableAttack
     public override void _PhysicsProcess(float delta)
     {
         base._PhysicsProcess(delta);
-        cooldown -= delta;
-        cooldown = Mathf.Max(0, cooldown);
+        cooldown = Mathf.Max(cooldown - delta, 0);
 
         if (isTryingToFire && CanFire())
         {

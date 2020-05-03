@@ -66,7 +66,7 @@ public abstract class AimableAttack : Spatial
         AimIndicator.Range = range;
     }
 
-    public Vector2 GetAttackJoyAxisFromMouseDisplacement(Vector3 mouseDisplacement)
+    public Vector2 GetWeightedAttackDirectionFromMouseDisplacement(Vector3 mouseDisplacement)
     {
         Vector2 mouseDisplacement2D = new Vector2(mouseDisplacement.x, mouseDisplacement.z);
         mouseDisplacement2D = (mouseDisplacement2D / range).Clamped(1.0f);

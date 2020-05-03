@@ -161,7 +161,7 @@ public class Player : KinematicBody
 
         Vector3 newVelocity = velocity + actualAcceleration;
         velocity = newVelocity;
-        KinematicCollision collision = this.MoveAndCollide(newVelocity * delta);
+        KinematicCollision collision = MoveAndCollide(newVelocity * delta);
         if (collision != null)
         {
             velocity = velocity.Slide(collision.Normal);
@@ -188,7 +188,7 @@ public class Player : KinematicBody
             if (cursorPosition.HasValue)
             {
                 Vector3 displacement = cursorPosition.Value - Translation;
-                return weapon.GetAttackJoyAxisFromMouseDisplacement(displacement);
+                return weapon.GetWeightedAttackDirectionFromMouseDisplacement(displacement);
             }
         }
         return Vector2.Zero;

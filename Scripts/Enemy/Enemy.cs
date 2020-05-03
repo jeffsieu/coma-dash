@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 
 public class Enemy : KinematicBody, IStatusHolder
@@ -7,7 +8,7 @@ public class Enemy : KinematicBody, IStatusHolder
     private readonly float gravity = 4.85f;
     private float health = 100f;
     private SpatialMaterial material;
-    private List<Status> statuses;
+    private Dictionary<Type, Status> statuses;
 
     public override void _Ready()
     {
@@ -19,7 +20,7 @@ public class Enemy : KinematicBody, IStatusHolder
 
         CSGCylinder cylinder = GetNode<CSGCylinder>("CSGCylinder");
         cylinder.Material = material;
-        statuses = new List<Status>();
+        statuses = new Dictionary<Type, Status>();
     }
 
     public override void _PhysicsProcess(float delta)
@@ -60,12 +61,7 @@ public class Enemy : KinematicBody, IStatusHolder
 
     public S GetStatusOrNull<S>() where S : Status
     {
-        foreach (Status status in statuses)
-        {
-            if (status.GetType() == typeof(S))
-                return status as S;
-        }
-        return null;
+        return statuses[typeof(S)] as S;
     }
 
     public float GetPercentLeft<S>() where S : Status
@@ -90,13 +86,13 @@ public class Enemy : KinematicBody, IStatusHolder
             {
                 TimeLeft = duration
             };
-            statuses.Add(status);
+            statuses[typeof(S)] = status;
             AddChild(status);
         }
     }
 
     public void OnStatusEnd(Status status)
     {
-        statuses.Remove(status);
+        statuses[status.GetType()] = null;
     }
 }

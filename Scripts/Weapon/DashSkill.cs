@@ -100,6 +100,7 @@ public class DashSkill : AimableAttack
 
                 if (ray.Count == 0)
                     return;
+
                 Vector3 enemyBoundary = (Vector3)ray["position"];
 
                 impactAimIndicator.Translation = enemyBoundary - enemyLocation;
@@ -125,14 +126,14 @@ public class DashSkill : AimableAttack
         Vector3 forward = -GlobalTransform.basis.z;
         foreach (PhysicsBody body in bodies)
         {
+            if (!(body is Enemy))
+                continue;
+
             Vector3 bodyDisplacement = body.GlobalTransform.origin - GlobalTransform.origin;
             Plane upFacingPlane = new Plane(GlobalTransform.basis.y, 0);
             Vector3 flattenedBodyDisplacement = upFacingPlane.Project(bodyDisplacement);
 
             float degreesDifference = Mathf.Rad2Deg(forward.AngleTo(flattenedBodyDisplacement));
-
-            if (!(body is Enemy))
-                continue;
 
             if (degreesDifference > spreadDegrees / 2)
                 continue;
@@ -230,6 +231,9 @@ public class DashSkill : AimableAttack
                     continue;
 
                 Enemy enemy = body as Enemy;
+                if (enemy == targetEnemy)
+                    continue;
+
                 Vector3 enemyDirection = (enemy.GlobalTransform.origin - GlobalTransform.origin).Normalized();
                 Vector3 accelerationOnEnemy = 25.0f * enemyDirection + 20.0f * Vector3.Up;
                 enemy.Velocity += accelerationOnEnemy;

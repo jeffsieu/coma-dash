@@ -72,7 +72,6 @@ public class OverheatingGun : StraightProjectileWeapon
 
     protected override void OnProjectileHit(Enemy enemy)
     {
-        // TODO: Mark enemy
         rng.Randomize();
         if (rng.Randf() < markChance)
             enemy.ApplyStatus<MarkStatus>(MarkDuration);
