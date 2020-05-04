@@ -3,7 +3,7 @@ using Godot;
 public class PlayerCamera : Camera
 {
     [Export]
-    private readonly float PlayerDistanceThreshold = 2f;
+    private readonly float PlayerDistanceThreshold = 3f;
     [Export]
     private readonly float CursorDistanceThreshold = 1f;
     [Export]
@@ -15,7 +15,7 @@ public class PlayerCamera : Camera
     [Export]
     private readonly float FollowCursorSpeedFactor = 0.3f;
     [Export]
-    private readonly float FollowPlayerSpeedFactor = 0.7f;
+    private readonly float FollowPlayerSpeedFactor = 0.25f;
     [Export]
     private readonly float VelocityDamping = 0.9f;
 
@@ -24,6 +24,7 @@ public class PlayerCamera : Camera
     private Vector3 followCursorVelocity;
     private Vector3 followPlayerVelocity;
     private Vector3 currentCursorOffset;
+    private Tween tween;
 
     public override void _Ready()
     {
@@ -32,14 +33,13 @@ public class PlayerCamera : Camera
         followCursorVelocity = new Vector3();
         followPlayerVelocity = new Vector3();
         currentCursorOffset = new Vector3();
+        tween = new Tween();
+        AddChild(tween);
     }
 
     public override void _PhysicsProcess(float delta)
     {
-        if (player.IsMovementLocked)
-            TargetHeight = Height * 0.75f;
-        else
-            TargetHeight = Height;
+        TargetHeight = Height;
 
         Vector3 playerTranslation = player.GlobalTransform.origin;
         Vector3 currentTranslation = GlobalTransform.origin - currentCursorOffset;
