@@ -17,6 +17,14 @@ public abstract class HealthEntity : KinematicBody, IStatusHolder
             health = value;
             if (healthBar != null)
                 healthBar.Value = value;
+            if (whiteHealthBar != null)
+            {
+                tween.RemoveAll();
+                tween.PlaybackProcessMode = Tween.TweenProcessMode.Physics;
+                tween.InterpolateProperty(whiteHealthBar, "value", null, value, whiteBarAnimationDuration, Tween.TransitionType.Linear, Tween.EaseType.In);
+                tween.Start();
+            }
+
         }
     }
 
@@ -32,14 +40,19 @@ public abstract class HealthEntity : KinematicBody, IStatusHolder
             Health = value;
             if (healthBar != null)
                 healthBar.MaxValue = value;
+            if (whiteHealthBar != null)
+                whiteHealthBar.MaxValue = value;
         }
     }
 
     private static readonly int borderWidth = 3;
     private static readonly int borderRadius = 3;
     private static readonly Vector2 healthBarSize = new Vector2(50, 10);
+    private static readonly float whiteBarAnimationDuration = 0.5f;
 
     protected ProgressBar healthBar;
+    protected ProgressBar whiteHealthBar;
+    protected Tween tween;
     private float health;
     private float maxHealth;
     private Camera camera;
@@ -52,6 +65,7 @@ public abstract class HealthEntity : KinematicBody, IStatusHolder
     public override void _Ready()
     {
         camera = GetTree().Root.GetCamera();
+        Health = maxHealth;
         healthBar = new ProgressBar
         {
             Value = health,
@@ -60,11 +74,10 @@ public abstract class HealthEntity : KinematicBody, IStatusHolder
             RectSize = healthBarSize,
             PercentVisible = false
         };
-        Health = maxHealth;
         healthBar.AddStyleboxOverride("fg", new StyleBoxFlat
         {
             BgColor = new Color("#F1AB86"),
-            BorderColor = Colors.Black,
+            BorderColor = Colors.Transparent,
             BorderWidthBottom = borderWidth,
             BorderWidthLeft = borderWidth,
             BorderWidthRight = borderWidth,
@@ -75,6 +88,32 @@ public abstract class HealthEntity : KinematicBody, IStatusHolder
             CornerRadiusTopRight = borderRadius,
         });
         healthBar.AddStyleboxOverride("bg", new StyleBoxFlat
+        {
+            BgColor = Colors.Transparent
+        });
+
+        whiteHealthBar = new ProgressBar
+        {
+            Value = health,
+            MinValue = 0,
+            MaxValue = maxHealth,
+            RectSize = healthBarSize,
+            PercentVisible = false
+        };
+        whiteHealthBar.AddStyleboxOverride("fg", new StyleBoxFlat
+        {
+            BgColor = Colors.White,
+            BorderColor = Colors.Black,
+            BorderWidthBottom = borderWidth,
+            BorderWidthLeft = borderWidth,
+            BorderWidthRight = borderWidth,
+            BorderWidthTop = borderWidth,
+            CornerRadiusBottomLeft = borderRadius,
+            CornerRadiusBottomRight = borderRadius,
+            CornerRadiusTopLeft = borderRadius,
+            CornerRadiusTopRight = borderRadius,
+        });
+        whiteHealthBar.AddStyleboxOverride("bg", new StyleBoxFlat
         {
             BgColor = Colors.Black,
             BorderColor = Colors.Black,
@@ -87,6 +126,10 @@ public abstract class HealthEntity : KinematicBody, IStatusHolder
             CornerRadiusTopLeft = borderRadius,
             CornerRadiusTopRight = borderRadius,
         });
+
+        tween = new Tween();
+        AddChild(tween);
+        AddChild(whiteHealthBar);
         AddChild(healthBar);
     }
 
@@ -99,9 +142,12 @@ public abstract class HealthEntity : KinematicBody, IStatusHolder
     {
         Vector2 positionOnScreen = camera.UnprojectPosition(GlobalTransform.origin);
 
-        var size = healthBar.RectSize;
-        var scale = healthBar.RectScale;
-        healthBar.SetPosition(positionOnScreen + new Vector2(-size.x * scale.x / 2, -size.y * scale.y) + Vector2.Up * 10);
+        Vector2 size = healthBar.RectSize;
+        Vector2 scale = healthBar.RectScale;
+
+        Vector2 healthBarPosition = positionOnScreen + new Vector2(-size.x * scale.x / 2, -size.y * scale.y) + Vector2.Up * 10;
+        healthBar.RectPosition = healthBarPosition;
+        whiteHealthBar.RectPosition = healthBarPosition;
     }
 
     public virtual void Damage(float damage)
@@ -109,7 +155,13 @@ public abstract class HealthEntity : KinematicBody, IStatusHolder
         Health = Mathf.Max(Health - damage, 0);
 
         if (Health == 0)
+        {
+            whiteHealthBar.QueueFree();
+            healthBar.QueueFree();
+            tween.QueueFree();
+            statuses.Clear();
             Die();
+        }
     }
 
     protected abstract void Die();

@@ -1,6 +1,4 @@
 using Godot;
-using System;
-using System.Collections.Generic;
 
 public class Enemy : HealthEntity
 {
@@ -42,11 +40,7 @@ public class Enemy : HealthEntity
     {
         Tween tween = new Tween();
         AddChild(tween);
-        Color initialColor = material.AlbedoColor;
-        initialColor.a = 0.5f;
-        Color finalColor = material.AlbedoColor;
-        finalColor.a = 0;
-        tween.InterpolateProperty(material, "albedo_color", initialColor, finalColor, 1.0f);
+        tween.InterpolateProperty(material, "albedo_color:a", 0.5f, 0, 1.0f);
         tween.InterpolateCallback(this, 1.0f, "queue_free");
         tween.Start();
     }
