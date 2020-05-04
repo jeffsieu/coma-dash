@@ -198,8 +198,8 @@ public class DashSkill : AimableAttack
             Dictionary ray = GetWorld().DirectSpaceState.IntersectRay(currentLocation, targetLocation, collisionMask: 1);
             if (ray.Count > 0)
             {
-                Vector3 wallNormal = (Vector3) ray["normal"];
-                Vector3 position = (Vector3) ray["position"];
+                Vector3 wallNormal = (Vector3)ray["normal"];
+                Vector3 position = (Vector3)ray["position"];
                 float cosAngle = wallNormal.Dot(GlobalTransform.basis.z);
                 float radius = player.Scale.x;
                 float hyp = radius / cosAngle;
