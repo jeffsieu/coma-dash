@@ -64,6 +64,7 @@
     <Compile Include="Scripts\Generator\RoomGenerator.cs" />
     <Compile Include="Scripts\Generator\Floor.cs" />
     <Compile Include="Scripts\Generator\Wall.cs" />
+    <Compile Include="Scripts\HealthEntity.cs" />
     <Compile Include="Scripts\InputMode.cs" />
     <Compile Include="Scripts\Player.cs" />
     <Compile Include="Scripts\Projectile.cs" />
