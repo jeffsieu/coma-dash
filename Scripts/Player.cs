@@ -248,20 +248,8 @@ public class Player : HealthEntity
     {
         Vector3 cameraRayOrigin = camera.ProjectRayOrigin(mousePosition);
         Vector3 rayDirection = camera.ProjectRayNormal(mousePosition);
-        Vector3 cameraRayTarget = cameraRayOrigin + (rayDirection * 1000);
-        Dictionary ray = GetWorld().DirectSpaceState.IntersectRay(cameraRayOrigin, cameraRayTarget, collisionMask: 1);
-        if (ray.Count > 0)
-        {
-            Vector3 cursorPointOnFloor = (Vector3)ray["position"];
-            Vector3 directionToCamera = -rayDirection;
-            float heightDifference = Mathf.Abs(GlobalTransform.origin.y - cursorPointOnFloor.y);
-
-            // Backtrack ray to camera such that cursorPosition.y = player.y
-            Vector3 cursorPointOnPlayerPlane = cursorPointOnFloor + (heightDifference / directionToCamera.y) * directionToCamera;
-
-            return cursorPointOnPlayerPlane;
-        }
-        return null;
+        float factor = (GlobalTransform.origin.y - cameraRayOrigin.y) / rayDirection.y;
+        return cameraRayOrigin + rayDirection * factor;
     }
 
     protected override void Die()
