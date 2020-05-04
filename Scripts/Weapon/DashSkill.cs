@@ -18,6 +18,7 @@ public class DashSkill : AimableAttack
     private Area targetArea;
     private Area coneSides;
     private Area impactArea;
+    private Tween tween;
     private Spatial hintReticle;
     private Spatial impactAimIndicator;
     private bool showTargetHint = false;
@@ -77,6 +78,9 @@ public class DashSkill : AimableAttack
         impactAimIndicator = new ConicalAimIndicator { SpreadDegrees = 360, Range = impactRange };
         hintReticle.AddChild(impactAimIndicator);
 
+        Tween tween = new Tween();
+
+        AddChild(tween);
         AddChild(targetArea);
         AddChild(coneSides);
         AddChild(impactArea);
@@ -206,8 +210,6 @@ public class DashSkill : AimableAttack
 
         float duration = (targetLocation - currentTransform.origin).Length() / dashSpeed;
 
-        Tween tween = new Tween();
-        AddChild(tween);
         tween.InterpolateProperty(player, "GlobalTransform", currentTransform, targetTransform, duration, transType: Tween.TransitionType.Quart);
         tween.InterpolateCallback(this, duration, "OnFinished");
         tween.Start();
