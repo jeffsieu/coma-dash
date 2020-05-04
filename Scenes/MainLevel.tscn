@@ -116,7 +116,6 @@ __meta__ = {
 margin_right = 824.0
 margin_bottom = 34.0
 custom_fonts/font = SubResource( 4 )
-custom_colors/font_color = Color( 1, 0.301961, 0, 1 )
 text = "Heat"
 align = 1
 valign = 1

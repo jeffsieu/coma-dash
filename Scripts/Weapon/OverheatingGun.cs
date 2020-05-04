@@ -63,7 +63,6 @@ public class OverheatingGun : StraightProjectileWeapon
     public override void _Ready()
     {
         base._Ready();
-        heatLevelBarLeft = GetTree().Root.FindNode("HeatLevelLeft", owned: false) as ProgressBar;
         StyleBox fg = new StyleBoxFlat
         {
             BgColor = new Color("#F1AB86"),
@@ -92,6 +91,8 @@ public class OverheatingGun : StraightProjectileWeapon
             CornerRadiusTopLeft = 0,
             CornerRadiusTopRight = borderRadius,
         };
+
+        heatLevelBarLeft = GetTree().Root.FindNode("HeatLevelLeft", owned: false) as ProgressBar;
         heatLevelBarLeft.AddStyleboxOverride("fg", fg);
         heatLevelBarLeft.AddStyleboxOverride("bg", bg);
 
@@ -102,7 +103,6 @@ public class OverheatingGun : StraightProjectileWeapon
         heatLevelBarLeft.RectScale = new Vector2(-1, 1);
         heatLevelBarLeft.RectMinSize = new Vector2(0, 20);
         heatLevelBarRight.RectMinSize = new Vector2(0, 20);
-        GD.Print(heatLevelBarLeft.RectMinSize);
         heatLevelBarLeft.Connect("resized", this, "BarResized");
     }
 
