@@ -67,6 +67,7 @@
     <Compile Include="Scripts\HealthEntity.cs" />
     <Compile Include="Scripts\InputMode.cs" />
     <Compile Include="Scripts\Player.cs" />
+    <Compile Include="Scripts\PlayerCamera.cs" />
     <Compile Include="Scripts\Projectile.cs" />
     <Compile Include="Scripts\Status\MarkStatus.cs" />
     <Compile Include="Scripts\Status\Status.cs" />
