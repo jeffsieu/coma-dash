@@ -49,7 +49,7 @@ shader_param/grout_color = Color( 0.39, 0.51, 0.54, 1 )
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.461393, 0.887196, 0, -0.887196, 0.461393, 1.34645, 50.4642, 26.7106 )
-fov = 36.6
+fov = 35.0
 script = ExtResource( 2 )
 
 [node name="Player" type="KinematicBody" parent="."]
