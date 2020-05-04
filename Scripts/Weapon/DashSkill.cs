@@ -78,7 +78,7 @@ public class DashSkill : AimableAttack
         impactAimIndicator = new ConicalAimIndicator { SpreadDegrees = 360, Range = impactRange };
         hintReticle.AddChild(impactAimIndicator);
 
-        Tween tween = new Tween();
+        tween = new Tween();
 
         AddChild(tween);
         AddChild(targetArea);

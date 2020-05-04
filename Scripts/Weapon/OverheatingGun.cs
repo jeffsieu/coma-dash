@@ -18,8 +18,35 @@ public class OverheatingGun : StraightProjectileWeapon
     public readonly float MarkDuration = 3.0f;
 
     private float heatLevel = 0.0f;
+    private float HeatLevel
+    {
+        get
+        {
+            return heatLevel;
+        }
+        set
+        {
+            heatLevel = value;
+            if (heatLevelBarLeft != null)
+            {
+
+                Color progressBarColor = isOverheated ? maxHeatColor : minHeatColor.LinearInterpolate(maxHeatColor, HeatLevel);
+                (heatLevelBarLeft.Get("custom_styles/fg") as StyleBoxFlat).BgColor = progressBarColor;
+                (heatLevelBarRight.Get("custom_styles/fg") as StyleBoxFlat).BgColor = progressBarColor;
+
+                heatLevelBarLeft.Value = value;
+                heatLevelBarRight.Value = value;
+            }
+        }
+    }
+
     private bool isOverheated = false;
-    private ProgressBar heatLevelBar;
+    private ProgressBar heatLevelBarLeft;
+    private ProgressBar heatLevelBarRight;
+    private readonly int borderWidth = 8;
+    private readonly int borderRadius = 4;
+    private readonly Color maxHeatColor = new Color("#E86252");
+    private readonly Color minHeatColor = new Color("#9CAFB7");
     private readonly RandomNumberGenerator rng;
 
     protected override bool CanFire()
@@ -36,20 +63,63 @@ public class OverheatingGun : StraightProjectileWeapon
     public override void _Ready()
     {
         base._Ready();
-        heatLevelBar = GetTree().Root.FindNode("HeatLevel", owned: false) as ProgressBar;
+        StyleBox fg = new StyleBoxFlat
+        {
+            BgColor = new Color("#F1AB86"),
+            AntiAliasing = false,
+            BorderColor = Colors.Transparent,
+            BorderWidthBottom = borderWidth,
+            BorderWidthLeft = 0,
+            BorderWidthRight = borderWidth,
+            BorderWidthTop = borderWidth,
+            CornerRadiusBottomLeft = 0,
+            CornerRadiusBottomRight = borderRadius,
+            CornerRadiusTopLeft = 0,
+            CornerRadiusTopRight = borderRadius,
+        };
+        StyleBox bg = new StyleBoxFlat
+        {
+            BgColor = Colors.Black,
+            AntiAliasing = false,
+            BorderColor = Colors.Black,
+            BorderWidthBottom = borderWidth,
+            BorderWidthLeft = 0,
+            BorderWidthRight = borderWidth,
+            BorderWidthTop = borderWidth,
+            CornerRadiusBottomLeft = 0,
+            CornerRadiusBottomRight = borderRadius,
+            CornerRadiusTopLeft = 0,
+            CornerRadiusTopRight = borderRadius,
+        };
+
+        heatLevelBarLeft = GetTree().Root.FindNode("HeatLevelLeft", owned: false) as ProgressBar;
+        heatLevelBarLeft.AddStyleboxOverride("fg", fg);
+        heatLevelBarLeft.AddStyleboxOverride("bg", bg);
+
+        heatLevelBarRight = GetTree().Root.FindNode("HeatLevelRight", owned: false) as ProgressBar;
+        heatLevelBarRight.AddStyleboxOverride("fg", fg);
+        heatLevelBarRight.AddStyleboxOverride("bg", bg);
+
+        heatLevelBarLeft.RectScale = new Vector2(-1, 1);
+        heatLevelBarLeft.RectMinSize = new Vector2(0, 20);
+        heatLevelBarRight.RectMinSize = new Vector2(0, 20);
+        heatLevelBarLeft.Connect("resized", this, "BarResized");
+    }
+
+    private void BarResized()
+    {
+        heatLevelBarLeft.RectPivotOffset = heatLevelBarLeft.RectSize / 2;
     }
 
     public override void _PhysicsProcess(float delta)
     {
         if (!isTryingToFire || !CanFire())
         {
-            heatLevel -= coolDownSpeed * delta;
-            heatLevel = Mathf.Max(heatLevel, 0);
-            if (heatLevel == 0)
+            HeatLevel = Mathf.Max(HeatLevel - coolDownSpeed * delta, 0);
+            if (HeatLevel == 0)
                 isOverheated = false;
         }
 
-        heatLevelBar.Value = heatLevel;
 
         // Shoot if not overheating
         base._PhysicsProcess(delta);
@@ -57,16 +127,16 @@ public class OverheatingGun : StraightProjectileWeapon
 
     public void Cool(float heat)
     {
-        heatLevel = Mathf.Max(heatLevel - heat, 0);
+        HeatLevel = Mathf.Max(HeatLevel - heat, 0);
     }
 
     protected override void OnProjectileFired()
     {
-        heatLevel += heatPerProjectile;
-        if (heatLevel >= 1)
+        HeatLevel += heatPerProjectile;
+        if (HeatLevel >= 1)
         {
             isOverheated = true;
-            heatLevel = 1;
+            HeatLevel = 1;
         }
     }
 

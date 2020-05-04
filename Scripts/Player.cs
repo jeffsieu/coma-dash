@@ -2,7 +2,7 @@ using System;
 using Godot;
 using Godot.Collections;
 
-public class Player : KinematicBody
+public class Player : HealthEntity
 {
     [Export]
     protected float MaxSpeed = 25f;
@@ -77,8 +77,15 @@ public class Player : KinematicBody
     private AimableAttack weapon;
     private AimableAttack skill;
 
+    public Player()
+    {
+        MaxHealth = 100;
+    }
+
+
     public override void _Ready()
     {
+        base._Ready();
         camera = GetParent().GetNode<Camera>("Camera");
         weapon = GetNode<AimableAttack>("Weapon");
         skill = GetNode<AimableAttack>("Skill");
@@ -99,6 +106,7 @@ public class Player : KinematicBody
 
     public override void _PhysicsProcess(float delta)
     {
+        base._PhysicsProcess(delta);
         if (!IsMovementLocked)
         {
             Vector2 weightedDirection = GetWeightedMovementDirection();
@@ -254,5 +262,10 @@ public class Player : KinematicBody
             return cursorPointOnPlayerPlane;
         }
         return null;
+    }
+
+    protected override void Die()
+    {
+        QueueFree();
     }
 }
