@@ -12,7 +12,6 @@ public class PlayerCamera : Camera
     [Export]
     private float Height = 50f;
     private Player player;
-    private float EPSILON = 0.0001f;
     private float TargetHeight;
     public override void _Ready()
     {
