@@ -24,7 +24,6 @@ public class PlayerCamera : Camera
     private Vector3 followCursorVelocity;
     private Vector3 followPlayerVelocity;
     private Vector3 currentCursorOffset;
-    private Tween tween;
 
     public override void _Ready()
     {
@@ -33,8 +32,6 @@ public class PlayerCamera : Camera
         followCursorVelocity = new Vector3();
         followPlayerVelocity = new Vector3();
         currentCursorOffset = new Vector3();
-        tween = new Tween();
-        AddChild(tween);
     }
 
     public override void _PhysicsProcess(float delta)
