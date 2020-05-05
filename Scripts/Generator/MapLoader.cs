@@ -76,7 +76,6 @@ public class MapLoader : Spatial
     {
         BuildMap(ParseMap());
         ready = true;
-        //Translation = new Vector3((-size / 2 ) * unitSize, -1, (-size / 2) * unitSize);
     }
 
     private void RebuildMap()
