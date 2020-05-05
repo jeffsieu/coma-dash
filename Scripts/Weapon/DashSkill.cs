@@ -242,6 +242,8 @@ public class DashSkill : AimableAttack
         tween.Start();
 
         player.IsMovementLocked = true;
+        // Dodge all attacks
+        player.CollisionLayer = 0;
         isRunning = true;
     }
 
@@ -274,5 +276,7 @@ public class DashSkill : AimableAttack
         player.IsMovementLocked = false;
         isRunning = false;
         targetEnemy = null;
+        // currently there seems to be no way to get the collision layer by name, but it should be ok as we would not change this value
+        player.CollisionLayer = 2;
     }
 }
