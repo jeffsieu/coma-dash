@@ -1,8 +1,6 @@
 using Godot;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 public class MapLoader : Spatial
 {
@@ -66,34 +64,28 @@ public class MapLoader : Spatial
         }
     }
 
-    private class Bounds
-    {
-        public int left, right, top, bottom;
-    }
-
     private int unitSize;
     private Material wallMaterial;
     private ShaderMaterial floorMaterial;
     private string mapPath;
 
     private int size;
-    private List<StaticBody> children = new List<StaticBody>();
     private bool ready = false;
 
     public override void _Ready()
     {
         BuildMap(ParseMap());
         ready = true;
+        //Translation = new Vector3((-size / 2 ) * unitSize, -1, (-size / 2) * unitSize);
     }
 
     private void RebuildMap()
     {
-        foreach (var child in children)
+        foreach (Node child in GetChildren())
         {
             child.QueueFree();
             RemoveChild(child);
         }
-        children.Clear();
         BuildMap(ParseMap());
     }
 
@@ -115,75 +107,54 @@ public class MapLoader : Spatial
 
     private void BuildMap(List<int> pixels)
     {
-        List<Bounds> bounds = new List<Bounds>();
-        int[] groupings = new int[size * size];
-
-        for (int i = 0; i < size * size; ++i)
-            groupings[i] = -1;
+        BitMap floorMap = new BitMap();
+        floorMap.Create(Vector2.One * size);
+        BitMap doorMap = new BitMap();
+        doorMap.Create(Vector2.One * size);
 
         for (int y = 0; y < size; ++y)
         {
             for (int x = 0; x < size; ++x)
             {
                 int index = y * size + x;
-                int leftIndex = y * size + x - 1;
-
                 int pixel = pixels[index];
 
+                // Wall, white
                 if (pixel == 0xffffff)
-                    continue;
-
-                // for now, add walls as 1x1 unit blocks
-                if (pixel == 0xff0000)
                 {
-                    Vector2 cellPosition = new Vector2(x - size / 2, y - size / 2) * unitSize;
+                    Vector2 cellPosition = new Vector2(x, y) * unitSize;
                     Vector2 cellSize = Vector2.One * unitSize;
                     Wall wall = new Wall(cellPosition, cellSize, wallMaterial);
                     AddChild(wall);
-                    children.Add(wall);
                     continue;
                 }
 
-                // group up adjacent pixels that are not walls
-                // very naive algorithm for now
-                if (x > 0 && pixels[leftIndex] == pixels[index])
-                    UpdateBounds(leftIndex, x, y, bounds, groupings);
-                else
-                    AddBounds(x, y, bounds, groupings);
+                // Door, red
+                if (pixel == 0xff0000)
+                {
+                    doorMap.SetBit(new Vector2(x, y), true);
+                    continue;
+                }
+
+                // Starting tile, green
+                if (pixel == 0x00ff00)
+                {
+                    Translation = new Vector3((-x) * unitSize, -1, (-y) * unitSize);
+                }
+
+                // Room floor, other colors
+                floorMap.SetBit(new Vector2(x, y), true);
             }
         }
 
-        for (int i = 0; i < bounds.Count; ++i)
+        foreach (Vector2[] polygon in floorMap.OpaqueToPolygons(new Rect2(Vector2.Zero, Vector2.One * size)))
         {
-            int x = bounds[i].left;
-            int y = bounds[i].top;
-
-            Vector2 cellPosition = new Vector2(x - size / 2, y - size / 2) * unitSize;
-            Vector2 cellSize = new Vector2(bounds[i].right - x + 1, bounds[i].bottom - y + 1) * unitSize;
-            Floor floor = new Floor(cellPosition, cellSize, floorMaterial);
-            AddChild(floor);
-            children.Add(floor);
+            AddChild(new Room(polygon, unitSize, FloorMaterial));
         }
-    }
 
-    private void AddBounds(int x, int y, List<Bounds> bounds, int[] groupings)
-    {
-        int index = y * size + x;
-        groupings[index] = bounds.Count;
-        bounds.Add(new Bounds()
+        foreach (Vector2[] polygon in doorMap.OpaqueToPolygons(new Rect2(Vector2.Zero, Vector2.One * size)))
         {
-            right = x,
-            left = x,
-            top = y,
-            bottom = y
-        });
-    }
-
-    private void UpdateBounds(int prevIndex, int x, int y, List<Bounds> bounds, int[] groupings)
-    {
-        int index = y * size + x;
-        int group = groupings[index] = groupings[prevIndex];
-        bounds[group].right = Math.Max(bounds[group].right, x);
-        bounds[group].bottom = Math.Max(bounds[group].bottom, y);
+            AddChild(new Door(polygon, unitSize, FloorMaterial));
+        }
     }
 }

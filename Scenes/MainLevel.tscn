@@ -22,6 +22,7 @@ outline_color = Color( 0, 0, 0, 1 )
 font_data = SubResource( 3 )
 
 [sub_resource type="SpatialMaterial" id=5]
+albedo_color = Color( 0.486275, 0.470588, 0.529412, 1 )
 
 [sub_resource type="Shader" id=6]
 code = "shader_type spatial;
@@ -178,6 +179,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.91746, 2.16162, -3.4431 )
 [node name="MapLoader" type="Spatial" parent="."]
 script = ExtResource( 7 )
 UnitSize = 4
-MapPath = "res://Maps/basic2.data"
+MapPath = "res://Maps/map.data"
 WallMaterial = SubResource( 5 )
 FloorMaterial = SubResource( 7 )
