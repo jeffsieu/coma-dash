@@ -6,7 +6,7 @@
 
 [sub_resource type="CylinderMesh" id=2]
 
-[node name="Enemy" type="KinematicBody"]
+[node name="NoobEnemy" type="KinematicBody"]
 collision_layer = 4
 collision_mask = 9
 script = ExtResource( 1 )
