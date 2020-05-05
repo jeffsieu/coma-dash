@@ -209,6 +209,8 @@ public class DashSkill : AimableAttack
         }
         else
         {
+            // Set target enemy to null if it has somehow disappeared
+            targetEnemy = null;
             float radius = player.Scale.x;
             targetLocation = currentLocation + (range + radius) * (-GlobalTransform.basis.z);
             Dictionary ray = GetWorld().DirectSpaceState.IntersectRay(currentLocation, targetLocation, collisionMask: 1);
