@@ -45,7 +45,12 @@ void fragment()
 	// See: https://roystan.net/articles/outline-shader.html
 	dist = sqrt(dist);
 	if (dist > threshold && enabled)
+	{
 		ALBEDO = color;
+		ALPHA = 1.0;
+	}
 	else
-		ALBEDO = texture(SCREEN_TEXTURE, uv).rgb;
+	{
+		ALPHA = 0.0;
+	}
 }
