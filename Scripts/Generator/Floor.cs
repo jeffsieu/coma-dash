@@ -33,5 +33,7 @@ public class Floor : StaticBody
 
         Scale = new Vector3(dimensions.x, 1, dimensions.y);
         Translation = new Vector3(position.x + dimensions.x / 2, -1, position.y + dimensions.y / 2);
+
+        Friction = 0;
     }
 }
