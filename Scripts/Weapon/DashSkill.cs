@@ -191,8 +191,26 @@ public class DashSkill : AimableAttack
             return;
         Vector3 currentLocation = GlobalTransform.origin;
         Vector3 targetLocation;
-        if (targetEnemy == null)
+
+        Dictionary rayToEnemy = null;
+
+        // Check if enemy still exists before going to it
+        // It could have died or moved away at this point
+        if (targetEnemy != null)
         {
+            Vector3 enemyLocation = targetEnemy.GlobalTransform.origin;
+            rayToEnemy = GetWorld().DirectSpaceState.IntersectRay(currentLocation, enemyLocation, collisionMask: 4);
+        }
+
+        if (rayToEnemy != null && rayToEnemy.Count > 0)
+        {
+            Vector3 enemyBoundary = (Vector3)rayToEnemy["position"];
+            targetLocation = enemyBoundary + player.Scale * GlobalTransform.basis.z;
+        }
+        else
+        {
+            // Set target enemy to null if it has somehow disappeared
+            targetEnemy = null;
             float radius = player.Scale.x;
             targetLocation = currentLocation + (range + radius) * (-GlobalTransform.basis.z);
             Dictionary ray = GetWorld().DirectSpaceState.IntersectRay(currentLocation, targetLocation, collisionMask: 1);
@@ -212,15 +230,6 @@ public class DashSkill : AimableAttack
             {
                 targetLocation = currentLocation + range * (-GlobalTransform.basis.z);
             }
-        }
-        else
-        {
-            Vector3 enemyLocation = targetEnemy.GlobalTransform.origin;
-            Dictionary ray = GetWorld().DirectSpaceState.IntersectRay(currentLocation, enemyLocation, collisionMask: 4);
-            Vector3 enemyBoundary = (Vector3)ray["position"];
-
-            // Go right up beside enemy
-            targetLocation = enemyBoundary + player.Scale * GlobalTransform.basis.z;
         }
 
         Transform currentTransform = player.GlobalTransform;
