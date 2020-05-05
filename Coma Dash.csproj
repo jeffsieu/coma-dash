@@ -60,6 +60,8 @@
     <Compile Include="Scripts\AimIndicator\GeneralAimIndicator.cs" />
     <Compile Include="Scripts\AimIndicator\StraightAimIndicator.cs" />
     <Compile Include="Scripts\Enemy\Enemy.cs" />
+    <Compile Include="Scripts\Enemy\GangEnemy.cs" />
+    <Compile Include="Scripts\Enemy\GangMember.cs" />
     <Compile Include="Scripts\Enemy\NoobEnemy.cs" />
     <Compile Include="Scripts\Generator\Floor.cs" />
     <Compile Include="Scripts\Generator\MapLoader.cs" />

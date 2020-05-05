@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Scenes/GangMember.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scripts/Enemy/GangEnemy.cs" type="Script" id=2]
+
+[node name="GangEnemy" type="Spatial"]
+script = ExtResource( 2 )
+
+[node name="Member1" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.07389, 0, 0 )
+
+[node name="Member2" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.02667, 0, 0 )
+
+[node name="Member3" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.45055 )
+
+[node name="Member4" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5.12923 )
