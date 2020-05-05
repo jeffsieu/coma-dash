@@ -17,11 +17,11 @@ public class Enemy : HealthEntity
         material = new SpatialMaterial()
         {
             AlbedoColor = Colors.White,
-            FlagsTransparent = true
+            FlagsTransparent = false
         };
 
-        CSGCylinder cylinder = GetNode<CSGCylinder>("CSGCylinder");
-        cylinder.Material = material;
+        MeshInstance cylinder = GetNode<MeshInstance>("MeshInstance");
+        cylinder.SetSurfaceMaterial(0, material);
     }
 
     public override void _PhysicsProcess(float delta)
@@ -38,6 +38,7 @@ public class Enemy : HealthEntity
 
     protected override void Die()
     {
+        material.FlagsTransparent = true;
         Tween tween = new Tween();
         AddChild(tween);
         tween.InterpolateProperty(material, "albedo_color:a", 0.5f, 0, 1.0f);
