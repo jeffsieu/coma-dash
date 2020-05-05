@@ -3,15 +3,15 @@ render_mode unshaded;
 
 uniform float scale = 2.0;
 uniform float threshold = 2.0;
-uniform vec3 color = vec3(0, 0, 0);
+uniform vec4 color : hint_color = vec4(0, 0, 0, 1);
 uniform bool enabled = true;
 
-varying mat4 CAMERA;
+// varying mat4 CAMERA;
 
 void vertex() 
 {
 	POSITION = vec4(VERTEX, 1.0);
-	CAMERA = CAMERA_MATRIX;
+	// CAMERA = CAMERA_MATRIX;
 }
 
 float depth_calc(vec2 uv, sampler2D depth_tex, mat4 inv_projection_mat) 
@@ -46,8 +46,8 @@ void fragment()
 	dist = sqrt(dist);
 	if (dist > threshold && enabled)
 	{
-		ALBEDO = color;
-		ALPHA = 1.0;
+		ALBEDO = color.rgb;
+		ALPHA = color.a;
 	}
 	else
 	{
