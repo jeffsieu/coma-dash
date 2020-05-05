@@ -4,7 +4,7 @@ public class Enemy : HealthEntity
 {
     public Vector3 Velocity;
     protected readonly float gravity = 4.85f;
- 
+
     protected Player player;
     protected float acceleration = 5f;
     protected float angularSpeed = 3f;
