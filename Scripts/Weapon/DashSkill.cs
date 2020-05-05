@@ -193,15 +193,14 @@ public class DashSkill : AimableAttack
         Vector3 targetLocation;
         if (targetEnemy == null)
         {
-            float largeNum = 1000.0f;
-            targetLocation = currentLocation + largeNum * (-GlobalTransform.basis.z);
+            float radius = player.Scale.x;
+            targetLocation = currentLocation + (range + radius) * (-GlobalTransform.basis.z);
             Dictionary ray = GetWorld().DirectSpaceState.IntersectRay(currentLocation, targetLocation, collisionMask: 1);
             if (ray.Count > 0)
             {
                 Vector3 wallNormal = (Vector3)ray["normal"];
                 Vector3 position = (Vector3)ray["position"];
                 float cosAngle = wallNormal.Dot(GlobalTransform.basis.z);
-                float radius = player.Scale.x;
                 float hyp = radius / cosAngle;
                 // cosAngle should not be 90 degrees as that would mean that
                 // player is moving parallel to the wall hence ray would not intersect
