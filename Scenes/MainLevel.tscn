@@ -23,20 +23,18 @@ size = Vector2( 2, 2 )
 
 [sub_resource type="CylinderShape" id=3]
 
-[sub_resource type="BoxShape" id=4]
-
-[sub_resource type="DynamicFontData" id=5]
+[sub_resource type="DynamicFontData" id=4]
 font_path = "res://Fonts/PermanentMarker-Regular.ttf"
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=5]
 size = 23
 outline_size = 3
 outline_color = Color( 0, 0, 0, 1 )
-font_data = SubResource( 5 )
+font_data = SubResource( 4 )
 
-[sub_resource type="SpatialMaterial" id=7]
+[sub_resource type="SpatialMaterial" id=6]
 
-[sub_resource type="Shader" id=8]
+[sub_resource type="Shader" id=7]
 code = "shader_type spatial;
 
 uniform vec2 size;
@@ -58,8 +56,8 @@ void fragment()
 	ALBEDO = color;
 }"
 
-[sub_resource type="ShaderMaterial" id=9]
-shader = SubResource( 8 )
+[sub_resource type="ShaderMaterial" id=8]
+shader = SubResource( 7 )
 shader_param/size = Vector2( 20, 0 )
 shader_param/tile_color = Color( 1, 0.58, 0.43, 1 )
 shader_param/grout_color = Color( 0.39, 0.51, 0.54, 1 )
@@ -123,7 +121,7 @@ __meta__ = {
 [node name="Heat" type="Label" parent="GUI/VBoxContainer"]
 margin_right = 824.0
 margin_bottom = 34.0
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 5 )
 text = "Heat"
 align = 1
 valign = 1
@@ -171,31 +169,31 @@ __meta__ = {
 [node name="Enemy" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.81554, 2.16162, -1.22923 )
 collision_mask = 11
-script = ExtResource( 8 )
+script = ExtResource( 9 )
 
 [node name="Enemy2" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.78837, 2.16162, 7.87757 )
 collision_mask = 11
-script = ExtResource( 8 )
+script = ExtResource( 9 )
 
 [node name="Enemy3" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.88411, 2.16162, 2.84288 )
 collision_mask = 11
-script = ExtResource( 8 )
+script = ExtResource( 9 )
 
 [node name="Enemy4" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.36592, 2.16162, -7.50016 )
 collision_mask = 11
-script = ExtResource( 8 )
+script = ExtResource( 9 )
 
 [node name="Enemy5" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.91614, 2.11222, -3.47199 )
 collision_mask = 11
-script = ExtResource( 8 )
+script = ExtResource( 9 )
 
 [node name="MapLoader" type="Spatial" parent="."]
 script = ExtResource( 7 )
 UnitSize = 4
 MapPath = "res://Maps/basic2.data"
-WallMaterial = SubResource( 7 )
-FloorMaterial = SubResource( 9 )
+WallMaterial = SubResource( 6 )
+FloorMaterial = SubResource( 8 )

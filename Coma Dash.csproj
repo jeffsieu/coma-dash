@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Tools</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EF469854-4FED-4991-B815-8FBC6046A04F}</ProjectGuid>
+    <ProjectGuid>{59BD8681-58C2-4E6B-9F80-B0069F80882C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <OutputPath>.mono/temp/bin/$(Configuration)</OutputPath>
     <RootNamespace>ComaDash</RootNamespace>
@@ -61,18 +61,18 @@
     <Compile Include="Scripts\AimIndicator\StraightAimIndicator.cs" />
     <Compile Include="Scripts\Enemy\Enemy.cs" />
     <Compile Include="Scripts\Enemy\NoobEnemy.cs" />
+    <Compile Include="Scripts\Generator\Floor.cs" />
     <Compile Include="Scripts\Generator\MapLoader.cs" />
     <Compile Include="Scripts\Generator\RoomGenerator.cs" />
-    <Compile Include="Scripts\Generator\Floor.cs" />
     <Compile Include="Scripts\Generator\Wall.cs" />
     <Compile Include="Scripts\HealthEntity.cs" />
     <Compile Include="Scripts\InputMode.cs" />
     <Compile Include="Scripts\Player.cs" />
     <Compile Include="Scripts\PlayerCamera.cs" />
     <Compile Include="Scripts\Projectile.cs" />
+    <Compile Include="Scripts\Status\IStatusHolder.cs" />
     <Compile Include="Scripts\Status\MarkStatus.cs" />
     <Compile Include="Scripts\Status\Status.cs" />
-    <Compile Include="Scripts\Status\IStatusHolder.cs" />
     <Compile Include="Scripts\Weapon\AimableAttack.cs" />
     <Compile Include="Scripts\Weapon\DashSkill.cs" />
     <Compile Include="Scripts\Weapon\OverheatingGun.cs" />
