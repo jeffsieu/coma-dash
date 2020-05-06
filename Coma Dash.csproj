@@ -60,9 +60,10 @@
     <Compile Include="Scripts\AimIndicator\GeneralAimIndicator.cs" />
     <Compile Include="Scripts\AimIndicator\StraightAimIndicator.cs" />
     <Compile Include="Scripts\Enemy\Enemy.cs" />
+    <Compile Include="Scripts\Generator\Door.cs" />
     <Compile Include="Scripts\Generator\MapLoader.cs" />
     <Compile Include="Scripts\Generator\RoomGenerator.cs" />
-    <Compile Include="Scripts\Generator\Floor.cs" />
+    <Compile Include="Scripts\Generator\Room.cs" />
     <Compile Include="Scripts\Generator\Wall.cs" />
     <Compile Include="Scripts\HealthEntity.cs" />
     <Compile Include="Scripts\InputMode.cs" />
