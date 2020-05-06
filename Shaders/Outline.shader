@@ -54,9 +54,10 @@ float edge(vec2 uv, sampler2D depth_tex, mat4 inv_projection_mat)
 
 float aliased_edge(vec2 uv, sampler2D depth_tex, mat4 inv_projection_mat)
 {
-	vec2 offset = vec2(1.0 / pixels_x, 1.0 / pixels_y) * float(scale) / 2.0;
+	vec2 offset = vec2(1.0 / pixels_x, 1.0 / pixels_y);
 	float total = 0.0;
-	// total += edge(uv, depth_tex, inv_projection_mat);
+	float main = edge(uv, depth_tex, inv_projection_mat);
+	// total += main;
 	total += edge(uv + offset, depth_tex, inv_projection_mat);
 	total += edge(uv - offset, depth_tex, inv_projection_mat);
 	total += edge(uv + offset * vec2(-1.0, 1.0), depth_tex, inv_projection_mat);
@@ -65,15 +66,15 @@ float aliased_edge(vec2 uv, sampler2D depth_tex, mat4 inv_projection_mat)
 	total += 2.0 * edge(uv - offset * vec2(1.0, 0.0), depth_tex, inv_projection_mat);
 	total += 2.0 * edge(uv + offset * vec2(0.0, 1.0), depth_tex, inv_projection_mat);
 	total += 2.0 * edge(uv - offset * vec2(0.0, 1.0), depth_tex, inv_projection_mat);
-	total += 4.0 * edge(uv, depth_tex, inv_projection_mat);
+	total += 4.0 * main;
 	total /= 16.0;
 	// total += edge(uv + offset * vec2(1.0, 0.0), depth_tex, inv_projection_mat);
 	// total += edge(uv - offset * vec2(1.0, 0.0), depth_tex, inv_projection_mat);
 	// total += edge(uv + offset * vec2(0.0, 1.0), depth_tex, inv_projection_mat);
 	// total += edge(uv - offset * vec2(0.0, 1.0), depth_tex, inv_projection_mat);
-	// total += edge(uv, depth_tex, inv_projection_mat);
+	// total += main;
 	// total /= 9.0;
-	return total;
+	return total * main;
 }
 
 void fragment() 
