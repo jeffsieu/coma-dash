@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Scripts/Player.cs" type="Script" id=1]
 [ext_resource path="res://Scripts/PlayerCamera.cs" type="Script" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://Scripts/Weapon/DashSkill.cs" type="Script" id=6]
 [ext_resource path="res://Scripts/Generator/MapLoader.cs" type="Script" id=7]
 [ext_resource path="res://Shaders/Outline.shader" type="Shader" id=8]
+[ext_resource path="res://Scripts/Enemy/ZigZagEnemy.cs" type="Script" id=9]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 8 )
@@ -190,6 +191,12 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.36592, 2.16162, -7.50016 )
 
 [node name="Enemy5" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.91746, 2.16162, -3.4431 )
+
+[node name="Enemy6" parent="." instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.91746, 2.16162, -3.4431 )
+script = ExtResource( 9 )
+
+[node name="ImmediateGeometry" type="ImmediateGeometry" parent="Enemy6"]
 
 [node name="MapLoader" type="Spatial" parent="."]
 script = ExtResource( 7 )
