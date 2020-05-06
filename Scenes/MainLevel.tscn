@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=30 format=2]
 
 [ext_resource path="res://Scripts/Player.cs" type="Script" id=1]
 [ext_resource path="res://Scripts/PlayerCamera.cs" type="Script" id=2]
@@ -22,20 +22,89 @@ size = Vector2( 2, 2 )
 
 [sub_resource type="CylinderShape" id=3]
 
-[sub_resource type="BoxShape" id=4]
+[sub_resource type="Curve" id=13]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.989848, 0.318966 ), 0.0, 0.0, 0, 0 ]
 
-[sub_resource type="DynamicFontData" id=5]
+[sub_resource type="CurveTexture" id=14]
+curve = SubResource( 13 )
+
+[sub_resource type="ParticlesMaterial" id=11]
+lifetime_randomness = 0.3
+direction = Vector3( 0, 1, 0 )
+spread = 40.0
+gravity = Vector3( 0, -1, 0 )
+initial_velocity = 3.0
+initial_velocity_random = 0.5
+scale = 0.6
+scale_random = 0.5
+scale_curve = SubResource( 14 )
+hue_variation = 0.5
+
+[sub_resource type="SpatialMaterial" id=12]
+flags_transparent = true
+albedo_color = Color( 0.929412, 0.054902, 0.917647, 1 )
+
+[sub_resource type="SphereMesh" id=4]
+material = SubResource( 12 )
+radius = 0.5
+height = 1.0
+radial_segments = 8
+rings = 8
+
+[sub_resource type="Gradient" id=17]
+offsets = PoolRealArray( 0, 0.535714, 1 )
+colors = PoolColorArray( 0.976471, 0.188235, 0.027451, 1, 0.933333, 0.968627, 0.00392157, 0.745098, 0.501961, 0.501961, 0.482353, 0.494118 )
+
+[sub_resource type="GradientTexture" id=18]
+gradient = SubResource( 17 )
+
+[sub_resource type="Curve" id=19]
+_data = [ Vector2( 0, 1 ), 0.0, -0.384515, 0, 0, Vector2( 0.989848, 0.234914 ), -1.68541, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=20]
+curve = SubResource( 19 )
+
+[sub_resource type="ParticlesMaterial" id=15]
+lifetime_randomness = 0.46
+emission_shape = 1
+emission_sphere_radius = 0.5
+direction = Vector3( 0, 1, 0 )
+spread = 36.26
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 3.0
+initial_velocity_random = 0.47
+angular_velocity = 83.88
+angular_velocity_random = 0.91
+angle = -14.0
+angle_random = 0.47
+scale = 0.5
+scale_random = 0.23
+scale_curve = SubResource( 20 )
+color_ramp = SubResource( 18 )
+hue_variation_random = 0.1
+
+[sub_resource type="SpatialMaterial" id=21]
+flags_transparent = true
+vertex_color_use_as_albedo = true
+
+[sub_resource type="CubeMesh" id=16]
+material = SubResource( 21 )
+size = Vector3( 1, 1, 1 )
+
+[sub_resource type="BoxShape" id=5]
+
+[sub_resource type="DynamicFontData" id=6]
 font_path = "res://Fonts/PermanentMarker-Regular.ttf"
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=7]
 size = 23
 outline_size = 3
 outline_color = Color( 0, 0, 0, 1 )
-font_data = SubResource( 5 )
+font_data = SubResource( 6 )
 
-[sub_resource type="SpatialMaterial" id=7]
+[sub_resource type="SpatialMaterial" id=8]
 
-[sub_resource type="Shader" id=8]
+[sub_resource type="Shader" id=9]
 code = "shader_type spatial;
 
 uniform vec2 size;
@@ -57,8 +126,8 @@ void fragment()
 	ALBEDO = color;
 }"
 
-[sub_resource type="ShaderMaterial" id=9]
-shader = SubResource( 8 )
+[sub_resource type="ShaderMaterial" id=10]
+shader = SubResource( 9 )
 shader_param/size = Vector2( 20, 0 )
 shader_param/tile_color = Color( 1, 0.58, 0.43, 1 )
 shader_param/grout_color = Color( 0.39, 0.51, 0.54, 1 )
@@ -96,12 +165,33 @@ IndicatorType = 2
 [node name="Skill" type="Spatial" parent="Player"]
 script = ExtResource( 6 )
 
+[node name="Particles" type="Particles" parent="Player"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.3668, 0 )
+emitting = false
+lifetime = 2.0
+randomness = 0.3
+fract_delta = false
+process_material = SubResource( 11 )
+draw_pass_1 = SubResource( 4 )
+
+[node name="Particles2" type="Particles" parent="Player"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.45937, 0 )
+emitting = false
+amount = 50
+lifetime = 2.0
+speed_scale = 2.0
+randomness = 1.0
+fract_delta = false
+draw_order = 2
+process_material = SubResource( 15 )
+draw_pass_1 = SubResource( 16 )
+
 [node name="Floor" type="StaticBody" parent="."]
 transform = Transform( 100, 0, 0, 0, 1, 0, 0, 0, 100, 0, 0, 0 )
 collision_mask = 15
 
 [node name="CollisionShape" type="CollisionShape" parent="Floor"]
-shape = SubResource( 4 )
+shape = SubResource( 5 )
 
 [node name="RoomGenerator" type="Spatial" parent="."]
 
@@ -131,7 +221,7 @@ __meta__ = {
 [node name="Heat" type="Label" parent="GUI/VBoxContainer"]
 margin_right = 824.0
 margin_bottom = 34.0
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
 text = "Heat"
 align = 1
 valign = 1
@@ -195,5 +285,5 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.91746, 2.16162, -3.4431 )
 script = ExtResource( 7 )
 UnitSize = 4
 MapPath = "res://Maps/basic2.data"
-WallMaterial = SubResource( 7 )
-FloorMaterial = SubResource( 9 )
+WallMaterial = SubResource( 8 )
+FloorMaterial = SubResource( 10 )
