@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://Scripts/Player.cs" type="Script" id=1]
 [ext_resource path="res://Scripts/PlayerCamera.cs" type="Script" id=2]
