@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://Scripts/Player.cs" type="Script" id=1]
 [ext_resource path="res://Scripts/PlayerCamera.cs" type="Script" id=2]
@@ -8,14 +8,17 @@
 [ext_resource path="res://Scripts/Weapon/DashSkill.cs" type="Script" id=6]
 [ext_resource path="res://Scripts/Generator/MapLoader.cs" type="Script" id=7]
 [ext_resource path="res://Shaders/Outline.shader" type="Shader" id=8]
-[ext_resource path="res://Scenes/DecorationShowcase.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Scripts/Effects/OutlineEffect.cs" type="Script" id=9]
+[ext_resource path="res://Scenes/DecorationShowcase.tscn" type="PackedScene" id=10]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 8 )
-shader_param/scale = 2.0
+shader_param/scale = 2
 shader_param/threshold = 2.0
 shader_param/color = Color( 0, 0, 0, 1 )
 shader_param/enabled = true
+shader_param/pixels_x = 1024.0
+shader_param/pixels_y = 600.0
 
 [sub_resource type="QuadMesh" id=2]
 material = SubResource( 1 )
@@ -75,6 +78,7 @@ script = ExtResource( 2 )
 [node name="OutlineEffect" type="MeshInstance" parent="Camera"]
 mesh = SubResource( 2 )
 material/0 = null
+script = ExtResource( 9 )
 
 [node name="Player" type="KinematicBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0 )
@@ -200,4 +204,4 @@ MapPath = "res://Maps/map.data"
 WallMaterial = SubResource( 7 )
 FloorMaterial = SubResource( 9 )
 
-[node name="DecorationShowcase" parent="." instance=ExtResource( 9 )]
+[node name="DecorationShowcase" parent="." instance=ExtResource( 10 )]
