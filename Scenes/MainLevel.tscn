@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Scripts/Player.cs" type="Script" id=1]
 [ext_resource path="res://Scripts/PlayerCamera.cs" type="Script" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://Scripts/Weapon/DashSkill.cs" type="Script" id=6]
 [ext_resource path="res://Scripts/Generator/MapLoader.cs" type="Script" id=7]
 [ext_resource path="res://Shaders/Outline.shader" type="Shader" id=8]
+[ext_resource path="res://Scenes/DecorationShowcase.tscn" type="PackedScene" id=9]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 8 )
@@ -198,3 +199,5 @@ UnitSize = 4
 MapPath = "res://Maps/map.data"
 WallMaterial = SubResource( 7 )
 FloorMaterial = SubResource( 9 )
+
+[node name="DecorationShowcase" parent="." instance=ExtResource( 9 )]
