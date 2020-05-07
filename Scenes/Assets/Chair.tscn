@@ -124,15 +124,16 @@ surfaces/0 = {
 }
 
 [sub_resource type="BoxShape" id=9]
-extents = Vector3( 0.9, 0.9, 0.8 )
+extents = Vector3( 0.957213, 0.870736, 0.845432 )
 
 [sub_resource type="BoxShape" id=10]
-extents = Vector3( 0.2, 1, 0.8 )
+extents = Vector3( 0.2, 1.04078, 0.921977 )
 
-[node name="chair" type="RigidBody"]
+[node name="Chair" type="RigidBody"]
 mass = 5.0
 
 [node name="Seat" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0873208, -0.0335827, 0.000244141 )
 mesh = SubResource( 1 )
 material/0 = ExtResource( 1 )
 
@@ -165,9 +166,9 @@ mesh = SubResource( 8 )
 material/0 = ExtResource( 1 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 1, 0 )
+transform = Transform( 0.999746, 0.0225477, 0, -0.0225477, 0.999746, 0, 0, 0, 1, -0.065924, 0.919063, 0 )
 shape = SubResource( 9 )
 
 [node name="CollisionShape2" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 3, 0 )
+transform = Transform( 0.994949, -0.100379, 0, 0.100379, 0.994949, 0, 0, 0, 1, -0.900817, 2.87971, 0 )
 shape = SubResource( 10 )
