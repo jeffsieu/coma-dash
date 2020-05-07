@@ -1,0 +1,47 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Scenes/Assets/Bookshelf.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scenes/Assets/Book.tscn" type="PackedScene" id=2]
+
+[node name="DecorationShowcase" type="Spatial"]
+
+[node name="Books" type="Spatial" parent="."]
+
+[node name="Book" type="RigidBody" parent="Books" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.101, 4.32447, -3.08881 )
+
+[node name="Book2" type="RigidBody" parent="Books" instance=ExtResource( 2 )]
+transform = Transform( 0.46729, 0.774625, 0.426142, -0.572363, 0.632421, -0.521962, -0.673825, 0, 0.738891, 3.06924, 7.16832, -3.08881 )
+
+[node name="Book3" type="RigidBody" parent="Books" instance=ExtResource( 2 )]
+transform = Transform( 0.46729, 0.774625, 0.426142, -0.572363, 0.632421, -0.521962, -0.673825, 0, 0.738891, 0.881694, 9.84774, 8.54895 )
+
+[node name="Book4" type="RigidBody" parent="Books" instance=ExtResource( 2 )]
+transform = Transform( 0.46729, 0.774625, 0.426142, -0.572363, 0.632421, -0.521962, -0.673825, 0, 0.738891, 5.43634, 4.26896, -4.00825 )
+
+[node name="Book5" type="RigidBody" parent="Books" instance=ExtResource( 2 )]
+transform = Transform( 0.46729, 0.774625, 0.426142, -0.572363, 0.632421, -0.521962, -0.673825, 0, 0.738891, 7.76326, 6.16871, -4.00825 )
+
+[node name="Book6" type="RigidBody" parent="Books" instance=ExtResource( 2 )]
+transform = Transform( 0.46729, 0.380733, -0.797924, -0.572363, -0.557585, -0.601249, -0.673826, 0.737659, -0.0426367, 5.89961, 7.78085, -6.67006 )
+
+[node name="Book7" type="RigidBody" parent="Books" instance=ExtResource( 2 )]
+transform = Transform( 0.46729, 0.380733, -0.797924, -0.572363, -0.557585, -0.601249, -0.673826, 0.737659, -0.0426367, 3.90088, 2.96493, -3.9654 )
+
+[node name="Bookshelves" type="Spatial" parent="."]
+
+[node name="Bookshelf1" type="RigidBody" parent="Bookshelves" instance=ExtResource( 1 )]
+transform = Transform( 0.981095, 0, 0.15352, 0, 1, 0, -0.152425, 0, 0.988145, -6.87652, 3.13019, -3.66796 )
+mass = 20.0
+
+[node name="Bookshelf2" type="RigidBody" parent="Bookshelves" instance=ExtResource( 1 )]
+transform = Transform( 0.998701, 0, -0.050959, 0, 1, 0, 0.050959, 0, 0.998701, -6.87652, 3.13019, 5.27843 )
+mass = 20.0
+
+[node name="Bookshelf3" type="RigidBody" parent="Bookshelves" instance=ExtResource( 1 )]
+transform = Transform( -0.129419, 0, -0.99159, 0, 1, 0, 0.99159, 0, -0.129419, 9.64382, 3.13019, -9.65562 )
+mass = 20.0
+
+[node name="Bookshelf4" type="RigidBody" parent="Bookshelves" instance=ExtResource( 1 )]
+transform = Transform( 0.0345854, 0, -0.999402, 0, 1, 0, 0.999402, 0, 0.0345854, -0.663754, 3.13019, -10.8362 )
+mass = 20.0

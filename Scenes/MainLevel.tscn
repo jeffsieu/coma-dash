@@ -9,6 +9,7 @@
 [ext_resource path="res://Scripts/Generator/MapLoader.cs" type="Script" id=7]
 [ext_resource path="res://Shaders/Outline.shader" type="Shader" id=8]
 [ext_resource path="res://Scripts/Effects/OutlineEffect.cs" type="Script" id=9]
+[ext_resource path="res://Scenes/DecorationShowcase.tscn" type="PackedScene" id=10]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 8 )
@@ -202,3 +203,5 @@ UnitSize = 4
 MapPath = "res://Maps/map.data"
 WallMaterial = SubResource( 7 )
 FloorMaterial = SubResource( 9 )
+
+[node name="DecorationShowcase" parent="." instance=ExtResource( 10 )]
