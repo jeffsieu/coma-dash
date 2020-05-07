@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 public class OutlineEffect : MeshInstance
 {
@@ -16,9 +15,7 @@ public class OutlineEffect : MeshInstance
     public void ScreenResized()
     {
         Vector2 size = OS.WindowSize;
-        GD.Print(size);
         material.SetShaderParam("pixels_x", size.x);
         material.SetShaderParam("pixels_y", size.y);
     }
-
 }
