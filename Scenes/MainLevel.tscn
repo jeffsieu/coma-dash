@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Scripts/Player.cs" type="Script" id=1]
 [ext_resource path="res://Scripts/PlayerCamera.cs" type="Script" id=2]
@@ -9,10 +9,12 @@
 [ext_resource path="res://Scripts/Generator/MapLoader.cs" type="Script" id=7]
 [ext_resource path="res://Shaders/Outline.shader" type="Shader" id=8]
 [ext_resource path="res://Scenes/DecorationShowcase.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Scenes/Assets/EnemyApple.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Scenes/Assets/EnemyPencil.tscn" type="PackedScene" id=11]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 8 )
-shader_param/scale = 2.0
+shader_param/scale = 1.0
 shader_param/threshold = 2.0
 shader_param/color = Color( 0, 0, 0, 1 )
 shader_param/enabled = true
@@ -201,3 +203,9 @@ WallMaterial = SubResource( 7 )
 FloorMaterial = SubResource( 9 )
 
 [node name="DecorationShowcase" parent="." instance=ExtResource( 9 )]
+
+[node name="apple" parent="." instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.753544, 4.45579 )
+
+[node name="Pencil" parent="." instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.76818, 0, 3.93529 )
