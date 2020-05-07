@@ -1,10 +1,13 @@
 shader_type spatial;
 render_mode unshaded;
 
-uniform float scale = 2.0;
+uniform int scale = 2;
 uniform float threshold = 2.0;
 uniform vec4 color : hint_color = vec4(0, 0, 0, 1);
 uniform bool enabled = true;
+
+uniform float pixels_x = 1024.0;
+uniform float pixels_y = 600.0;
 
 // varying mat4 CAMERA;
 
@@ -28,29 +31,57 @@ float depth_calc(vec2 uv, sampler2D depth_tex, mat4 inv_projection_mat)
 	return linear_depth;
 }
 
-float diff_sq(vec2 uv, vec2 dir, sampler2D depth_tex, mat4 inv_projection_mat) {
+float diff_sq(vec2 uv, vec2 dir, sampler2D depth_tex, mat4 inv_projection_mat)
+{
 	float d1 = depth_calc(uv + dir, depth_tex, inv_projection_mat);
 	float d2 = depth_calc(uv - dir, depth_tex, inv_projection_mat);
 	return (d1 - d2) * (d1 - d2);
 }
 
+float edge(vec2 uv, sampler2D depth_tex, mat4 inv_projection_mat)
+{
+	vec2 offset = vec2(1.0 / pixels_x, 1.0 / pixels_y) * float(scale);
+	float dist =
+		diff_sq(uv, offset, depth_tex, inv_projection_mat) +
+		diff_sq(uv, offset * vec2(-1.0, 1.0),
+			depth_tex, inv_projection_mat);
+	dist = sqrt(dist);
+	if (dist > threshold && enabled)
+		return 1.0;
+	else
+		return 0.0;
+}
+
+float aliased_edge(vec2 uv, sampler2D depth_tex, mat4 inv_projection_mat)
+{
+	vec2 offset = vec2(1.0 / pixels_x, 1.0 / pixels_y);
+	float total = 0.0;
+	float main = edge(uv, depth_tex, inv_projection_mat);
+	// total += main;
+	total += edge(uv + offset, depth_tex, inv_projection_mat);
+	total += edge(uv - offset, depth_tex, inv_projection_mat);
+	total += edge(uv + offset * vec2(-1.0, 1.0), depth_tex, inv_projection_mat);
+	total += edge(uv - offset * vec2(-1.0, 1.0), depth_tex, inv_projection_mat);
+	total += 2.0 * edge(uv + offset * vec2(1.0, 0.0), depth_tex, inv_projection_mat);
+	total += 2.0 * edge(uv - offset * vec2(1.0, 0.0), depth_tex, inv_projection_mat);
+	total += 2.0 * edge(uv + offset * vec2(0.0, 1.0), depth_tex, inv_projection_mat);
+	total += 2.0 * edge(uv - offset * vec2(0.0, 1.0), depth_tex, inv_projection_mat);
+	total += 4.0 * main;
+	total /= 16.0;
+	// total += edge(uv + offset * vec2(1.0, 0.0), depth_tex, inv_projection_mat);
+	// total += edge(uv - offset * vec2(1.0, 0.0), depth_tex, inv_projection_mat);
+	// total += edge(uv + offset * vec2(0.0, 1.0), depth_tex, inv_projection_mat);
+	// total += edge(uv - offset * vec2(0.0, 1.0), depth_tex, inv_projection_mat);
+	// total += main;
+	// total /= 9.0;
+	return total * main;
+}
+
 void fragment() 
 {	
 	vec2 uv = SCREEN_UV;
-	float offset = 0.001 * scale;
-	float dist = 
-		diff_sq(uv, vec2(offset, offset), DEPTH_TEXTURE, INV_PROJECTION_MATRIX) + 
-		diff_sq(uv, vec2(-offset, offset), DEPTH_TEXTURE, INV_PROJECTION_MATRIX);
 	// Once Godot supports accessing the normal maps, more enhancements can be made
 	// See: https://roystan.net/articles/outline-shader.html
-	dist = sqrt(dist);
-	if (dist > threshold && enabled)
-	{
-		ALBEDO = color.rgb;
-		ALPHA = color.a;
-	}
-	else
-	{
-		ALPHA = 0.0;
-	}
+	ALBEDO = color.rgb;
+	ALPHA = aliased_edge(uv, DEPTH_TEXTURE, INV_PROJECTION_MATRIX);
 }
