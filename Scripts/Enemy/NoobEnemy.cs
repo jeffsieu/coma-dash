@@ -37,9 +37,8 @@ public class NoobEnemy : Enemy
             FlagsTransparent = true
         };
 
-        // CSGCylinder cylinder = GetNode<CSGCylinder>("CSGCylinder");
-        CSGBox box = GetNode<CSGBox>("CSGMesh");
-        box.Material = material;
+        MeshInstance mesh = GetNode<MeshInstance>("MeshInstance");
+        mesh.SetSurfaceMaterial(0, material);
     }
 
     public override void _PhysicsProcess(float delta)
