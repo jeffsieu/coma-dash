@@ -155,5 +155,18 @@ public class MapLoader : Spatial
         {
             AddChild(new Door(polygon, unitSize, FloorMaterial));
         }
+
+        float mapLength = size * unitSize;
+        StaticBody floor = new StaticBody
+        {
+            CollisionLayer = 1
+        };
+        floor.AddChild(new CollisionShape
+        {
+            Shape = new BoxShape()
+        });
+
+        floor.Scale = new Vector3(mapLength, 1, mapLength);
+        AddChild(floor);
     }
 }
