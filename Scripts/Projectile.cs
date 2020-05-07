@@ -38,7 +38,7 @@ public class Projectile : Spatial
 
         // To make the bullet's origin at the edge of the projectile weapon
         Vector3 weaponFrontDirection = -GlobalTransform.basis.z;
-        Translation += projectileLength / 2 * weaponFrontDirection;
+        Translation += projectileLength * weaponFrontDirection;
         AddChild(projectileInstance);
     }
 
@@ -53,6 +53,7 @@ public class Projectile : Spatial
             QueueFree();
 
         Translation += displacementToTravel;
+        GD.Print(Translation);
     }
 
     public void OnBodyEnteredProjectile(Node body)
@@ -61,7 +62,7 @@ public class Projectile : Spatial
         {
             Enemy enemy = body as Enemy;
             EmitSignal("hit_enemy", enemy);
-            QueueFree();
         }
+        QueueFree();
     }
 }

@@ -25,7 +25,7 @@ public class Wall : StaticBody
         AddChild(meshInstance);
         AddChild(collisionShape);
 
-        Scale = new Vector3(dimensions.x, 3, dimensions.y);
-        Translation = new Vector3(position.x + dimensions.x / 2, 1, position.y + dimensions.y / 2);
+        Scale = new Vector3(dimensions.x, 6, dimensions.y);
+        Translation = new Vector3(position.x + dimensions.x / 2, 3, position.y + dimensions.y / 2);
     }
 }
