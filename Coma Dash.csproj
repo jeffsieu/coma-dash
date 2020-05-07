@@ -46,7 +46,7 @@
       <HintPath>$(ProjectDir)/.mono/assemblies/$(ApiConfiguration)/GodotSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="GodotSharpEditor" Condition=" '$(Configuration)' == 'Tools' ">
+    <Reference Include="GodotSharpEditor" Condition=" '$s(Configuration)' == 'Tools' ">
       <HintPath>$(ProjectDir)/.mono/assemblies/$(ApiConfiguration)/GodotSharpEditor.dll</HintPath>
       <Private>False</Private>
     </Reference>
@@ -63,13 +63,9 @@
     <Compile Include="Scripts\Enemy\Enemy.cs" />
     <Compile Include="Scripts\Generator\Door.cs" />
     <Compile Include="Scripts\Enemy\NoobEnemy.cs" />
-    <Compile Include="Scripts\Generator\Floor.cs" />
     <Compile Include="Scripts\Generator\MapLoader.cs" />
     <Compile Include="Scripts\Generator\RoomGenerator.cs" />
-<<<<<<< HEAD
     <Compile Include="Scripts\Generator\Room.cs" />
-=======
->>>>>>> Properly rebase to dev
     <Compile Include="Scripts\Generator\Wall.cs" />
     <Compile Include="Scripts\HealthEntity.cs" />
     <Compile Include="Scripts\InputMode.cs" />
