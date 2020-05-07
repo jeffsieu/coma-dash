@@ -8,7 +8,6 @@ public class Room : StaticBody
         CSGPolygon floorMesh = new CSGPolygon
         {
             Polygon = polygon,
-            Material = material,
             RotationDegrees = new Vector3(90, 0, 0),
             Scale = unitSize * Vector3.One
         };
@@ -17,7 +16,6 @@ public class Room : StaticBody
         // might want to see if this costs anything? I don't think so though
         // 5 lines of shader code shouldn't cost anything
         ShaderMaterial dupMaterial = (ShaderMaterial)material.Duplicate();
-
 
         float minX = polygon[0].x, maxX = polygon[0].x;
         float minY = polygon[0].y, maxY = polygon[0].y;
@@ -36,16 +34,7 @@ public class Room : StaticBody
 
         floorMesh.Material = dupMaterial;
 
-        CollisionShape collisionShape = new CollisionShape
-        {
-            Shape = new BoxShape
-            {
-                Extents = 0.5f * Vector3.One
-            }
-        };
         AddChild(floorMesh);
-        AddChild(collisionShape);
-
         Translation = new Vector3(0, -unitSize, 0);
     }
 }
