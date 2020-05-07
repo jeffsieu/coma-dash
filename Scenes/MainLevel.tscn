@@ -1,10 +1,9 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Scripts/Player.cs" type="Script" id=1]
 [ext_resource path="res://Scripts/PlayerCamera.cs" type="Script" id=2]
 [ext_resource path="res://Scripts/AimIndicator/GeneralAimIndicator.cs" type="Script" id=3]
 [ext_resource path="res://Scripts/Weapon/OverheatingGun.cs" type="Script" id=4]
-[ext_resource path="res://Scenes/Enemy.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scripts/Weapon/DashSkill.cs" type="Script" id=6]
 [ext_resource path="res://Scripts/Generator/MapLoader.cs" type="Script" id=7]
 [ext_resource path="res://Shaders/Outline.shader" type="Shader" id=8]
@@ -12,6 +11,7 @@
 [ext_resource path="res://Scenes/DecorationShowcase.tscn" type="PackedScene" id=10]
 [ext_resource path="res://Scenes/Assets/EnemyApple.tscn" type="PackedScene" id=11]
 [ext_resource path="res://Scenes/Assets/EnemyPencil.tscn" type="PackedScene" id=12]
+[ext_resource path="res://Scenes/AngstyEnemy.tscn" type="PackedScene" id=13]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 8 )
@@ -173,21 +173,20 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Enemy" parent="." instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.81554, 2.16162, -1.22923 )
-collision_mask = 1
+[node name="AngstyEnemy" parent="." instance=ExtResource( 13 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.45397, 2.67313, 0 )
 
-[node name="Enemy2" parent="." instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.78837, 2.16162, 7.87757 )
+[node name="AngstyEnemy2" parent="." instance=ExtResource( 13 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.45397, 2.67313, 6.04912 )
 
-[node name="Enemy3" parent="." instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.88411, 2.16162, 2.84288 )
+[node name="AngstyEnemy3" parent="." instance=ExtResource( 13 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 11.3656, 2.67313, 0 )
 
-[node name="Enemy4" parent="." instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.36592, 2.16162, -7.50016 )
+[node name="AngstyEnemy4" parent="." instance=ExtResource( 13 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9061, 2.67313, 3.19658 )
 
-[node name="Enemy5" parent="." instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.91746, 2.16162, -3.4431 )
+[node name="AngstyEnemy5" parent="." instance=ExtResource( 13 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.34822, 2.67313, -6.41331 )
 
 [node name="MapLoader" type="Spatial" parent="."]
 script = ExtResource( 7 )

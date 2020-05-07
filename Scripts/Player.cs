@@ -18,9 +18,12 @@ public class Player : HealthEntity
 
     [Export]
     protected float WalkingSlowFactor = 0.7f;
+    [Export]
+    private float Gravity = 9.8f;
     protected float RotationSpeed = 30f;
 
     public bool IsMovementLocked = false;
+    public Vector3 Velocity;
 
     private float WalkingSpeed
     {
@@ -70,7 +73,6 @@ public class Player : HealthEntity
     }
 
     private Vector2 mousePosition;
-    private Vector3 velocity;
     private Camera camera;
     private InputMode inputMode = InputMode.Keyboard;
     private Vector3 previousFaceDirection = Vector3.Forward;
@@ -107,6 +109,8 @@ public class Player : HealthEntity
     public override void _PhysicsProcess(float delta)
     {
         base._PhysicsProcess(delta);
+        Velocity.y -= Gravity;
+
         if (!IsMovementLocked)
         {
             Vector2 weightedDirection = GetWeightedMovementDirection();
@@ -137,7 +141,7 @@ public class Player : HealthEntity
     {
         float targetSpeed = IsSprinting ? MaxSpeed : WalkingSpeed;
         Vector3 targetVelocity = targetSpeed * new Vector3(weightedDirection.x, 0, weightedDirection.y);
-        Vector3 targetAcceleration = targetVelocity - velocity;
+        Vector3 targetAcceleration = targetVelocity - Velocity;
         Vector3 actualAcceleration = targetAcceleration;
 
         // Player trying to accelerate in the same direction
@@ -159,7 +163,7 @@ public class Player : HealthEntity
 
         // 1.0 when player is continuing forward/trying to go backward,
         // 0.0 when player is trying to turn 90 degrees
-        float directionSpeedFactor = Mathf.Abs(Mathf.Cos(targetVelocity.AngleTo(velocity)));
+        float directionSpeedFactor = Mathf.Abs(Mathf.Cos(targetVelocity.AngleTo(Velocity)));
 
         // Map speed factor to [1 - resistance, 1], so player is slowed by <resistance> when he is turning 90 degrees
         directionSpeedFactor = Mathf.Lerp(1 - TurningResistance, 1.0f, directionSpeedFactor);
@@ -167,13 +171,8 @@ public class Player : HealthEntity
         // Slow player when he is turning
         actualAcceleration *= directionSpeedFactor;
 
-        Vector3 newVelocity = velocity + actualAcceleration;
-        velocity = newVelocity;
-        KinematicCollision collision = MoveAndCollide(newVelocity * delta);
-        if (collision != null)
-        {
-            velocity = velocity.Slide(collision.Normal);
-        }
+        Velocity += actualAcceleration;
+        Velocity = MoveAndSlide(Velocity);
     }
 
     public Vector2 GetWeightedAttackDirection()
