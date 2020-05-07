@@ -141,13 +141,16 @@ public abstract class HealthEntity : KinematicBody, IStatusHolder
     private void DisplayHealthBar()
     {
         Vector2 positionOnScreen = camera.UnprojectPosition(GlobalTransform.origin);
+        if (Health > 0)
+        {
+            Vector2 size = healthBar.RectSize;
+            Vector2 scale = healthBar.RectScale;
 
-        Vector2 size = healthBar.RectSize;
-        Vector2 scale = healthBar.RectScale;
+            Vector2 healthBarPosition = positionOnScreen + new Vector2(-size.x * scale.x / 2, -size.y * scale.y) + Vector2.Up * 10;
 
-        Vector2 healthBarPosition = positionOnScreen + new Vector2(-size.x * scale.x / 2, -size.y * scale.y) + Vector2.Up * 10;
-        healthBar.RectPosition = healthBarPosition;
-        whiteHealthBar.RectPosition = healthBarPosition;
+            healthBar.RectPosition = healthBarPosition;
+            whiteHealthBar.RectPosition = healthBarPosition;
+        }
     }
 
     public virtual void Damage(float damage)
