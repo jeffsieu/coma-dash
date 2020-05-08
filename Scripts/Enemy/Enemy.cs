@@ -1,6 +1,6 @@
 using Godot;
 
-public class Enemy : HealthEntity
+public abstract class Enemy : HealthEntity
 {
     public Vector3 Velocity;
     protected readonly float gravity = 4.85f;
@@ -18,6 +18,7 @@ public class Enemy : HealthEntity
     public override void _Ready()
     {
         base._Ready();
+
         CollisionLayer = ColLayer.Enemies;
         material = new SpatialMaterial()
         {
@@ -33,6 +34,7 @@ public class Enemy : HealthEntity
     public override void _PhysicsProcess(float delta)
     {
         base._PhysicsProcess(delta);
+
         Velocity.x *= 0.9f;
         Velocity.y -= gravity;
         Velocity.z *= 0.9f;
@@ -50,15 +52,14 @@ public class Enemy : HealthEntity
         return player.GlobalTransform.origin;
     }
 
-    protected void MoveToPlayer(float delta)
+    protected Vector3 GetDirectionToPlayer()
     {
-        Vector3 moveDirection = NextPointInPath() - GlobalTransform.origin;
-        Velocity += acceleration * moveDirection.Normalized() * delta;
+        return GlobalTransform.origin.DirectionTo(NextPointInPath());
     }
 
-    protected void RotateToPlayer(float delta)
+    protected void LookAtPlayerDirection(float delta)
     {
-        Vector3 directionToPlayer = NextPointInPath() - GlobalTransform.origin;
+        Vector3 directionToPlayer = GetDirectionToPlayer();
         float angle = Mathf.Pi - GlobalTransform.basis.z.AngleTo(directionToPlayer);
         float angleSign = -Mathf.Sign(GlobalTransform.basis.x.Dot(directionToPlayer));
         float rotationAngle = Mathf.Min(angularSpeed * delta, angle) * angleSign;

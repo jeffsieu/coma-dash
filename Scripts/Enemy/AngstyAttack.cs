@@ -1,4 +1,5 @@
 using Godot;
+using System.Runtime;
 
 public class AngstyAttack : Spatial
 {
@@ -44,9 +45,8 @@ public class AngstyAttack : Spatial
         attackCooldownLeft = Mathf.Max(attackCooldownLeft - delta, 0);
     }
 
-    public void TryAttackPlayer()
+    public void TryStartAttackSequence()
     {
-        Vector3 directionToPlayer = player.GlobalTransform.origin - GlobalTransform.origin;
         if (GlobalTransform.origin.DistanceTo(player.GlobalTransform.origin) < DetectDistance && attackCooldownLeft == 0)
         {
             LookAt(player.GlobalTransform.origin, Vector3.Up);
@@ -57,22 +57,17 @@ public class AngstyAttack : Spatial
 
     public void AttackPlayer(float delta)
     {
-        Vector3 directionToPlayer = player.GlobalTransform.origin - GlobalTransform.origin;
-        if (IsCharging())
+        Vector3 directionToPlayer = GlobalTransform.origin.DirectionTo(player.GlobalTransform.origin);
+        if (IsMovingBack())
         {
-            parent.Velocity = -directionToPlayer.Normalized() * MovebackSpeed;
+            parent.Velocity = -directionToPlayer * MovebackSpeed;
         }
         else if (attackDurationLeft <= chargeDuration && attackDurationLeft + delta > chargeDuration)
         {
-            parent.Velocity = directionToPlayer.Normalized() * ChargeSpeed;
+            parent.Velocity = directionToPlayer * ChargeSpeed;
         }
         parent.MoveAndSlide(parent.Velocity);
         CheckCollision();
-    }
-
-    public bool IsAttacking()
-    {
-        return attackDurationLeft > 0;
     }
 
     private void CheckCollision()
@@ -93,8 +88,13 @@ public class AngstyAttack : Spatial
         }
     }
 
-    private bool IsCharging()
+    private bool IsMovingBack()
     {
         return attackDurationLeft > chargeDuration;
+    }
+
+    public bool IsInAttackSequence()
+    {
+        return attackDurationLeft > 0;
     }
 }

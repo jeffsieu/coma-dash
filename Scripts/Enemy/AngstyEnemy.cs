@@ -31,8 +31,8 @@ public class AngstyEnemy : Enemy
     {
         base._PhysicsProcess(delta);
 
-        attack.TryAttackPlayer();
-        if (attack.IsAttacking())
+        attack.TryStartAttackSequence();
+        if (attack.IsInAttackSequence())
         {
             attack.AttackPlayer(delta);
         }
@@ -51,9 +51,11 @@ public class AngstyEnemy : Enemy
         Velocity.y -= gravity;
         Velocity.x *= 0.9f;
         Velocity.z *= 0.9f;
-        MoveToPlayer(delta);
+
+        Velocity += acceleration * delta * GetDirectionToPlayer();
+        
         Velocity = MoveAndSlide(Velocity);
-        RotateToPlayer(delta);
+        LookAtPlayerDirection(delta);
     }
 
     protected override void Die()
@@ -63,7 +65,5 @@ public class AngstyEnemy : Enemy
         tween.InterpolateProperty(material, "albedo_color:a", 0.5f, 0, 1.0f);
         tween.InterpolateCallback(this, 1.0f, "queue_free");
         tween.Start();
-
-        base.Die();
     }
 }

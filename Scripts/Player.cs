@@ -91,6 +91,7 @@ public class Player : HealthEntity
         camera = GetParent().GetNode<Camera>("Camera");
         weapon = GetNode<AimableAttack>("Weapon");
         skill = GetNode<AimableAttack>("Skill");
+        CollisionLayer = 2;
 
         // Move weapon to the front of the player
         weapon.Translation = Vector3.Forward * Scale.z;
