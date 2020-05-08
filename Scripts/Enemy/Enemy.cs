@@ -1,6 +1,6 @@
 using Godot;
 
-public class Enemy : HealthEntity
+public abstract class Enemy : HealthEntity
 {
     public Vector3 Velocity;
     protected readonly float gravity = 4.85f;
@@ -18,6 +18,8 @@ public class Enemy : HealthEntity
     {
         base._Ready();
         player = GetTree().Root.GetNode("Level").GetNodeOrNull<Player>("Player");
+        CollisionLayer = 4;
+        CollisionMask = 1 + 2 + 8;
     }
 
     public override void _PhysicsProcess(float delta)
@@ -33,22 +35,17 @@ public class Enemy : HealthEntity
         return player.GlobalTransform.origin;
     }
 
-    protected void MoveToPlayer(float delta)
+    protected Vector3 GetDirectionToPlayer()
     {
-        Vector3 moveDirection = NextPointInPath() - GlobalTransform.origin;
-        Velocity += acceleration * moveDirection.Normalized() * delta;
+        return GlobalTransform.origin.DirectionTo(NextPointInPath());
     }
 
-    protected void RotateToPlayer(float delta)
+    protected void LookAtPlayerDirection(float delta)
     {
-        Vector3 directionToPlayer = NextPointInPath() - GlobalTransform.origin;
+        Vector3 directionToPlayer = GetDirectionToPlayer();
         float angle = Mathf.Pi - GlobalTransform.basis.z.AngleTo(directionToPlayer);
         float angleSign = -Mathf.Sign(GlobalTransform.basis.x.Dot(directionToPlayer));
         float rotationAngle = Mathf.Min(angularSpeed * delta, angle) * angleSign;
         Rotate(Vector3.Up, rotationAngle);
-    }
-
-    protected override void Die()
-    {
     }
 }
