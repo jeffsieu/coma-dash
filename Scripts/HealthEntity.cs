@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public abstract class HealthEntity : KinematicBody, IStatusHolder
+public abstract class HealthEntity : RigidBody, IStatusHolder
 {
     private readonly Dictionary<Type, Status> statuses;
 

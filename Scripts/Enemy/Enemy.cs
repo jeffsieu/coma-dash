@@ -27,10 +27,10 @@ public class Enemy : HealthEntity
     public override void _PhysicsProcess(float delta)
     {
         base._PhysicsProcess(delta);
-        Velocity.x *= 0.9f;
-        Velocity.y -= gravity;
-        Velocity.z *= 0.9f;
-        Velocity = MoveAndSlide(Velocity);
+        // Velocity.x *= 0.9f;
+        // Velocity.y -= gravity;
+        // Velocity.z *= 0.9f;
+        // Velocity = MoveAndSlide(Velocity);
         Color baseColor = Colors.Red.LinearInterpolate(Colors.Blue, GetPercentLeft<MarkStatus>());
         Color healthColor = baseColor.LinearInterpolate(Colors.White, 1 - Health / 100);
         material.AlbedoColor = healthColor;
