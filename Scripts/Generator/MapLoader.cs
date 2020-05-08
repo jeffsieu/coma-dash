@@ -161,6 +161,7 @@ public class MapLoader : Spatial
         {
             CollisionLayer = 1
         };
+        floor.Name = "Floor";
         floor.AddChild(new CollisionShape
         {
             Shape = new BoxShape()
