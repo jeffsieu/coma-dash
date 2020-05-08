@@ -3,7 +3,7 @@ using System;
 
 public class Wall : StaticBody
 {
-    public Wall(Vector2 position, Vector2 dimensions, Material material)
+    public Wall(Vector2 position, Vector3 dimensions, Material material)
     {
         Mesh wallMesh = new CubeMesh
         {
@@ -25,7 +25,7 @@ public class Wall : StaticBody
         AddChild(meshInstance);
         AddChild(collisionShape);
 
-        Scale = new Vector3(dimensions.x, 6, dimensions.y);
-        Translation = new Vector3(position.x + dimensions.x / 2, 3, position.y + dimensions.y / 2);
+        Scale = dimensions;
+        Translation = new Vector3(position.x + dimensions.x / 2, dimensions.y / 2, position.y + dimensions.y / 2);
     }
 }

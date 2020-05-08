@@ -123,7 +123,7 @@ public class MapLoader : Spatial
                 {
                     Vector2 cellPosition = new Vector2(x, y) * unitSize;
                     Vector2 cellSize = Vector2.One * unitSize;
-                    Wall wall = new Wall(cellPosition, cellSize, wallMaterial);
+                    Wall wall = new Wall(cellPosition, new Vector3(cellSize.x, 6, cellSize.y), wallMaterial);
                     AddChild(wall);
                     continue;
                 }
