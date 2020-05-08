@@ -45,13 +45,25 @@ public abstract class HealthEntity : KinematicBody, IStatusHolder
         }
     }
 
+    public Color HealthBarColor
+    {
+        set
+        {
+            healthBarStyleBox.BgColor = value;
+            whiteHealthBarStyleBox.BgColor = value.Lightened(0.9f);
+        }
+    }
+
     private static readonly int borderWidth = 3;
     private static readonly int borderRadius = 3;
     private static readonly Vector2 healthBarSize = new Vector2(50, 10);
     private static readonly float whiteBarAnimationDuration = 0.5f;
+    private static readonly Color defaultHealthBarColor = new Color("#F1AB86");
 
     protected ProgressBar healthBar;
     protected ProgressBar whiteHealthBar;
+    protected StyleBoxFlat healthBarStyleBox;
+    protected StyleBoxFlat whiteHealthBarStyleBox;
     protected Tween tween;
     private float health;
     private float maxHealth;
@@ -64,6 +76,9 @@ public abstract class HealthEntity : KinematicBody, IStatusHolder
 
     public override void _Ready()
     {
+        // Collide with weapons
+        SetCollisionMaskBit(ColLayer.Bit.Projectiles, true);
+
         camera = GetTree().Root.GetCamera();
         Health = maxHealth;
         healthBar = new ProgressBar
@@ -74,9 +89,10 @@ public abstract class HealthEntity : KinematicBody, IStatusHolder
             RectSize = healthBarSize,
             PercentVisible = false
         };
-        healthBar.AddStyleboxOverride("fg", new StyleBoxFlat
+        healthBarStyleBox = new StyleBoxFlat
         {
-            BgColor = new Color("#F1AB86"),
+            BgColor = defaultHealthBarColor,
+            AntiAliasing = false,
             BorderColor = Colors.Transparent,
             BorderWidthBottom = borderWidth,
             BorderWidthLeft = borderWidth,
@@ -85,8 +101,9 @@ public abstract class HealthEntity : KinematicBody, IStatusHolder
             CornerRadiusBottomLeft = borderRadius,
             CornerRadiusBottomRight = borderRadius,
             CornerRadiusTopLeft = borderRadius,
-            CornerRadiusTopRight = borderRadius,
-        });
+            CornerRadiusTopRight = borderRadius
+        };
+        healthBar.AddStyleboxOverride("fg", healthBarStyleBox);
         healthBar.AddStyleboxOverride("bg", new StyleBoxFlat
         {
             BgColor = Colors.Transparent
@@ -100,10 +117,11 @@ public abstract class HealthEntity : KinematicBody, IStatusHolder
             RectSize = healthBarSize,
             PercentVisible = false
         };
-        whiteHealthBar.AddStyleboxOverride("fg", new StyleBoxFlat
+        whiteHealthBarStyleBox = new StyleBoxFlat
         {
-            BgColor = Colors.White,
-            BorderColor = Colors.Black,
+            AntiAliasing = false,
+            BgColor = defaultHealthBarColor.Lightened(0.9f),
+            BorderColor = Colors.Transparent,
             BorderWidthBottom = borderWidth,
             BorderWidthLeft = borderWidth,
             BorderWidthRight = borderWidth,
@@ -111,8 +129,9 @@ public abstract class HealthEntity : KinematicBody, IStatusHolder
             CornerRadiusBottomLeft = borderRadius,
             CornerRadiusBottomRight = borderRadius,
             CornerRadiusTopLeft = borderRadius,
-            CornerRadiusTopRight = borderRadius,
-        });
+            CornerRadiusTopRight = borderRadius
+        };
+        whiteHealthBar.AddStyleboxOverride("fg", whiteHealthBarStyleBox);
         whiteHealthBar.AddStyleboxOverride("bg", new StyleBoxFlat
         {
             BgColor = Colors.Black,
@@ -124,7 +143,7 @@ public abstract class HealthEntity : KinematicBody, IStatusHolder
             CornerRadiusBottomLeft = borderRadius,
             CornerRadiusBottomRight = borderRadius,
             CornerRadiusTopLeft = borderRadius,
-            CornerRadiusTopRight = borderRadius,
+            CornerRadiusTopRight = borderRadius
         });
 
         tween = new Tween();
@@ -153,6 +172,12 @@ public abstract class HealthEntity : KinematicBody, IStatusHolder
         }
     }
 
+    public void ResetHealthBarColor()
+    {
+        healthBarStyleBox.BgColor = defaultHealthBarColor;
+        whiteHealthBarStyleBox.BgColor = defaultHealthBarColor.Lightened(0.9f);
+    }
+
     public virtual void Damage(float damage)
     {
         Health = Mathf.Max(Health - damage, 0);
@@ -167,7 +192,10 @@ public abstract class HealthEntity : KinematicBody, IStatusHolder
         }
     }
 
-    protected abstract void Die();
+    protected virtual void Die()
+    {
+        SetCollisionMaskBit(ColLayer.Bit.Projectiles, false);
+    }
 
     public bool HasStatus<S>() where S : Status
     {
@@ -206,10 +234,20 @@ public abstract class HealthEntity : KinematicBody, IStatusHolder
             statuses[typeof(S)] = status;
             AddChild(status);
         }
+
+
+        if (typeof(S) == typeof(MarkStatus))
+        {
+            HealthBarColor = new Color("#32A852");
+        }
     }
 
     public void OnStatusEnd(Status status)
     {
+        if (status is MarkStatus)
+        {
+            ResetHealthBarColor();
+        }
         statuses[status.GetType()] = null;
     }
 }
