@@ -169,7 +169,7 @@ FloorMaterial = SubResource( 8 )
 [node name="DecorationShowcase" parent="." instance=ExtResource( 10 )]
 
 [node name="Player" parent="." instance=ExtResource( 11 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.11713, 5.90435, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.117, 2.1, 0 )
 continuous_cd = true
 contacts_reported = 1
 contact_monitor = true
