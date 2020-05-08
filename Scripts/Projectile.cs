@@ -61,7 +61,9 @@ public class Projectile : Spatial
         {
             Enemy enemy = body as Enemy;
             EmitSignal("hit_enemy", enemy);
-            QueueFree();
         }
+        if (body is Player)
+            return;
+        QueueFree();
     }
 }
