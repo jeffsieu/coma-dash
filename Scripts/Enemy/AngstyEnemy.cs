@@ -53,7 +53,7 @@ public class AngstyEnemy : Enemy
         Velocity.z *= 0.9f;
 
         Velocity += acceleration * delta * GetDirectionToPlayer();
-        
+
         Velocity = MoveAndSlide(Velocity);
         LookAtPlayerDirection(delta);
     }
