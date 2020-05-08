@@ -62,7 +62,7 @@ public class Player : HealthEntity
         skill = GetNode<AimableAttack>("Skill");
 
         // Move weapon to the front of the player
-        weapon.Translation = Vector3.Forward * Scale.z;
+        weapon.Translation = Vector3.Forward * Scale.z + Vector3.Up * Scale.y / 2;
     }
 
     public override void _Input(InputEvent @event)
@@ -124,7 +124,7 @@ public class Player : HealthEntity
     public void Face(Vector3 faceDirection, float delta)
     {
         float currAngularVelocity = AngularVelocity.y;
-        
+
         // Friction
         AddTorque(Mass * TorqueFrictionFactor * -AngularVelocity);
 
