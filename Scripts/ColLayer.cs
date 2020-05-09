@@ -1,10 +1,5 @@
 public class ColLayer
 {
-    public static uint Environment = 1;
-    public static uint Player = 2;
-    public static uint Enemies = 4;
-    public static uint Projectiles = 8;
-
     public class Bit
     {
         public static int Environment = 0;
@@ -12,4 +7,9 @@ public class ColLayer
         public static int Enemies = 2;
         public static int Projectiles = 3;
     }
+    public static uint Environment = 1u << Bit.Environment;
+    public static uint Player = 1u << Bit.Player;
+    public static uint Enemies = 1u << Bit.Enemies;
+    public static uint Projectiles = 1u << Bit.Projectiles;
+
 }
