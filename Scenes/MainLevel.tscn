@@ -10,6 +10,8 @@
 [ext_resource path="res://Shaders/Outline.shader" type="Shader" id=8]
 [ext_resource path="res://Scripts/Effects/OutlineEffect.cs" type="Script" id=9]
 [ext_resource path="res://Scenes/DecorationShowcase.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Scenes/Assets/EnemyApple.tscn" type="PackedScene" id=11]
+[ext_resource path="res://Scenes/Assets/EnemyPencil.tscn" type="PackedScene" id=12]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 8 )
@@ -194,3 +196,9 @@ WallMaterial = SubResource( 6 )
 FloorMaterial = SubResource( 8 )
 
 [node name="DecorationShowcase" parent="." instance=ExtResource( 10 )]
+
+[node name="apple" parent="." instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.753544, 4.45579 )
+
+[node name="Pencil" parent="." instance=ExtResource( 12 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.76818, 0, 3.93529 )
