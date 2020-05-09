@@ -1,0 +1,26 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[sub_resource type="Shader" id=10]
+code = "shader_type spatial;
+
+float in_out(float mid, float width, float x) {
+	return smoothstep(mid - width, mid, x) + (1.0 - smoothstep(mid, mid + width, x)) - 1.0;
+}
+
+void fragment() {
+	return;
+	// Poison / Fire
+	vec3 purple = vec3(0.5, 0, 0.5);
+	vec3 orange = vec3(0.95, 0.25, 0.02);
+	vec3 red = vec3(1, 0.5, 0.25);
+	float part = fract(TIME / 3.0);
+	ALBEDO = orange; // orange
+	//EMISSION = ALBEDO;
+	EMISSION = red * in_out(0.9, 0.1, part);
+	//ALBEDO = purple;
+	//ALPHA = smoothstep(0.7, 0.9, part) + (1.0 - smoothstep(0.95, 1.0, part)) - 1.0;
+	ALPHA = in_out(0.7, 0.1, part) + in_out(0.9, 0.1, part);
+}"
+
+[resource]
+shader = SubResource( 10 )

@@ -1,9 +1,11 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Scripts/Enemy/EnemyPencil.cs" type="Script" id=1]
+[ext_resource path="res://Materials/Poison.tres" type="Material" id=2]
 
 [sub_resource type="SpatialMaterial" id=1]
 resource_name = "Orange"
+next_pass = ExtResource( 2 )
 params_cull_mode = 2
 albedo_color = Color( 0.906332, 0.770831, 0.240331, 1 )
 roughness = 0.4
@@ -15,6 +17,7 @@ emission_on_uv2 = false
 
 [sub_resource type="SpatialMaterial" id=2]
 resource_name = "Beige"
+next_pass = ExtResource( 2 )
 params_cull_mode = 2
 albedo_color = Color( 0.906332, 0.906332, 0.906332, 1 )
 roughness = 0.5
@@ -47,6 +50,7 @@ emission_on_uv2 = false
 
 [sub_resource type="SpatialMaterial" id=5]
 resource_name = "Orange2"
+next_pass = ExtResource( 2 )
 params_cull_mode = 2
 albedo_color = Color( 0.906332, 0.50084, 0.0994923, 1 )
 roughness = 0.5
@@ -119,7 +123,7 @@ surfaces/4 = {
 "vertex_count": 138
 }
 
-[sub_resource type="CylinderShape" id=7]
+[sub_resource type="CylinderShape" id=9]
 radius = 1.1
 height = 10.0
 
@@ -145,4 +149,4 @@ material/4 = null
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 5, 0 )
-shape = SubResource( 7 )
+shape = SubResource( 9 )
