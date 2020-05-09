@@ -19,6 +19,7 @@ public class Projectile : Spatial
     private readonly Vector3 direction;
     private readonly PackedScene projectileScene;
     private float projectileLength;
+    private bool hit;
 
     public Projectile(float range, float speed, Vector3 direction, PackedScene projectileScene)
     {
@@ -31,37 +32,44 @@ public class Projectile : Spatial
 
     public override void _Ready()
     {
-        Area projectileInstance = projectileScene.Instance() as Area;
-        projectileLength = projectileInstance.Scale.z;
-
+        RigidBody projectileInstance = projectileScene.Instance() as RigidBody;
+        // Area projectileInstance = projectileScene.Instance() as Area;
+        // projectileLength = projectileInstance.Scale.z;
+        projectileLength = 3;
         projectileInstance.Connect("body_entered", this, "OnBodyEnteredProjectile");
 
         // To make the bullet's origin at the edge of the projectile weapon
         Vector3 weaponFrontDirection = -GlobalTransform.basis.z;
         Translation += projectileLength / 2 * weaponFrontDirection;
+        hit = false;
         AddChild(projectileInstance);
+        projectileInstance.ApplyCentralImpulse(projectileInstance.Mass * speed * weaponFrontDirection);
     }
 
     public override void _PhysicsProcess(float delta)
     {
-        float distanceToTravel = speed * delta;
-        Vector3 displacementToTravel = distanceToTravel * direction;
-        distanceTravelled += distanceToTravel;
+        RigidBody instance = GetNode<RigidBody>("Bullet");
+        Vector3 velocity = instance.LinearVelocity;
+        instance.AddCentralForce(0.01f * velocity.Length() * -velocity);
+        // float distanceToTravel = speed * delta;
+        // Vector3 displacementToTravel = distanceToTravel * direction;
+        // distanceTravelled += distanceToTravel;
 
         // Destroy when the front edge reaches the end point
-        if (distanceTravelled > range - projectileLength)
-            QueueFree();
+        // if (distanceTravelled > range - projectileLength)
+            // QueueFree();
 
-        Translation += displacementToTravel;
+        // Translation += displacementToTravel;
     }
 
     public void OnBodyEnteredProjectile(Node body)
     {
-        if (body is Enemy)
+        if (!hit && body is Enemy)
         {
             Enemy enemy = body as Enemy;
             EmitSignal("hit_enemy", enemy);
         }
+        hit = true;
         QueueFree();
     }
 }
