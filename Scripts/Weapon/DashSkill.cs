@@ -94,11 +94,9 @@ public class DashSkill : AimableAttack
         if (showTargetHint)
         {
             targetEnemy = GetTargetEnemy();
-            hintReticle.Visible = targetEnemy != null;
-
             if (targetEnemy != null)
             {
-
+                hintReticle.Show();
                 Vector3 enemyLocation = targetEnemy.GlobalTransform.origin;
                 Dictionary ray = GetWorld().DirectSpaceState.IntersectRay(GlobalTransform.origin, enemyLocation, collisionMask: 4);
 
@@ -232,7 +230,7 @@ public class DashSkill : AimableAttack
             }
         }
 
-        Transform currentTransform = player.GlobalTransform;
+        /*Transform currentTransform = player.GlobalTransform;
         Transform targetTransform = new Transform(player.GlobalTransform.basis, targetLocation);
 
         float duration = (targetLocation - currentTransform.origin).Length() / dashSpeed;
@@ -242,7 +240,8 @@ public class DashSkill : AimableAttack
         tween.Start();
 
         player.IsMovementLocked = true;
-        isRunning = true;
+        isRunning = true;*/
+        player.ApplyCentralImpulse((targetLocation - currentLocation) * player.Mass * 10);
     }
 
     public void OnFinished()

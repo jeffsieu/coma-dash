@@ -111,8 +111,8 @@ public class Player : HealthEntity
         AddCentralForce(accFactor * Mass * direction);
 
         // Add drag to cap the maximum speed, proportional to square of speed
-        Vector3 velocity = LinearVelocity;
-        Vector3 velDirection = velocity.Normalized();
+        Vector3 velocity = LinearVelocity * new Vector3(1, 0, 1);
+        Vector3 velDirection = velocity.Length() > 1 ? velocity.Normalized() : velocity;
 
         float speedSquared = velocity.LengthSquared();
         AddCentralForce(-DragFactor * speedSquared * velDirection);
