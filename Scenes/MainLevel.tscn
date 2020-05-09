@@ -21,19 +21,19 @@ shader_param/pixels_y = 600.0
 material = SubResource( 1 )
 size = Vector2( 2, 2 )
 
-[sub_resource type="DynamicFontData" id=4]
+[sub_resource type="DynamicFontData" id=3]
 font_path = "res://Fonts/PermanentMarker-Regular.ttf"
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=4]
 size = 23
 outline_size = 3
 outline_color = Color( 0, 0, 0, 1 )
-font_data = SubResource( 4 )
+font_data = SubResource( 3 )
 
-[sub_resource type="SpatialMaterial" id=6]
+[sub_resource type="SpatialMaterial" id=5]
 albedo_color = Color( 0.486275, 0.470588, 0.529412, 1 )
 
-[sub_resource type="Shader" id=7]
+[sub_resource type="Shader" id=6]
 code = "shader_type spatial;
 
 uniform vec2 size;
@@ -55,8 +55,8 @@ void fragment()
 	ALBEDO = color;
 }"
 
-[sub_resource type="ShaderMaterial" id=8]
-shader = SubResource( 7 )
+[sub_resource type="ShaderMaterial" id=7]
+shader = SubResource( 6 )
 shader_param/size = Vector2( 20, 0 )
 shader_param/tile_color = Color( 1, 0.58, 0.43, 1 )
 shader_param/grout_color = Color( 0.39, 0.51, 0.54, 1 )
@@ -99,7 +99,7 @@ __meta__ = {
 [node name="Heat" type="Label" parent="GUI/VBoxContainer"]
 margin_right = 824.0
 margin_bottom = 34.0
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 4 )
 text = "Heat"
 align = 1
 valign = 1
@@ -163,8 +163,8 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.91746, 2.16162, -3.4431 )
 script = ExtResource( 7 )
 UnitSize = 4
 MapPath = "res://Maps/map.data"
-WallMaterial = SubResource( 6 )
-FloorMaterial = SubResource( 8 )
+WallMaterial = SubResource( 5 )
+FloorMaterial = SubResource( 7 )
 
 [node name="DecorationShowcase" parent="." instance=ExtResource( 10 )]
 

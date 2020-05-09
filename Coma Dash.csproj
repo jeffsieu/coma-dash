@@ -61,6 +61,7 @@
     <Compile Include="Scripts\AimIndicator\StraightAimIndicator.cs" />
     <Compile Include="Scripts\Effects\OutlineEffect.cs" />
     <Compile Include="Scripts\Enemy\Enemy.cs" />
+    <Compile Include="Scripts\Enemy\EnemyPencil.cs" />
     <Compile Include="Scripts\Generator\Door.cs" />
     <Compile Include="Scripts\Generator\MapLoader.cs" />
     <Compile Include="Scripts\Generator\RoomGenerator.cs" />
