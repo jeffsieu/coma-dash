@@ -42,6 +42,7 @@ public class Projectile : Spatial
         Translation += projectileLength / 2 * weaponFrontDirection;
         hit = false;
         AddChild(projectileInstance);
+        // TODO fix ImpulseFactor
         projectileInstance.ApplyCentralImpulse(
             1.5f * projectileInstance.Mass * speed * weaponFrontDirection);
     }
@@ -50,6 +51,7 @@ public class Projectile : Spatial
     {
         RigidBody instance = GetNode<RigidBody>("Bullet");
         Vector3 velocity = instance.LinearVelocity * new Vector3(1, 0, 1);
+        // TODO add DragFactor
         instance.AddCentralForce(0.003f * velocity.Length() * -velocity);
     }
 
