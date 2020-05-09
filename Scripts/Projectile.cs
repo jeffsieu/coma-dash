@@ -34,9 +34,7 @@ public class Projectile : Spatial
     public override void _Ready()
     {
         RigidBody projectileInstance = projectileScene.Instance() as RigidBody;
-        // Area projectileInstance = projectileScene.Instance() as Area;
-        // projectileLength = projectileInstance.Scale.z;
-        projectileLength = 3;
+        projectileLength = 3; // TODO no hardcode
         projectileInstance.Connect("body_entered", this, "OnBodyEnteredProjectile");
         projectileInstance.GravityScale = 2;
         // To make the bullet's origin at the edge of the projectile weapon
@@ -53,15 +51,6 @@ public class Projectile : Spatial
         RigidBody instance = GetNode<RigidBody>("Bullet");
         Vector3 velocity = instance.LinearVelocity * new Vector3(1, 0, 1);
         instance.AddCentralForce(0.003f * velocity.Length() * -velocity);
-        // float distanceToTravel = speed * delta;
-        // Vector3 displacementToTravel = distanceToTravel * direction;
-        // distanceTravelled += distanceToTravel;
-
-        // Destroy when the front edge reaches the end point
-        // if (distanceTravelled > range - projectileLength)
-        // QueueFree();
-
-        // Translation += displacementToTravel;
     }
 
     public void OnBodyEnteredProjectile(Node body)
@@ -80,8 +69,6 @@ public class Projectile : Spatial
             camera.GlobalTransform.origin,
             camera.GlobalTransform.basis.y
         );
-        // particles.Translation = GetNode<RigidBody>("Bullet").GlobalTransform.origin;
-        // particles.LookAt(camera.GlobalTransform.origin - particles.Transform.origin, camera.GlobalTransform.basis.x);
         particles.Emitting = true;
         Timer timer = new Timer();
         particles.AddChild(timer);
