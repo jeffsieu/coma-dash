@@ -17,12 +17,11 @@ public class EnemyPencil : RigidBody
         collisionShape = GetNode<CollisionShape>("CollisionShape");
         player = GetTree().Root.GetNode("Level").GetNode<PhysicsBody>("Player");
         pause = pauseReset;
-        
         Connect("body_entered", this, "BodyEnteredSelf");
         Connect("body_exited", this, "BodyExitedSelf");
     }
 
-    private bool IsOnGround() 
+    private bool IsOnGround()
     {
         return onGround;
     }
