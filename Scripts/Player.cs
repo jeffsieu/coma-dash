@@ -254,6 +254,7 @@ public class Player : HealthEntity
 
     protected override void Die()
     {
+        base.Die();
         QueueFree();
     }
 }
