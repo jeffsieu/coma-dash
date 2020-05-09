@@ -141,18 +141,19 @@ public class Player : HealthEntity
             // Kill current angular velocity whatever it is
             ApplyTorqueImpulse(Mass * -AngularVelocity);
         }
-        else if (Mathf.Abs(angle) < Mathf.Deg2Rad(5))
+        else
+        //else if (Mathf.Abs(angle) < Mathf.Deg2Rad(5))
         {
             // Kill current angular velocity whatever it is
             ApplyTorqueImpulse(Mass * -AngularVelocity);
             // Gently rotate towards correct direction
-            AddTorque(Mass * 100 * angle * Vector3.Up);
+            AddTorque(Mass * angle * Vector3.Up * 500);
         }
-        else
+        /*else
         {
             // Quickly rotate towards direction
             AddTorque(Mass * 30 * angle * Vector3.Up);
-        }
+        }*/
     }
 
     public Vector2 GetWeightedAttackDirection()
