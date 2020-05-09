@@ -241,7 +241,9 @@ public class DashSkill : AimableAttack
 
         player.IsMovementLocked = true;
         isRunning = true;*/
-        player.ApplyCentralImpulse((targetLocation - currentLocation) * player.Mass * 10);
+        Vector3 direction = (targetLocation - currentLocation).Normalized();
+        // Impulse / m = dv
+        player.ApplyCentralImpulse(direction * player.Mass * 100);
     }
 
     public void OnFinished()

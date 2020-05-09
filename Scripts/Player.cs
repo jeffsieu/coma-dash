@@ -13,7 +13,7 @@ public class Player : HealthEntity
     [Export]
     protected float FrictionFactor = 5f;
     [Export]
-    protected float TorqueFrictionFactor = 5f;
+    protected float TorqueFactor = 400f;
     public bool IsMovementLocked = false;
 
     private bool IsSprinting
@@ -125,18 +125,14 @@ public class Player : HealthEntity
     {
         float currAngularVelocity = AngularVelocity.y;
 
-        // Friction
-        AddTorque(Mass * TorqueFrictionFactor * -AngularVelocity);
-
         // Calculate angle from current orientation
         float angle = faceDirection.AngleTo(-GlobalTransform.basis.z);
-
         // Check if clockwise or counter-clockwise
         if (faceDirection.Dot(GlobalTransform.basis.x) > 0)
             angle = -angle;
 
         // Approximately reached target
-        if (Mathf.Abs(angle) < Mathf.Deg2Rad(1))
+        if (Mathf.Abs(angle) < Mathf.Deg2Rad(0.5f))
         {
             // Kill current angular velocity whatever it is
             ApplyTorqueImpulse(Mass * -AngularVelocity);
@@ -146,14 +142,9 @@ public class Player : HealthEntity
         {
             // Kill current angular velocity whatever it is
             ApplyTorqueImpulse(Mass * -AngularVelocity);
-            // Gently rotate towards correct direction
-            AddTorque(Mass * angle * Vector3.Up * 500);
+            // Rotate towards correct direction
+            AddTorque(Mass * TorqueFactor * angle * Vector3.Up);
         }
-        /*else
-        {
-            // Quickly rotate towards direction
-            AddTorque(Mass * 30 * angle * Vector3.Up);
-        }*/
     }
 
     public Vector2 GetWeightedAttackDirection()
