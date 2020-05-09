@@ -98,7 +98,7 @@ public class DashSkill : AimableAttack
             {
                 hintReticle.Show();
                 Vector3 enemyLocation = targetEnemy.GlobalTransform.origin;
-                Dictionary ray = GetWorld().DirectSpaceState.IntersectRay(GlobalTransform.origin, enemyLocation, collisionMask: 4);
+                Dictionary ray = GetWorld().DirectSpaceState.IntersectRay(GlobalTransform.origin, enemyLocation, collisionMask: ColLayer.Enemies);
 
                 if (ray.Count == 0)
                     return;
@@ -197,7 +197,7 @@ public class DashSkill : AimableAttack
         if (targetEnemy != null)
         {
             Vector3 enemyLocation = targetEnemy.GlobalTransform.origin;
-            rayToEnemy = GetWorld().DirectSpaceState.IntersectRay(currentLocation, enemyLocation, collisionMask: 4);
+            rayToEnemy = GetWorld().DirectSpaceState.IntersectRay(currentLocation, enemyLocation, collisionMask: ColLayer.Enemies);
         }
 
         if (rayToEnemy != null && rayToEnemy.Count > 0)
@@ -211,7 +211,7 @@ public class DashSkill : AimableAttack
             targetEnemy = null;
             float radius = player.Scale.x;
             targetLocation = currentLocation + (range + radius) * (-GlobalTransform.basis.z);
-            Dictionary ray = GetWorld().DirectSpaceState.IntersectRay(currentLocation, targetLocation, collisionMask: 1);
+            Dictionary ray = GetWorld().DirectSpaceState.IntersectRay(currentLocation, targetLocation, collisionMask: ColLayer.Environment);
             if (ray.Count > 0)
             {
                 Vector3 wallNormal = (Vector3)ray["normal"];

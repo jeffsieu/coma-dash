@@ -14,6 +14,7 @@ public class Enemy : HealthEntity
     public override void _Ready()
     {
         base._Ready();
+        CollisionLayer = ColLayer.Enemies;
         material = new SpatialMaterial()
         {
             AlbedoColor = Colors.White,
@@ -31,13 +32,14 @@ public class Enemy : HealthEntity
         // Velocity.y -= gravity;
         // Velocity.z *= 0.9f;
         // Velocity = MoveAndSlide(Velocity);
-        Color baseColor = Colors.Red.LinearInterpolate(Colors.Blue, GetPercentLeft<MarkStatus>());
+        Color baseColor = Colors.Red;
         Color healthColor = baseColor.LinearInterpolate(Colors.White, 1 - Health / 100);
         material.AlbedoColor = healthColor;
     }
 
     protected override void Die()
     {
+        base.Die();
         material.FlagsTransparent = true;
         Tween tween = new Tween();
         AddChild(tween);

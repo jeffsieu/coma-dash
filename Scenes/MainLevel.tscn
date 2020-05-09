@@ -146,6 +146,7 @@ __meta__ = {
 
 [node name="Enemy" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.81554, 2.16162, -1.22923 )
+collision_mask = 1
 
 [node name="Enemy2" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.78837, 2.16162, 7.87757 )
