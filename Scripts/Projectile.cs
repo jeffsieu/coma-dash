@@ -57,7 +57,7 @@ public class Projectile : Spatial
 
         // Destroy when the front edge reaches the end point
         // if (distanceTravelled > range - projectileLength)
-            // QueueFree();
+        // QueueFree();
 
         // Translation += displacementToTravel;
     }
