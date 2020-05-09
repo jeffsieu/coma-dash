@@ -18,6 +18,7 @@ public class Projectile : Spatial
     private readonly float speed;
     private readonly Vector3 direction;
     private readonly PackedScene projectileScene;
+    private readonly PackedScene explosion = ResourceLoader.Load<PackedScene>("res://Scenes/Assets/Explosion.tscn");
     private float projectileLength;
     private bool hit;
 
@@ -37,20 +38,21 @@ public class Projectile : Spatial
         // projectileLength = projectileInstance.Scale.z;
         projectileLength = 3;
         projectileInstance.Connect("body_entered", this, "OnBodyEnteredProjectile");
-
+        projectileInstance.GravityScale = 2;
         // To make the bullet's origin at the edge of the projectile weapon
         Vector3 weaponFrontDirection = -GlobalTransform.basis.z;
         Translation += projectileLength / 2 * weaponFrontDirection;
         hit = false;
         AddChild(projectileInstance);
-        projectileInstance.ApplyCentralImpulse(projectileInstance.Mass * speed * weaponFrontDirection);
+        projectileInstance.ApplyCentralImpulse(
+            1.5f * projectileInstance.Mass * speed * weaponFrontDirection);
     }
 
     public override void _PhysicsProcess(float delta)
     {
         RigidBody instance = GetNode<RigidBody>("Bullet");
-        Vector3 velocity = instance.LinearVelocity;
-        instance.AddCentralForce(0.01f * velocity.Length() * -velocity);
+        Vector3 velocity = instance.LinearVelocity * new Vector3(1, 0, 1);
+        instance.AddCentralForce(0.003f * velocity.Length() * -velocity);
         // float distanceToTravel = speed * delta;
         // Vector3 displacementToTravel = distanceToTravel * direction;
         // distanceTravelled += distanceToTravel;
@@ -70,6 +72,17 @@ public class Projectile : Spatial
             EmitSignal("hit_enemy", enemy);
         }
         hit = true;
+        CPUParticles particles = explosion.Instance() as CPUParticles;
+        Camera camera = GetTree().Root.GetCamera();
+        GetTree().Root.AddChild(particles);
+        particles.LookAtFromPosition(
+            GetNode<RigidBody>("Bullet").GlobalTransform.origin,
+            camera.GlobalTransform.origin,
+            camera.GlobalTransform.basis.y
+        );
+        // particles.Translation = GetNode<RigidBody>("Bullet").GlobalTransform.origin;
+        // particles.LookAt(camera.GlobalTransform.origin - particles.Transform.origin, camera.GlobalTransform.basis.x);
+        particles.Emitting = true;
         QueueFree();
     }
 }
