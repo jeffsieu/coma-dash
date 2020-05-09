@@ -87,7 +87,7 @@ public class Player : HealthEntity
 
         Vector3 faceDirection = GetFaceDirection();
         Face(faceDirection, delta);
-        
+
         // So that the global rotation of the weapon will be zero
         weapon.WeightedAttackDirection = GetWeightedAttackDirection();
         weapon.IsAttackButtonPressed = IsPrimaryAttackPressed;
