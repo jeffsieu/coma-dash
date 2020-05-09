@@ -12,9 +12,6 @@ public class EnemyPencil : RigidBody
     public float pauseReset = 3.0f;
     public float pause = 3.0f;
 
-
-
-    // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
         collisionShape = GetNode<CollisionShape>("CollisionShape");
