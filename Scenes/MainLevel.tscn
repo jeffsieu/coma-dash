@@ -173,3 +173,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.117, 2.1, 0 )
 continuous_cd = true
 contacts_reported = 1
 contact_monitor = true
+WalkAccelerationFactor = 100.0
+DragFactor = 4.0
+FrictionFactor = 5.0
+TorqueFrictionFactor = 5.0

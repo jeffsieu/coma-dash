@@ -4,17 +4,17 @@ using Godot.Collections;
 
 public class Player : HealthEntity
 {
-    public bool IsMovementLocked = false;
     [Export]
-    protected float SprintAccelerationFactor = 80f;
+    protected float SprintAccelerationFactor = 200f;
     [Export]
-    protected float WalkAccelerationFactor = 50f;
+    protected float WalkAccelerationFactor = 100f;
     [Export]
     protected float DragFactor = 2f;
     [Export]
-    protected float FrictionFactor = 2f;
+    protected float FrictionFactor = 5f;
     [Export]
-    protected float TorqueFrictionFactor = 3f;
+    protected float TorqueFrictionFactor = 5f;
+    public bool IsMovementLocked = false;
 
     private bool IsSprinting
     {
