@@ -83,6 +83,11 @@ public class Projectile : Spatial
         // particles.Translation = GetNode<RigidBody>("Bullet").GlobalTransform.origin;
         // particles.LookAt(camera.GlobalTransform.origin - particles.Transform.origin, camera.GlobalTransform.basis.x);
         particles.Emitting = true;
+        Timer timer = new Timer();
+        particles.AddChild(timer);
+        timer.WaitTime = 5;
+        timer.Connect("timeout", particles, "queue_free");
+        timer.Start();
         QueueFree();
     }
 }
