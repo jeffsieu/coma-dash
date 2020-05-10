@@ -36,6 +36,7 @@ public class Projectile : Spatial
         RigidBody projectileInstance = projectileScene.Instance() as RigidBody;
         projectileLength = 3; // TODO no hardcode
         projectileInstance.Connect("body_entered", this, "OnBodyEnteredProjectile");
+        // TODO change to lifetime
         projectileInstance.GravityScale = 2;
         // To make the bullet's origin at the edge of the projectile weapon
         Vector3 weaponFrontDirection = -GlobalTransform.basis.z;
@@ -57,6 +58,8 @@ public class Projectile : Spatial
 
     public void OnBodyEnteredProjectile(Node body)
     {
+        if (body is Player)
+            return;
         if (!hit && body is Enemy)
         {
             Enemy enemy = body as Enemy;
