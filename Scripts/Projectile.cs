@@ -20,7 +20,8 @@ public class Projectile : Spatial
     private readonly PackedScene projectileScene;
     private readonly PackedScene explosion = ResourceLoader.Load<PackedScene>("res://Scenes/Assets/Explosion.tscn");
     private float projectileLength;
-    private bool hit;
+    private Vector3 origin;
+    private RigidBody projectileInstance;
 
     public Projectile(float range, float speed, Vector3 direction, PackedScene projectileScene)
     {
@@ -33,51 +34,45 @@ public class Projectile : Spatial
 
     public override void _Ready()
     {
-        RigidBody projectileInstance = projectileScene.Instance() as RigidBody;
-        projectileLength = 3; // TODO no hardcode
+        projectileInstance = projectileScene.Instance() as RigidBody;
+        projectileLength = projectileInstance.GetNode<CSGBox>("CSGBox").Depth;
         projectileInstance.Connect("body_entered", this, "OnBodyEnteredProjectile");
-        // TODO change to lifetime
-        projectileInstance.GravityScale = 2;
+        projectileInstance.GravityScale = 0;
         // To make the bullet's origin at the edge of the projectile weapon
         Vector3 weaponFrontDirection = -GlobalTransform.basis.z;
-        Translation += projectileLength / 2 * weaponFrontDirection;
-        hit = false;
+        Translation += origin;
         AddChild(projectileInstance);
-        // TODO fix ImpulseFactor
-        projectileInstance.ApplyCentralImpulse(
-            1.5f * projectileInstance.Mass * speed * weaponFrontDirection);
+        origin = projectileInstance.GlobalTransform.origin;
+        projectileInstance.ApplyCentralImpulse(projectileInstance.Mass * speed * weaponFrontDirection);
     }
 
     public override void _PhysicsProcess(float delta)
     {
-        RigidBody instance = GetNode<RigidBody>("Bullet");
-        Vector3 velocity = instance.LinearVelocity * new Vector3(1, 0, 1);
-        // TODO add DragFactor
-        instance.AddCentralForce(0.003f * velocity.Length() * -velocity);
+        if ((projectileInstance.GlobalTransform.origin - origin).Length() > range)
+            QueueFree();
     }
 
     public void OnBodyEnteredProjectile(Node body)
     {
         if (body is Player)
             return;
-        if (!hit && body is Enemy)
+        if (body is Enemy)
         {
             Enemy enemy = body as Enemy;
             EmitSignal("hit_enemy", enemy);
         }
-        hit = true;
         CPUParticles particles = explosion.Instance() as CPUParticles;
         Camera camera = GetTree().Root.GetCamera();
         GetTree().Root.AddChild(particles);
         particles.LookAtFromPosition(
-            GetNode<RigidBody>("Bullet").GlobalTransform.origin,
+            projectileInstance.GlobalTransform.origin,
             camera.GlobalTransform.origin,
             camera.GlobalTransform.basis.y
         );
         particles.Emitting = true;
         Timer timer = new Timer();
         particles.AddChild(timer);
-        timer.WaitTime = 5;
+        timer.WaitTime = 1;
         timer.Connect("timeout", particles, "queue_free");
         timer.Start();
         QueueFree();
