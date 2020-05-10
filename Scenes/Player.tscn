@@ -1,13 +1,28 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Scripts/Player.cs" type="Script" id=1]
 [ext_resource path="res://Scripts/Weapon/OverheatingGun.cs" type="Script" id=2]
 [ext_resource path="res://Scripts/Weapon/DashSkill.cs" type="Script" id=3]
 [ext_resource path="res://Scripts/AimIndicator/GeneralAimIndicator.cs" type="Script" id=4]
+[ext_resource path="res://Shaders/Shockwave.shader" type="Shader" id=5]
 
 [sub_resource type="CylinderMesh" id=1]
 
 [sub_resource type="CylinderShape" id=2]
+
+[sub_resource type="PlaneMesh" id=4]
+size = Vector2( 10, 10 )
+subdivide_width = 20
+subdivide_depth = 20
+
+[sub_resource type="ShaderMaterial" id=5]
+shader = ExtResource( 5 )
+shader_param/radius = 5.0
+shader_param/startTime = null
+shader_param/wave_speed = 3.0
+shader_param/wave_width = 0.1
+shader_param/wave_height = 1.0
+shader_param/t = null
 
 [node name="Player" type="RigidBody"]
 collision_layer = 2
@@ -35,3 +50,8 @@ IndicatorType = 2
 
 [node name="Skill" type="Spatial" parent="."]
 script = ExtResource( 3 )
+
+[node name="Shockwave" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0 )
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
