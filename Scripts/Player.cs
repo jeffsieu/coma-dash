@@ -5,45 +5,19 @@ using Godot.Collections;
 public class Player : HealthEntity
 {
     [Export]
-    protected float MaxSpeed = 25f;
-
+    protected float SprintAccelerationFactor = 200f;
     [Export]
-    protected float TurningResistance = 0.2f;
-
+    protected float WalkAccelerationFactor = 100f;
     [Export]
-    protected float MaxAccelerationFactor = 0.3f;
-
+    protected float DragFactor = 2f;
     [Export]
-    protected float MaxDecelerationFactor = 0.1f;
-
+    protected float FrictionFactor = 1.6f;
     [Export]
-    protected float WalkingSlowFactor = 0.7f;
-    protected float RotationSpeed = 30f;
-
+    protected float TorqueFactor = 400f;
     public bool IsMovementLocked = false;
+    public bool disableFriction = false;
 
-    private float WalkingSpeed
-    {
-        get
-        {
-            return WalkingSlowFactor * MaxSpeed;
-        }
-    }
-
-    private float MaxAcceleration
-    {
-        get
-        {
-            return MaxAccelerationFactor * MaxSpeed;
-        }
-    }
-    private float MaxDeceleration
-    {
-        get
-        {
-            return MaxDecelerationFactor * MaxSpeed;
-        }
-    }
+    public float gravity;
 
     private bool IsSprinting
     {
@@ -89,9 +63,10 @@ public class Player : HealthEntity
         camera = GetParent().GetNode<Camera>("Camera");
         weapon = GetNode<AimableAttack>("Weapon");
         skill = GetNode<AimableAttack>("Skill");
+        gravity = (float)PhysicsServer.AreaGetParam(GetWorld().Space, PhysicsServer.AreaParameter.Gravity);
 
         // Move weapon to the front of the player
-        weapon.Translation = Vector3.Forward * Scale.z;
+        weapon.Translation = Vector3.Forward * Scale.z + Vector3.Up * Scale.y / 2;
     }
 
     public override void _Input(InputEvent @event)
@@ -107,16 +82,15 @@ public class Player : HealthEntity
     public override void _PhysicsProcess(float delta)
     {
         base._PhysicsProcess(delta);
+
         if (!IsMovementLocked)
         {
             Vector2 weightedDirection = GetWeightedMovementDirection();
             Move(weightedDirection, delta);
         }
-        float angle = GetFaceDirection().AngleTo(previousFaceDirection);
-        angle = Math.Min(angle, RotationSpeed * delta);
-        Vector3 newFaceDirection = previousFaceDirection.Rotated(GetFaceDirection().Cross(previousFaceDirection), -angle);
-        LookAt(Translation + newFaceDirection, Vector3.Up);
-        previousFaceDirection = newFaceDirection.Normalized();
+
+        Vector3 faceDirection = GetFaceDirection();
+        Face(faceDirection, delta);
 
         // So that the global rotation of the weapon will be zero
         weapon.WeightedAttackDirection = GetWeightedAttackDirection();
@@ -135,44 +109,48 @@ public class Player : HealthEntity
 
     public void Move(Vector2 weightedDirection, float delta)
     {
-        float targetSpeed = IsSprinting ? MaxSpeed : WalkingSpeed;
-        Vector3 targetVelocity = targetSpeed * new Vector3(weightedDirection.x, 0, weightedDirection.y);
-        Vector3 targetAcceleration = targetVelocity - velocity;
-        Vector3 actualAcceleration = targetAcceleration;
+        // Add acceleration based on user input
+        float accFactor = IsSprinting ? SprintAccelerationFactor : WalkAccelerationFactor;
+        Vector3 direction = new Vector3(weightedDirection.x, 0, weightedDirection.y);
+        AddCentralForce(accFactor * Mass * direction);
 
-        // Player trying to accelerate in the same direction
-        if (targetVelocity.Dot(targetAcceleration) > 0)
+        // Add drag to cap the maximum speed, proportional to square of speed
+        Vector3 velocity = LinearVelocity * new Vector3(1, 0, 1);
+        Vector3 velDirection = velocity.Length() > 1 ? velocity.Normalized() : velocity;
+
+        if (!disableFriction)
         {
-            if (targetAcceleration.Length() > MaxAcceleration)
-            {
-                actualAcceleration = targetAcceleration.Normalized() * MaxAcceleration;
-            }
+            float speedSquared = velocity.LengthSquared();
+            AddCentralForce(-DragFactor * speedSquared * velDirection);
+            // Add kinetic friction
+            AddCentralForce(-FrictionFactor * Mass * GravityScale * gravity * velDirection);
         }
-        // Player trying to slow down/switch direction
+
+    }
+
+    public void Face(Vector3 faceDirection, float delta)
+    {
+        float currAngularVelocity = AngularVelocity.y;
+
+        // Calculate angle from current orientation
+        float angle = faceDirection.AngleTo(-GlobalTransform.basis.z);
+        // Check if clockwise or counter-clockwise
+        if (faceDirection.Dot(GlobalTransform.basis.x) > 0)
+            angle = -angle;
+
+        // Approximately reached target
+        if (Mathf.Abs(angle) < Mathf.Deg2Rad(0.5f))
+        {
+            // Kill current angular velocity whatever it is
+            ApplyTorqueImpulse(Mass * -AngularVelocity);
+        }
         else
+        //else if (Mathf.Abs(angle) < Mathf.Deg2Rad(5))
         {
-            if (targetAcceleration.Length() > MaxDeceleration)
-            {
-                actualAcceleration = targetAcceleration.Normalized() * MaxDeceleration;
-            }
-        }
-
-        // 1.0 when player is continuing forward/trying to go backward,
-        // 0.0 when player is trying to turn 90 degrees
-        float directionSpeedFactor = Mathf.Abs(Mathf.Cos(targetVelocity.AngleTo(velocity)));
-
-        // Map speed factor to [1 - resistance, 1], so player is slowed by <resistance> when he is turning 90 degrees
-        directionSpeedFactor = Mathf.Lerp(1 - TurningResistance, 1.0f, directionSpeedFactor);
-
-        // Slow player when he is turning
-        actualAcceleration *= directionSpeedFactor;
-
-        Vector3 newVelocity = velocity + actualAcceleration;
-        velocity = newVelocity;
-        KinematicCollision collision = MoveAndCollide(newVelocity * delta);
-        if (collision != null)
-        {
-            velocity = velocity.Slide(collision.Normal);
+            // Kill current angular velocity whatever it is
+            ApplyTorqueImpulse(Mass * -AngularVelocity);
+            // Rotate towards correct direction
+            AddTorque(Mass * TorqueFactor * angle * Vector3.Up);
         }
     }
 

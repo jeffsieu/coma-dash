@@ -25,6 +25,8 @@ public class DashSkill : AimableAttack
     private Player player;
     private Enemy targetEnemy;
     private bool isRunning = false;
+    private float dashLeft;
+    private float shaderTime = 2.0f;
 
     private OverheatingGun overheatingGun;
 
@@ -42,6 +44,7 @@ public class DashSkill : AimableAttack
         base._Ready();
         player = GetParent<Player>();
         overheatingGun = player.GetNode<OverheatingGun>("Weapon");
+        dashLeft = 0;
 
         (AimIndicator as GeneralAimIndicator).IndicatorType = GeneralAimIndicator.AimIndicatorType.CONICAL;
         (AimIndicator as GeneralAimIndicator).SpreadDegrees = spreadDegrees;
@@ -89,16 +92,25 @@ public class DashSkill : AimableAttack
 
     public override void _PhysicsProcess(float delta)
     {
+        shaderTime += delta;
+        MeshInstance m = player.GetNode<MeshInstance>("Shockwave");
+        ShaderMaterial mat = m.GetSurfaceMaterial(0) as ShaderMaterial;
+        mat.SetShaderParam("t", shaderTime);
+
+        if (dashLeft > 0)
+        {
+            dashLeft -= delta;
+            if (dashLeft <= 0)
+                OnFinished();
+        }
         if (isRunning)
             return;
         if (showTargetHint)
         {
             targetEnemy = GetTargetEnemy();
-            hintReticle.Visible = targetEnemy != null;
-
             if (targetEnemy != null)
             {
-
+                hintReticle.Show();
                 Vector3 enemyLocation = targetEnemy.GlobalTransform.origin;
                 Dictionary ray = GetWorld().DirectSpaceState.IntersectRay(GlobalTransform.origin, enemyLocation, collisionMask: ColLayer.Enemies);
 
@@ -190,7 +202,7 @@ public class DashSkill : AimableAttack
         if (isRunning)
             return;
         Vector3 currentLocation = GlobalTransform.origin;
-        Vector3 targetLocation;
+        Vector3 targetLocation = Vector3.Zero;
 
         Dictionary rayToEnemy = null;
 
@@ -200,78 +212,67 @@ public class DashSkill : AimableAttack
         {
             Vector3 enemyLocation = targetEnemy.GlobalTransform.origin;
             rayToEnemy = GetWorld().DirectSpaceState.IntersectRay(currentLocation, enemyLocation, collisionMask: ColLayer.Enemies);
-        }
-
-        if (rayToEnemy != null && rayToEnemy.Count > 0)
-        {
-            Vector3 enemyBoundary = (Vector3)rayToEnemy["position"];
-            targetLocation = enemyBoundary + player.Scale * GlobalTransform.basis.z;
-        }
-        else
-        {
-            // Set target enemy to null if it has somehow disappeared
-            targetEnemy = null;
-            float radius = player.Scale.x;
-            targetLocation = currentLocation + (range + radius) * (-GlobalTransform.basis.z);
-            Dictionary ray = GetWorld().DirectSpaceState.IntersectRay(currentLocation, targetLocation, collisionMask: ColLayer.Environment);
-            if (ray.Count > 0)
+            if (rayToEnemy.Count > 0)
             {
-                Vector3 wallNormal = (Vector3)ray["normal"];
-                Vector3 position = (Vector3)ray["position"];
-                float cosAngle = wallNormal.Dot(GlobalTransform.basis.z);
-                float hyp = radius / cosAngle;
-                // cosAngle should not be 90 degrees as that would mean that
-                // player is moving parallel to the wall hence ray would not intersect
-                targetLocation = position + hyp * GlobalTransform.basis.z;
-                if ((targetLocation - currentLocation).Length() > range)
-                    targetLocation = currentLocation + range * (-GlobalTransform.basis.z);
+                Vector3 enemyBoundary = (Vector3)rayToEnemy["position"];
+                targetLocation = enemyBoundary + player.Scale * GlobalTransform.basis.z;
             }
             else
             {
-                targetLocation = currentLocation + range * (-GlobalTransform.basis.z);
+                targetEnemy = null;
             }
         }
 
-        Transform currentTransform = player.GlobalTransform;
-        Transform targetTransform = new Transform(player.GlobalTransform.basis, targetLocation);
+        if (targetEnemy == null)
+        {
+            targetLocation = currentLocation + range * (-GlobalTransform.basis.z);
+        }
 
-        float duration = (targetLocation - currentTransform.origin).Length() / dashSpeed;
-
-        tween.InterpolateProperty(player, "GlobalTransform", currentTransform, targetTransform, duration, transType: Tween.TransitionType.Quart);
-        tween.InterpolateCallback(this, duration, "OnFinished");
-        tween.Start();
-
+        float duration = (targetLocation - currentLocation).Length() / dashSpeed;
         player.IsMovementLocked = true;
         isRunning = true;
+        dashLeft = duration;
+        Vector3 direction = (targetLocation - currentLocation).Normalized();
+        player.disableFriction = true;
+        player.ApplyCentralImpulse(player.Mass * -player.LinearVelocity);
+        player.ApplyCentralImpulse(direction * player.Mass * dashSpeed);
     }
 
     public void OnFinished()
     {
+        MeshInstance m = player.GetNode<MeshInstance>("Shockwave");
+        ShaderMaterial mat = m.GetSurfaceMaterial(0) as ShaderMaterial;
+        mat.SetShaderParam("t", 0);
+        shaderTime = 0;
+
+        player.ApplyCentralImpulse(player.Mass * -player.LinearVelocity);
+
         if (targetEnemy != null)
         {
             Vector3 targetEnemyDirection = (targetEnemy.GlobalTransform.origin - GlobalTransform.origin).Normalized();
-            Vector3 accelerationOntargetEnemy = 50.0f * targetEnemyDirection + 40.0f * Vector3.Up;
-            targetEnemy.Velocity += accelerationOntargetEnemy;
+            Vector3 targetEnemyVelocity = 5.0f * targetEnemyDirection + 15.0f * Vector3.Up;
+            targetEnemy.ApplyCentralImpulse(targetEnemy.Mass * targetEnemyVelocity);
             targetEnemy.Damage(damage);
-
-            foreach (PhysicsBody body in impactArea.GetOverlappingBodies())
-            {
-                if (!(body is Enemy))
-                    continue;
-
-                Enemy enemy = body as Enemy;
-                if (enemy == targetEnemy)
-                    continue;
-
-                Vector3 enemyDirection = (enemy.GlobalTransform.origin - GlobalTransform.origin).Normalized();
-                Vector3 accelerationOnEnemy = 25.0f * enemyDirection + 20.0f * Vector3.Up;
-                enemy.Velocity += accelerationOnEnemy;
-                enemy.Damage(damage / 2);
-            }
-
             overheatingGun.Cool(coolAmount);
         }
+
+        foreach (PhysicsBody body in impactArea.GetOverlappingBodies())
+        {
+            if (!(body is Enemy))
+                continue;
+
+            Enemy enemy = body as Enemy;
+            if (enemy == targetEnemy)
+                continue;
+
+            Vector3 enemyDirection = (enemy.GlobalTransform.origin - GlobalTransform.origin).Normalized();
+            Vector3 enemyVelocity = 2.5f * enemyDirection + 15.0f * Vector3.Up;
+            enemy.ApplyCentralImpulse(enemy.Mass * enemyVelocity);
+            enemy.Damage(damage / 2);
+        }
+
         player.IsMovementLocked = false;
+        player.disableFriction = false;
         isRunning = false;
         targetEnemy = null;
     }

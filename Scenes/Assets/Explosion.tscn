@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=2]
+
+[sub_resource type="SpatialMaterial" id=4]
+flags_transparent = true
+vertex_color_use_as_albedo = true
+
+[sub_resource type="CubeMesh" id=5]
+material = SubResource( 4 )
+size = Vector3( 0.5, 0.5, 0.5 )
+
+[sub_resource type="Curve" id=3]
+_data = [ Vector2( 0, 0.987069 ), 0.0, 0.0, 0, 0, Vector2( 0.989362, 0.331897 ), -1.78276, 0.0, 0, 0 ]
+
+[sub_resource type="Gradient" id=6]
+offsets = PoolRealArray( 0, 0.232704, 1 )
+colors = PoolColorArray( 1, 1, 1, 1, 0.952941, 0.94902, 0.0392157, 1, 0.996078, 0.0156863, 0.0156863, 1 )
+
+[node name="Particles" type="CPUParticles"]
+emitting = false
+amount = 30
+lifetime = 0.3
+one_shot = true
+fract_delta = false
+mesh = SubResource( 5 )
+direction = Vector3( 0, 1, 0 )
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 10.0
+angular_velocity_random = 1.0
+linear_accel = 10.0
+linear_accel_random = 1.0
+scale_amount_curve = SubResource( 3 )
+color_ramp = SubResource( 6 )
