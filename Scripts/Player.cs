@@ -11,10 +11,13 @@ public class Player : HealthEntity
     [Export]
     protected float DragFactor = 2f;
     [Export]
-    protected float FrictionFactor = 5f;
+    protected float FrictionFactor = 1.6f;
     [Export]
     protected float TorqueFactor = 400f;
     public bool IsMovementLocked = false;
+    public bool disableFriction = false;
+
+    public float gravity;
 
     private bool IsSprinting
     {
@@ -60,6 +63,7 @@ public class Player : HealthEntity
         camera = GetParent().GetNode<Camera>("Camera");
         weapon = GetNode<AimableAttack>("Weapon");
         skill = GetNode<AimableAttack>("Skill");
+        gravity = (float)PhysicsServer.AreaGetParam(GetWorld().Space, PhysicsServer.AreaParameter.Gravity);
 
         // Move weapon to the front of the player
         weapon.Translation = Vector3.Forward * Scale.z + Vector3.Up * Scale.y / 2;
@@ -114,11 +118,13 @@ public class Player : HealthEntity
         Vector3 velocity = LinearVelocity * new Vector3(1, 0, 1);
         Vector3 velDirection = velocity.Length() > 1 ? velocity.Normalized() : velocity;
 
-        float speedSquared = velocity.LengthSquared();
-        AddCentralForce(-DragFactor * speedSquared * velDirection);
-
-        // Add kinetic friction
-        AddCentralForce(-FrictionFactor * Mass * GravityScale * 9.8f * velDirection);
+        if (!disableFriction) {
+            float speedSquared = velocity.LengthSquared();
+            AddCentralForce(-DragFactor * speedSquared * velDirection);
+            // Add kinetic friction
+            AddCentralForce(-FrictionFactor * Mass * GravityScale * gravity * velDirection);
+        }
+        
     }
 
     public void Face(Vector3 faceDirection, float delta)
