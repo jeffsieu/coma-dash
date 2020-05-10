@@ -14,7 +14,6 @@ public class DashSkill : AimableAttack
     private readonly float damage;
     private readonly float impactRange;
     private readonly float coolAmount;
-    private readonly float dashDuration;
 
     private Area targetArea;
     private Area coneSides;
@@ -38,7 +37,6 @@ public class DashSkill : AimableAttack
         damage = 30.0f;
         impactRange = 5.0f;
         coolAmount = 0.4f;
-        dashDuration = 1f;
     }
 
     public override void _Ready()
@@ -233,9 +231,8 @@ public class DashSkill : AimableAttack
         float duration = (targetLocation - currentLocation).Length() / dashSpeed;
         player.IsMovementLocked = true;
         isRunning = true;
-        dashLeft = duration; //dashDuration;
+        dashLeft = duration;
         Vector3 direction = (targetLocation - currentLocation).Normalized();
-        // Impulse / m = dv
         player.disableFriction = true;
         player.ApplyCentralImpulse(player.Mass * -player.LinearVelocity);
         player.ApplyCentralImpulse(direction * player.Mass * dashSpeed);
@@ -246,16 +243,15 @@ public class DashSkill : AimableAttack
         MeshInstance m = player.GetNode<MeshInstance>("Shockwave");
         ShaderMaterial mat = m.GetSurfaceMaterial(0) as ShaderMaterial;
         mat.SetShaderParam("t", 0);
-        // mat.GetShaderParam("TIME");
         shaderTime = 0;
+
         player.ApplyCentralImpulse(player.Mass * -player.LinearVelocity);
 
         if (targetEnemy != null)
         {
             Vector3 targetEnemyDirection = (targetEnemy.GlobalTransform.origin - GlobalTransform.origin).Normalized();
-            Vector3 accelerationOntargetEnemy = 5.0f * targetEnemyDirection + 15.0f * Vector3.Up;
-            // targetEnemy.ApplyCentralImpulse(targetEnemy.Mass * -targetEnemy.LinearVelocity);
-            targetEnemy.ApplyCentralImpulse(targetEnemy.Mass * accelerationOntargetEnemy);
+            Vector3 targetEnemyVelocity = 5.0f * targetEnemyDirection + 15.0f * Vector3.Up;
+            targetEnemy.ApplyCentralImpulse(targetEnemy.Mass * targetEnemyVelocity);
             targetEnemy.Damage(damage);
             overheatingGun.Cool(coolAmount);
         }
@@ -264,15 +260,14 @@ public class DashSkill : AimableAttack
         {
             if (!(body is Enemy))
                 continue;
-            GD.Print(body.Name);
+
             Enemy enemy = body as Enemy;
             if (enemy == targetEnemy)
                 continue;
 
             Vector3 enemyDirection = (enemy.GlobalTransform.origin - GlobalTransform.origin).Normalized();
-            Vector3 accelerationOnEnemy = 2.5f * enemyDirection + 15.0f * Vector3.Up;
-            // enemy.ApplyCentralImpulse(enemy.Mass * -enemy.LinearVelocity);
-            enemy.ApplyCentralImpulse(enemy.Mass * accelerationOnEnemy);
+            Vector3 enemyVelocity = 2.5f * enemyDirection + 15.0f * Vector3.Up;
+            enemy.ApplyCentralImpulse(enemy.Mass * enemyVelocity);
             enemy.Damage(damage / 2);
         }
 
