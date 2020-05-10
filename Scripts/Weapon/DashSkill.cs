@@ -98,7 +98,7 @@ public class DashSkill : AimableAttack
         MeshInstance m = player.GetNode<MeshInstance>("Shockwave");
         ShaderMaterial mat = m.GetSurfaceMaterial(0) as ShaderMaterial;
         mat.SetShaderParam("t", shaderTime);
-        
+
         if (dashLeft > 0)
         {
             dashLeft -= delta;
@@ -275,7 +275,7 @@ public class DashSkill : AimableAttack
             enemy.ApplyCentralImpulse(enemy.Mass * accelerationOnEnemy);
             enemy.Damage(damage / 2);
         }
-        
+
         player.IsMovementLocked = false;
         player.disableFriction = false;
         isRunning = false;

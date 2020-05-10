@@ -118,13 +118,14 @@ public class Player : HealthEntity
         Vector3 velocity = LinearVelocity * new Vector3(1, 0, 1);
         Vector3 velDirection = velocity.Length() > 1 ? velocity.Normalized() : velocity;
 
-        if (!disableFriction) {
+        if (!disableFriction)
+        {
             float speedSquared = velocity.LengthSquared();
             AddCentralForce(-DragFactor * speedSquared * velDirection);
             // Add kinetic friction
             AddCentralForce(-FrictionFactor * Mass * GravityScale * gravity * velDirection);
         }
-        
+
     }
 
     public void Face(Vector3 faceDirection, float delta)
