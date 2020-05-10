@@ -104,6 +104,10 @@ attack_secondary={
 3d_physics/layer_3="Enemies"
 3d_physics/layer_4="Projectiles"
 
+[physics]
+
+3d/default_gravity=30.0
+
 [rendering]
 
 quality/driver/driver_name="GLES2"
