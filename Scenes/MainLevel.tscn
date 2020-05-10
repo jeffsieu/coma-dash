@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://Scripts/Player.cs" type="Script" id=1]
 [ext_resource path="res://Scripts/PlayerCamera.cs" type="Script" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://Shaders/Outline.shader" type="Shader" id=8]
 [ext_resource path="res://Scripts/Effects/OutlineEffect.cs" type="Script" id=9]
 [ext_resource path="res://Scenes/DecorationShowcase.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Scripts/Generator/Bookshelf.cs" type="Script" id=11]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 8 )
@@ -102,6 +103,7 @@ script = ExtResource( 6 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
 transform = Transform( 0.618224, -0.112404, 0.777923, -0.784334, -0.152666, 0.601259, 0.0511787, -0.981865, -0.182544, 8.25041, 20.7953, -4.0208 )
+light_bake_mode = 2
 shadow_enabled = true
 
 [node name="GUI" type="Control" parent="."]
@@ -194,3 +196,16 @@ WallMaterial = SubResource( 6 )
 FloorMaterial = SubResource( 8 )
 
 [node name="DecorationShowcase" parent="." instance=ExtResource( 10 )]
+
+[node name="Spatial2" type="Spatial" parent="."]
+transform = Transform( -0.00436357, 0, -0.99999, 0, 1, 0, 0.99999, 0, -0.00436357, 62.0807, 1.72142, -8.9013 )
+script = ExtResource( 11 )
+Books = 15
+
+[node name="Spatial3" type="Spatial" parent="."]
+transform = Transform( -0.00436357, 0, -0.99999, 0, 1, 0, 0.99999, 0, -0.00436357, 71.67, 1.72142, -8.89417 )
+script = ExtResource( 11 )
+
+[node name="Spatial4" type="Spatial" parent="."]
+transform = Transform( -0.00436357, 0, -0.99999, 0, 1, 0, 0.99999, 0, -0.00436357, 81.7424, 1.72142, -8.85022 )
+script = ExtResource( 11 )

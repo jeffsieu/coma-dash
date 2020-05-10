@@ -9,6 +9,7 @@
     <RootNamespace>ComaDash</RootNamespace>
     <AssemblyName>Coma Dash</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+	<LangVersion>8.0</LangVersion>
     <GodotProjectGeneratorVersion>1.0.7374.18850</GodotProjectGeneratorVersion>
     <BaseIntermediateOutputPath>.mono/temp/obj</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)/$(Configuration)</IntermediateOutputPath>
@@ -61,6 +62,7 @@
     <Compile Include="Scripts\AimIndicator\StraightAimIndicator.cs" />
     <Compile Include="Scripts\Effects\OutlineEffect.cs" />
     <Compile Include="Scripts\Enemy\Enemy.cs" />
+    <Compile Include="Scripts\Generator\Bookshelf.cs" />
     <Compile Include="Scripts\Generator\Door.cs" />
     <Compile Include="Scripts\Generator\MapLoader.cs" />
     <Compile Include="Scripts\Generator\RoomGenerator.cs" />
