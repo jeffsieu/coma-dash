@@ -1,9 +1,10 @@
 shader_type spatial;
 
 uniform float radius = 5.0;
+uniform float max_radius = 14.142;
 uniform float startTime;
 
-uniform float wave_speed = 3.0;
+uniform float wave_speed = 2.0;
 uniform float wave_width = 0.1;
 uniform float wave_height = 1.0;
 
@@ -65,7 +66,7 @@ void fragment() {
 	float r = length(uv);
 	ALBEDO = vec3(0.5, 0.5, 0.5);
 	ALBEDO = vec3(1.0, 1.0, 0);
-	if (r < 1.0 && onwave(time, r))
+	if (r < radius / max_radius && onwave(time, r))
 		ALPHA = 0.5;
 	else
 		ALPHA = 0.0;

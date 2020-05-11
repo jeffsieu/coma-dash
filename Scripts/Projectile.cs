@@ -69,8 +69,13 @@ public class Projectile : Spatial
         CPUParticles particles = explosion.Instance() as CPUParticles;
         Camera camera = GetTree().Root.GetCamera();
         GetTree().Root.AddChild(particles);
+        RigidBody bullet = GetNode<RigidBody>("Bullet");
+        CollisionShape collisionShape = bullet.GetNode<CollisionShape>("CollisionShape");
+
+        Vector3 collisionPosition = bullet.GlobalTransform.origin + -bullet.GlobalTransform.basis.z * (collisionShape.Shape as BoxShape).Extents.z;
+
         particles.LookAtFromPosition(
-            GetNode<RigidBody>("Bullet").GlobalTransform.origin,
+            collisionPosition,
             camera.GlobalTransform.origin,
             camera.GlobalTransform.basis.y
         );

@@ -93,7 +93,7 @@ public class DashSkill : AimableAttack
     public override void _PhysicsProcess(float delta)
     {
         shaderTime += delta;
-        MeshInstance m = player.GetNode<MeshInstance>("Shockwave");
+        MeshInstance m = GetNode<MeshInstance>("Shockwave");
         ShaderMaterial mat = m.GetSurfaceMaterial(0) as ShaderMaterial;
         mat.SetShaderParam("t", shaderTime);
 
@@ -110,20 +110,28 @@ public class DashSkill : AimableAttack
             targetEnemy = GetTargetEnemy();
             if (targetEnemy != null)
             {
-                hintReticle.Show();
                 Vector3 enemyLocation = targetEnemy.GlobalTransform.origin;
                 Dictionary ray = GetWorld().DirectSpaceState.IntersectRay(GlobalTransform.origin, enemyLocation, collisionMask: ColLayer.Enemies);
 
                 if (ray.Count == 0)
+                {
+                    hintReticle.Hide();
                     return;
+                }
 
+                hintReticle.Show();
                 Vector3 enemyBoundary = (Vector3)ray["position"];
 
                 impactAimIndicator.Translation = enemyBoundary - enemyLocation;
 
                 Transform hintReticleGlobalTransform = hintReticle.GlobalTransform;
                 hintReticleGlobalTransform.origin = enemyLocation;
+                hintReticleGlobalTransform.basis = Basis.Identity;
                 hintReticle.GlobalTransform = hintReticleGlobalTransform;
+            }
+            else
+            {
+                hintReticle.Hide();
             }
         }
         else
@@ -240,10 +248,6 @@ public class DashSkill : AimableAttack
 
     public void OnFinished()
     {
-        MeshInstance m = player.GetNode<MeshInstance>("Shockwave");
-        ShaderMaterial mat = m.GetSurfaceMaterial(0) as ShaderMaterial;
-        mat.SetShaderParam("t", 0);
-        shaderTime = 0;
 
         player.ApplyCentralImpulse(player.Mass * -player.LinearVelocity);
 
@@ -254,6 +258,11 @@ public class DashSkill : AimableAttack
             targetEnemy.ApplyCentralImpulse(targetEnemy.Mass * targetEnemyVelocity);
             targetEnemy.Damage(damage);
             overheatingGun.Cool(coolAmount);
+            MeshInstance m = GetNode<MeshInstance>("Shockwave");
+            ShaderMaterial mat = m.GetSurfaceMaterial(0) as ShaderMaterial;
+            mat.SetShaderParam("t", 0);
+            mat.SetShaderParam("radius", impactRange);
+            shaderTime = 0;
         }
 
         foreach (PhysicsBody body in impactArea.GetOverlappingBodies())
