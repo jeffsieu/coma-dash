@@ -5,17 +5,16 @@
 [ext_resource path="res://Scripts/Weapon/DashSkill.cs" type="Script" id=3]
 [ext_resource path="res://Scripts/AimIndicator/GeneralAimIndicator.cs" type="Script" id=4]
 [ext_resource path="res://Shaders/Shockwave.shader" type="Shader" id=5]
+[ext_resource path="res://Scenes/Assets/Character.tscn" type="PackedScene" id=6]
 
-[sub_resource type="CylinderMesh" id=1]
+[sub_resource type="CylinderShape" id=1]
 
-[sub_resource type="CylinderShape" id=2]
-
-[sub_resource type="PlaneMesh" id=4]
+[sub_resource type="PlaneMesh" id=2]
 size = Vector2( 10, 10 )
 subdivide_width = 20
 subdivide_depth = 20
 
-[sub_resource type="ShaderMaterial" id=5]
+[sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 5 )
 shader_param/radius = 5.0
 shader_param/startTime = null
@@ -32,14 +31,12 @@ axis_lock_angular_x = true
 axis_lock_angular_z = true
 script = ExtResource( 1 )
 
-[node name="MeshInstance" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
-mesh = SubResource( 1 )
-material/0 = null
+[node name="CharacterMesh" parent="." instance=ExtResource( 6 )]
+transform = Transform( -3.9, 0, -1.27078e-06, 0, 2.231, 0, 1.27078e-06, 0, -3.9, 0, 0, 0.132914 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Weapon" type="Spatial" parent="."]
 script = ExtResource( 2 )
@@ -53,5 +50,5 @@ script = ExtResource( 3 )
 
 [node name="Shockwave" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0 )
-mesh = SubResource( 4 )
-material/0 = SubResource( 5 )
+mesh = SubResource( 2 )
+material/0 = SubResource( 3 )

@@ -50,6 +50,8 @@ public class Player : HealthEntity
     private Vector3 previousFaceDirection = Vector3.Forward;
     private AimableAttack weapon;
     private AimableAttack skill;
+    private AnimationPlayer animationPlayer;
+    private Animation runAnimation;
 
     public Player()
     {
@@ -65,8 +67,11 @@ public class Player : HealthEntity
         skill = GetNode<AimableAttack>("Skill");
         gravity = (float)PhysicsServer.AreaGetParam(GetWorld().Space, PhysicsServer.AreaParameter.Gravity);
 
-        // Move weapon to the front of the player
-        weapon.Translation = Vector3.Forward * Scale.z + Vector3.Up * Scale.y / 2;
+        animationPlayer = GetNode<Spatial>("CharacterMesh").GetNode<AnimationPlayer>("AnimationPlayer");
+        runAnimation = animationPlayer.GetAnimation("animation_run_pistol_1");
+        runAnimation.Loop = true;
+        animationPlayer.PlaybackSpeed = 2;
+        animationPlayer.Play("animation_run_pistol_1");
     }
 
     public override void _Input(InputEvent @event)
@@ -92,7 +97,12 @@ public class Player : HealthEntity
         Vector3 faceDirection = GetFaceDirection();
         Face(faceDirection, delta);
 
-        // So that the global rotation of the weapon will be zero
+        // Change playback speed according to how similar
+        // the current velocity is to the face direction
+        float effectiveSpeedFactor = faceDirection.Dot(LinearVelocity);
+        animationPlayer.PlaybackSpeed = effectiveSpeedFactor * 0.15f;
+
+        weapon.Translation = Vector3.Forward * Scale.z + Vector3.Up * Scale.y / 2;
         weapon.WeightedAttackDirection = GetWeightedAttackDirection();
         weapon.IsAttackButtonPressed = IsPrimaryAttackPressed;
 
@@ -105,6 +115,7 @@ public class Player : HealthEntity
 
         weapon.AimIndicator.Translation = Vector3.Down;
         skill.AimIndicator.Translation = Vector3.Down;
+
     }
 
     public void Move(Vector2 weightedDirection, float delta)
@@ -194,16 +205,17 @@ public class Player : HealthEntity
         Vector3 direction = default;
 
         if (Input.GetConnectedJoypads().Count > 0)
-        {
-            float horizontal = Input.GetActionStrength("aim_right") - Input.GetActionStrength("aim_left");
-            float vertical = Input.GetActionStrength("aim_down") - Input.GetActionStrength("aim_up");
-            Vector2 joystick = new Vector2(horizontal, vertical).Clamped(1.0f);
-            if (joystick.Length() > 0)
+            if (LinearVelocity.Length() > 1.0)
             {
-                inputMode = InputMode.Controller;
+                float horizontal = Input.GetActionStrength("aim_right") - Input.GetActionStrength("aim_left");
+                float vertical = Input.GetActionStrength("aim_down") - Input.GetActionStrength("aim_up");
+                Vector2 joystick = new Vector2(horizontal, vertical).Clamped(1.0f);
+                if (joystick.Length() > 0)
+                {
+                    inputMode = InputMode.Controller;
+                }
+                direction += ((Vector3.Right * joystick.x) + (Vector3.Back * joystick.y)).Normalized();
             }
-            direction += ((Vector3.Right * joystick.x) + (Vector3.Back * joystick.y)).Normalized();
-        }
 
         if (inputMode == InputMode.Keyboard)
         {
