@@ -50,6 +50,7 @@ public class Player : HealthEntity
     private Vector3 previousFaceDirection = Vector3.Forward;
     private AimableAttack weapon;
     private AimableAttack skill;
+    private RunningCharacter character;
 
     public Player()
     {
@@ -63,6 +64,7 @@ public class Player : HealthEntity
         camera = GetParent().GetNode<Camera>("Camera");
         weapon = GetNode<AimableAttack>("Weapon");
         skill = GetNode<AimableAttack>("Skill");
+        character = GetNode<RunningCharacter>("RunningChar");
         gravity = (float)PhysicsServer.AreaGetParam(GetWorld().Space, PhysicsServer.AreaParameter.Gravity);
 
         // Move weapon to the front of the player
@@ -90,7 +92,20 @@ public class Player : HealthEntity
         }
 
         Vector3 faceDirection = GetFaceDirection();
-        Face(faceDirection, delta);
+        Vector3 vel = LinearVelocity;
+        float velMag = LinearVelocity.Length();
+        
+        float animationTimeFactor = 0.15f;
+        character.SetSpeed(velMag * animationTimeFactor);
+
+        if (velMag > 1)
+        {
+            Face(vel.Normalized(), delta);
+        }
+        else
+        {
+            Face(faceDirection, delta);
+        }
 
         // So that the global rotation of the weapon will be zero
         weapon.WeightedAttackDirection = GetWeightedAttackDirection();

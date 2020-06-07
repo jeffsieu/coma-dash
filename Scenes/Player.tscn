@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Scripts/Player.cs" type="Script" id=1]
 [ext_resource path="res://Scripts/Weapon/OverheatingGun.cs" type="Script" id=2]
 [ext_resource path="res://Scripts/Weapon/DashSkill.cs" type="Script" id=3]
 [ext_resource path="res://Scripts/AimIndicator/GeneralAimIndicator.cs" type="Script" id=4]
 [ext_resource path="res://Shaders/Shockwave.shader" type="Shader" id=5]
+[ext_resource path="res://Scenes/RunningCharacter.tscn" type="PackedScene" id=6]
 
 [sub_resource type="CylinderMesh" id=1]
 
@@ -34,6 +35,7 @@ script = ExtResource( 1 )
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
+visible = false
 mesh = SubResource( 1 )
 material/0 = null
 
@@ -52,6 +54,9 @@ IndicatorType = 2
 script = ExtResource( 3 )
 
 [node name="Shockwave" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0122922, 0.509393, -0.00447869 )
 mesh = SubResource( 3 )
 material/0 = SubResource( 4 )
+
+[node name="RunningChar" parent="." instance=ExtResource( 6 )]
+transform = Transform( -5, 0, -1.62921e-06, 0, 5, 0, 1.62921e-06, 0, -5, 0, -0.297259, 0 )

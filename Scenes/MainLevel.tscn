@@ -13,7 +13,7 @@ shader = ExtResource( 8 )
 shader_param/scale = 2
 shader_param/threshold = 2.0
 shader_param/color = Color( 0, 0, 0, 1 )
-shader_param/enabled = true
+shader_param/enabled = false
 shader_param/pixels_x = 1024.0
 shader_param/pixels_y = 600.0
 
