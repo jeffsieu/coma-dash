@@ -40,7 +40,6 @@ public class Projectile : Spatial
         projectileInstance.GravityScale = 0;
         // To make the bullet's origin at the edge of the projectile weapon
         Vector3 weaponFrontDirection = -GlobalTransform.basis.z;
-        Translation += origin;
         AddChild(projectileInstance);
         origin = projectileInstance.GlobalTransform.origin;
         projectileInstance.ApplyCentralImpulse(projectileInstance.Mass * speed * weaponFrontDirection);
