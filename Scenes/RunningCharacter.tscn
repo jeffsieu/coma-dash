@@ -1,7 +1,21 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Assets/character_v2_1.glb" type="PackedScene" id=1]
 [ext_resource path="res://Scripts/RunningCharacter.cs" type="Script" id=2]
 
+[sub_resource type="SpatialMaterial" id=1]
+albedo_color = Color( 0.498039, 0.443137, 0.305882, 1 )
+
+[sub_resource type="SpatialMaterial" id=2]
+albedo_color = Color( 0.160784, 0.0901961, 0.0901961, 1 )
+metallic = 0.74
+metallic_specular = 0.75
+
 [node name="RunningChar" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
+
+[node name="Body_Sample" parent="metarig002/Skeleton" index="0"]
+material/0 = SubResource( 1 )
+
+[node name="Pistol_v1" parent="metarig002/Skeleton" index="1"]
+material/0 = SubResource( 2 )
