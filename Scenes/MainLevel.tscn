@@ -64,13 +64,12 @@ font_data = SubResource( 6 )
 [node name="Level" type="Spatial"]
 
 [node name="MapLoader" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -124, -1, -136 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -64, -1, -236 )
 script = ExtResource( 7 )
-WallMaterial = SubResource( 1 )
-FloorMaterial = SubResource( 3 )
-Preview = true
-UnitSize = 4
 MapPath = "res://Maps/minimap.data"
+WallMaterial = SubResource( 1 )
+UnitSize = 4
+FloorMaterial = SubResource( 3 )
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.461393, 0.887196, 0, -0.887196, 0.461393, 1.34645, 50.4642, 26.7106 )
@@ -177,17 +176,14 @@ contacts_reported = 1
 contact_monitor = true
 
 [node name="CSGPolygon" type="CSGPolygon" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16.7242, 0.76474, 0.0150123 )
-operation = 2
-polygon = PoolVector2Array( -10, 0, -10, 1, 10, 1, 10, 0 )
-depth = 9.284
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 23.3318, 0, 0 )
+polygon = PoolVector2Array( 1, 2, 6.17892, 2.29824, 6, 8, 1, 8 )
 
 [node name="CSGPolygon2" type="CSGPolygon" parent="CSGPolygon"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.99008, 0.053128, -2.2099 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.53329, 1.71808, -2.79911e-07 )
 operation = 2
-polygon = PoolVector2Array( -2, 0, -2, 1, 2, 1, 2, 0 )
-depth = 4.642
+polygon = PoolVector2Array( 2, 5, 5, 5, 5, 7, 2, 7 )
+depth = 2.009
 
 [node name="CSGBox3" type="CSGBox" parent="CSGPolygon"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.698996, 1.17638, -2.89927 )
-operation = 2

@@ -10,35 +10,23 @@ public class Wall : StaticBody
 
         CSGPolygon wallMesh = new CSGPolygon
         {
-            Polygon = polygon[2],
+            Polygon = polygon[0],
             Material = material
         };
-
-        // CollisionLayer = 1;
-        // wallMesh.AddChild(new CollisionPolygon
-        // {
-        //     Polygon = polygon[0],
-        //     RotationDegrees = new Vector3(90, 0, 0),
-        //     Scale = unitSize * Vector3.One
-        // });
 
         for (int i = 1; i < polygon.Length; ++i)
         {
             CSGPolygon holeMesh = new CSGPolygon
             {
                 Polygon = polygon[i],
-                Operation = CSGShape.OperationEnum.Subtraction
+                Operation = CSGShape.OperationEnum.Subtraction,
+                Depth = 1.5f
             };
             wallMesh.AddChild(holeMesh);
+            AddChild(new CollisionPolygon{
+                Polygon = polygon[i]
+            });
         }
-
-        // CollisionLayer = 1;
-        // holeMesh.AddChild(new CollisionPolygon
-        // {
-        //     Polygon = polygon[i],
-        //     RotationDegrees = new Vector3(90, 0, 0),
-        //     Scale = unitSize * Vector3.One
-        // });
         AddChild(wallMesh);
     }
 }
