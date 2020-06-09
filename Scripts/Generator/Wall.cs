@@ -23,7 +23,8 @@ public class Wall : StaticBody
                 Depth = 1.5f
             };
             wallMesh.AddChild(holeMesh);
-            AddChild(new CollisionPolygon{
+            AddChild(new CollisionPolygon
+            {
                 Polygon = polygon[i]
             });
         }

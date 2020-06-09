@@ -41,7 +41,8 @@ public class Room : StaticBody
                 Depth = 1.5f
             };
             floorMesh.AddChild(holeMesh);
-            AddChild(new CollisionPolygon{
+            AddChild(new CollisionPolygon
+            {
                 Polygon = polygon[i]
             });
         }
