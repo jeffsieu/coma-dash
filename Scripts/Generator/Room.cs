@@ -3,11 +3,11 @@ using Godot;
 
 public class Room : StaticBody
 {
-    public Room(Vector2[] polygon, int unitSize, ShaderMaterial material)
+    public Room(Vector2[][] polygon, int unitSize, Material material)
     {
         CSGPolygon floorMesh = new CSGPolygon
         {
-            Polygon = polygon,
+            Polygon = polygon[0],
             RotationDegrees = new Vector3(90, 0, 0),
             Scale = unitSize * Vector3.One
         };
@@ -17,9 +17,9 @@ public class Room : StaticBody
         // 5 lines of shader code shouldn't cost anything
         ShaderMaterial dupMaterial = (ShaderMaterial)material.Duplicate();
 
-        float minX = polygon[0].x, maxX = polygon[0].x;
-        float minY = polygon[0].y, maxY = polygon[0].y;
-        foreach (Vector2 point in polygon)
+        float minX = polygon[0][0].x, maxX = polygon[0][0].x;
+        float minY = polygon[0][0].y, maxY = polygon[0][0].y;
+        foreach (Vector2 point in polygon[0])
         {
             minX = Mathf.Min(point.x, minX);
             maxX = Mathf.Max(point.x, maxX);
@@ -35,6 +35,6 @@ public class Room : StaticBody
         floorMesh.Material = dupMaterial;
 
         AddChild(floorMesh);
-        Translation = new Vector3(0, -unitSize, 0);
+        floorMesh.Translation = new Vector3(0, -unitSize, 0);
     }
 }

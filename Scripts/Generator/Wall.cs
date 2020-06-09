@@ -3,29 +3,42 @@ using Godot;
 
 public class Wall : StaticBody
 {
-    public Wall(Vector2 position, Vector3 dimensions, Material material)
+    public Wall(Vector2[][] polygon, int unitSize, Material material)
     {
-        Mesh wallMesh = new CubeMesh
-        {
-            Size = Vector3.One
-        };
-        MeshInstance meshInstance = new MeshInstance
-        {
-            Mesh = wallMesh
-        };
-        meshInstance.SetSurfaceMaterial(0, material);
+        RotationDegrees = new Vector3(90, 0, 0);
+        Scale = unitSize * Vector3.One;
 
-        CollisionShape collisionShape = new CollisionShape
+        CSGPolygon wallMesh = new CSGPolygon
         {
-            Shape = new BoxShape
+            Polygon = polygon[2],
+            Material = material
+        };
+
+        // CollisionLayer = 1;
+        // wallMesh.AddChild(new CollisionPolygon
+        // {
+        //     Polygon = polygon[0],
+        //     RotationDegrees = new Vector3(90, 0, 0),
+        //     Scale = unitSize * Vector3.One
+        // });
+
+        for (int i = 1; i < polygon.Length; ++i)
+        {
+            CSGPolygon holeMesh = new CSGPolygon
             {
-                Extents = 0.5f * Vector3.One
-            }
-        };
-        AddChild(meshInstance);
-        AddChild(collisionShape);
+                Polygon = polygon[i],
+                Operation = CSGShape.OperationEnum.Subtraction
+            };
+            wallMesh.AddChild(holeMesh);
+        }
 
-        Scale = dimensions;
-        Translation = new Vector3(position.x + dimensions.x / 2, dimensions.y / 2, position.y + dimensions.y / 2);
+        // CollisionLayer = 1;
+        // holeMesh.AddChild(new CollisionPolygon
+        // {
+        //     Polygon = polygon[i],
+        //     RotationDegrees = new Vector3(90, 0, 0),
+        //     Scale = unitSize * Vector3.One
+        // });
+        AddChild(wallMesh);
     }
 }
