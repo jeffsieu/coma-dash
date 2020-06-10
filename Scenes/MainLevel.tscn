@@ -64,11 +64,11 @@ font_data = SubResource( 6 )
 [node name="Level" type="Spatial"]
 
 [node name="MapLoader" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -64, -1, -236 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -64, -1, -232 )
 script = ExtResource( 7 )
-MapPath = "res://Maps/minimap.data"
-WallMaterial = SubResource( 1 )
 UnitSize = 4
+MapPath = "res://Maps/map.data"
+WallMaterial = SubResource( 1 )
 FloorMaterial = SubResource( 3 )
 
 [node name="Camera" type="Camera" parent="."]

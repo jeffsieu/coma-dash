@@ -177,7 +177,10 @@ public class MapLoader : Spatial
             AddChild(new Room(polygon, unitSize, FloorMaterial));
 
         foreach (Vector2[][] polygon in PolygonsFromBitmap(doorMap))
+        {
+            AddChild(new Room(polygon, unitSize, FloorMaterial));
             AddChild(new Door(polygon, unitSize, FloorMaterial));
+        }
 
         AddFloor();
     }
@@ -197,7 +200,7 @@ public class MapLoader : Spatial
                 {
                     int nsize = size + 2;
                     bool[,] connectedBitmap = new bool[nsize, nsize];
-                    InitBitmap(connectedBitmap, true);
+                    InitBitmap(connectedBitmap, false);
 
                     Stack<Tuple<int, int>> stack = new Stack<Tuple<int, int>>();
                     stack.Push(new Tuple<int, int>(x, y));
@@ -205,7 +208,7 @@ public class MapLoader : Spatial
                     while (stack.Count > 0)
                     {
                         Tuple<int, int> top = stack.Pop();
-                        connectedBitmap[top.Item1 + 1, top.Item2 + 1] = false;
+                        connectedBitmap[top.Item1 + 1, top.Item2 + 1] = true;
 
                         int[] dx = { 0, 0, 1, -1 };
                         int[] dy = { 1, -1, 0, 0 };
@@ -241,10 +244,9 @@ public class MapLoader : Spatial
             for (int x = 0; x < nsize; ++x)
             {
                 if (visitedCell[x, y]) continue;
-                if (!IsNextToCell(bitmap, x, y)) continue;
-                if (bitmap[x, y] && !bitmap[x, y + 1])
+                if (!bitmap[x, y] && bitmap[x, y + 1])
                 {
-                    points.Add(TraversePolygon(bitmap, visitedCell, x, y));
+                    points.Add(TracePolygon(bitmap, visitedCell, x, y));
                 }
             }
         }
@@ -252,7 +254,7 @@ public class MapLoader : Spatial
         return points.ToArray();
     }
 
-    private Vector2[] TraversePolygon(bool[,] bitmap, bool[,] visitedCell, int startX, int startY)
+    private Vector2[] TracePolygon(bool[,] bitmap, bool[,] visitedCell, int startX, int startY)
     {
         int nsize = size + 2;
         bool[,] visitedPoint = new bool[nsize + 1, nsize + 1]; // visited points on the grid, not pixels
@@ -286,11 +288,10 @@ public class MapLoader : Spatial
                 int nextCellY = cellY + dy[ndir];
                 if (nextCellX < 0 || nextCellX >= nsize) continue;
                 if (nextCellY < 0 || nextCellY >= nsize) continue;
-                if (!IsNextToCell(bitmap, nextCellX, nextCellY)) continue;
 
                 // only check if next path is valid if we are not doing a uturn
                 // we are traversing along the edge of the polygon so the next cell should be part of the edge
-                if (i <= 2 && !bitmap[nextCellX, nextCellY]) continue;
+                if (i <= 2 && bitmap[nextCellX, nextCellY]) continue;
 
                 switch (i)
                 {
@@ -406,23 +407,6 @@ public class MapLoader : Spatial
         for (int i = 0; i < bitmap.GetLength(0); ++i)
             for (int j = 0; j < bitmap.GetLength(1); ++j)
                 bitmap[i, j] = value;
-    }
-
-    private bool IsNextToCell(bool[,] bitmap, int x, int y)
-    {
-        int size = bitmap.GetLength(0);
-        int[] dx = { -1, 0, 1, 1, 1, 0, -1, -1 };
-        int[] dy = { -1, -1, -1, 0, 1, 1, 1, 0 };
-        bool nextToCell = false;
-        for (int i = 0; i < 8; ++i)
-        {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            if (nx < 0 || nx >= size) continue;
-            if (ny < 0 || ny >= size) continue;
-            if (bitmap[nx, ny]) nextToCell = true;
-        }
-        return nextToCell;
     }
 
     private void AddPointToPolygon(Vector2 point, List<Vector2> points, bool[,] visited)
