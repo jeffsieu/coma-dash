@@ -161,6 +161,7 @@ public class MapLoader : Spatial
                         doorMap[x, y] = true;
                         break;
                     case 0x00ff00:
+                        floorMap[x, y] = true;
                         Translation = new Vector3((-x) * unitSize, -1, (-y) * unitSize);
                         break;
                     default:

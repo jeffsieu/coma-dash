@@ -66,6 +66,7 @@ font_data = SubResource( 6 )
 [node name="MapLoader" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -64, -1, -232 )
 script = ExtResource( 7 )
+Preview = true
 UnitSize = 4
 MapPath = "res://Maps/map.data"
 WallMaterial = SubResource( 1 )
@@ -174,16 +175,3 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.117, 2.1, 0 )
 continuous_cd = true
 contacts_reported = 1
 contact_monitor = true
-
-[node name="CSGPolygon" type="CSGPolygon" parent="."]
-transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 23.3318, 0, 0 )
-polygon = PoolVector2Array( 1, 2, 6.17892, 2.29824, 6, 8, 1, 8 )
-
-[node name="CSGPolygon2" type="CSGPolygon" parent="CSGPolygon"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.53329, 1.71808, -2.79911e-07 )
-operation = 2
-polygon = PoolVector2Array( 2, 5, 5, 5, 5, 7, 2, 7 )
-depth = 2.009
-
-[node name="CSGBox3" type="CSGBox" parent="CSGPolygon"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.698996, 1.17638, -2.89927 )

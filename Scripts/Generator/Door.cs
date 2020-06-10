@@ -17,10 +17,8 @@ public class Door : StaticBody
         doorMesh.Material = doorMaterial;
         AddChild(doorMesh);
 
-        CollisionLayer = 1;
-        doorMesh.AddChild(new CollisionPolygon
-        {
-            Polygon = polygon[0]
-        });
+        doorMesh.UseCollision = true;
+        doorMesh.CollisionLayer = 1;
+        doorMesh.CollisionMask = 1;
     }
 }
