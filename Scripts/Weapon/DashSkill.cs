@@ -122,7 +122,7 @@ public class DashSkill : AimableAttack
                 hintReticle.Show();
                 Vector3 enemyBoundary = (Vector3)ray["position"];
 
-                impactAimIndicator.Translation = enemyBoundary - enemyLocation;
+                impactAimIndicator.Translation = enemyBoundary - enemyLocation + enemyLocation.DirectionTo(GlobalTransform.origin) * player.Scale.z;
 
                 Transform hintReticleGlobalTransform = hintReticle.GlobalTransform;
                 hintReticleGlobalTransform.origin = enemyLocation;

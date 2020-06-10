@@ -18,7 +18,7 @@ subdivide_depth = 20
 [sub_resource type="ShaderMaterial" id=4]
 shader = ExtResource( 5 )
 shader_param/radius = 5.0
-shader_param/max_radius = 14.142
+shader_param/max_radius = 7.71
 shader_param/startTime = 0.0
 shader_param/wave_speed = 2.0
 shader_param/wave_width = 0.1
@@ -52,8 +52,7 @@ IndicatorType = 2
 [node name="Skill" type="Spatial" parent="."]
 script = ExtResource( 3 )
 
-[node name="Shockwave" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0 )
-
+[node name="Shockwave" type="MeshInstance" parent="Skill"]
+transform = Transform( 2, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0.5, 0 )
 mesh = SubResource( 3 )
 material/0 = SubResource( 4 )
