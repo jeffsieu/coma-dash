@@ -56,7 +56,7 @@ public class RunningCharacter : Spatial
         player.Play("animation_run_pistol_1");
     }
 
-    public void BackRunAnimation() 
+    public void BackRunAnimation()
     {
         player.PlayBackwards("animation_run_pistol_1");
     }

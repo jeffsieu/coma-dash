@@ -113,12 +113,12 @@ public class Player : HealthEntity
                 character.BackRunAnimation();
                 character.SetSpeed(velMag * animationTimeFactor);
             }
-            else 
+            else
             {
                 character.RunAnimation();
                 character.SetSpeed(velMag * animationTimeFactor);
             }
-            
+
         }
         else
         {
