@@ -5,11 +5,11 @@ using Godot.Collections;
 public class Player : HealthEntity
 {
     [Export]
-    protected float SprintAccelerationFactor = 200f;
+    protected float SprintAccelerationFactor = 300f;
     [Export]
-    protected float WalkAccelerationFactor = 100f;
+    protected float WalkAccelerationFactor = 200f;
     [Export]
-    protected float DragFactor = 2f;
+    protected float DragFactor = 10f;
     [Export]
     protected float FrictionFactor = 1.6f;
     [Export]
@@ -43,12 +43,20 @@ public class Player : HealthEntity
         }
     }
 
+    public OverheatingGun Weapon
+    {
+        get
+        {
+            return weapon;
+        }
+    }
+
     private Vector2 mousePosition;
     private Vector3 velocity;
     private Camera camera;
     private InputMode inputMode = InputMode.Keyboard;
     private Vector3 previousFaceDirection = Vector3.Forward;
-    private AimableAttack weapon;
+    private OverheatingGun weapon;
     private AimableAttack skill;
     private RunningCharacter character;
 
@@ -62,12 +70,12 @@ public class Player : HealthEntity
     {
         base._Ready();
         camera = GetParent().GetNode<Camera>("Camera");
-        weapon = GetNode<AimableAttack>("Weapon");
-        skill = GetNode<AimableAttack>("Skill");
         character = GetNode<RunningCharacter>("RunningChar");
+        skill = character.GetNode<AimableAttack>("Skill");
+        weapon = character.GetNode<OverheatingGun>("Weapon");
         gravity = (float)PhysicsServer.AreaGetParam(GetWorld().Space, PhysicsServer.AreaParameter.Gravity);
         // Move weapon to the front of the player
-        weapon.Translation = Vector3.Forward * Scale.z + Vector3.Up * Scale.y;
+        weapon.Translation = Vector3.Forward * weapon.Scale.z + Vector3.Up * weapon.Scale.y;
     }
 
     public override void _Input(InputEvent @event)
@@ -93,19 +101,27 @@ public class Player : HealthEntity
         Vector3 faceDirection = GetFaceDirection();
         Vector3 vel = LinearVelocity;
         float velMag = LinearVelocity.Length();
+        Vector3 velDirection = vel.Normalized();
 
         float animationTimeFactor = 0.15f;
 
-
+        Face(faceDirection, delta);
         if (velMag > 1)
         {
-            Face(vel.Normalized(), delta);
-            character.RunAnimation();
-            character.SetSpeed(velMag * animationTimeFactor);
+            if (velDirection.Dot(faceDirection) < 0)
+            {
+                character.BackRunAnimation();
+                character.SetSpeed(velMag * animationTimeFactor);
+            }
+            else 
+            {
+                character.RunAnimation();
+                character.SetSpeed(velMag * animationTimeFactor);
+            }
+            
         }
         else
         {
-            Face(faceDirection, delta);
             character.PlayIdle();
             character.SetSpeed(1);
         }
@@ -147,28 +163,7 @@ public class Player : HealthEntity
 
     public void Face(Vector3 faceDirection, float delta)
     {
-        float currAngularVelocity = AngularVelocity.y;
-
-        // Calculate angle from current orientation
-        float angle = faceDirection.AngleTo(-GlobalTransform.basis.z);
-        // Check if clockwise or counter-clockwise
-        if (faceDirection.Dot(GlobalTransform.basis.x) > 0)
-            angle = -angle;
-
-        // Approximately reached target
-        if (Mathf.Abs(angle) < Mathf.Deg2Rad(0.5f))
-        {
-            // Kill current angular velocity whatever it is
-            ApplyTorqueImpulse(Mass * -AngularVelocity);
-        }
-        else
-        //else if (Mathf.Abs(angle) < Mathf.Deg2Rad(5))
-        {
-            // Kill current angular velocity whatever it is
-            ApplyTorqueImpulse(Mass * -AngularVelocity);
-            // Rotate towards correct direction
-            AddTorque(Mass * TorqueFactor * angle * Vector3.Up);
-        }
+        character.LookAt(character.GlobalTransform.origin + faceDirection, Vector3.Up);
     }
 
     public Vector2 GetWeightedAttackDirection()

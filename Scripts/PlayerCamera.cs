@@ -41,10 +41,8 @@ public class PlayerCamera : Camera
         Vector3 playerTranslation = player.GlobalTransform.origin;
         Vector3 currentTranslation = GlobalTransform.origin - currentCursorOffset;
         Vector3 targetTranslation = playerTranslation + TargetHeight * Vector3.Up + OffsetZ * Vector3.Back;
-        // Vector3 targetTranslation = new Vector3(playerTranslation.x, TargetHeight, playerTranslation.z + OffsetZ);
-        // Vector2 cursorPosition = player.GetWeightedAttackDirection();
-        Vector3 playerDirection = -player.GlobalTransform.basis.z;
-        Vector3 targetCursorOffset = new Vector3(playerDirection.x, 0, playerDirection.z) * LookRange;
+        Vector2 cursorPosition = player.GetWeightedAttackDirection();
+        Vector3 targetCursorOffset = new Vector3(cursorPosition.x, 0, cursorPosition.y) * LookRange;
         Vector3 followPlayerDirection = targetTranslation - currentTranslation;
         Vector3 followCursorDirection = targetCursorOffset - currentCursorOffset;
 

@@ -41,23 +41,25 @@ mesh = SubResource( 1 )
 material/0 = null
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.34233, 0 )
 shape = SubResource( 2 )
 
-[node name="Weapon" type="Spatial" parent="."]
+[node name="RunningChar" parent="." instance=ExtResource( 6 )]
+
+[node name="Weapon" type="Spatial" parent="RunningChar"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.359, 0 )
 script = ExtResource( 2 )
 
-[node name="AimIndicator" type="Spatial" parent="Weapon"]
+[node name="AimIndicator" type="Spatial" parent="RunningChar/Weapon"]
 script = ExtResource( 4 )
+Width = 2.0
 IndicatorType = 2
 
-[node name="Skill" type="Spatial" parent="."]
+[node name="Skill" type="Spatial" parent="RunningChar"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0 )
 script = ExtResource( 3 )
 
-[node name="Shockwave" type="MeshInstance" parent="Skill"]
+[node name="Shockwave" type="MeshInstance" parent="RunningChar/Skill"]
 transform = Transform( 2, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0.5, 0 )
 mesh = SubResource( 3 )
 material/0 = SubResource( 4 )
-
-[node name="RunningChar" parent="." instance=ExtResource( 6 )]
-transform = Transform( 5, 0, 0, 0, 5, 0, 0, 0, 5, 0, -0.297259, 0 )

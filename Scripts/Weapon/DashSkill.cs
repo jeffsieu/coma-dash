@@ -42,8 +42,8 @@ public class DashSkill : AimableAttack
     public override void _Ready()
     {
         base._Ready();
-        player = GetParent<Player>();
-        overheatingGun = player.GetNode<OverheatingGun>("Weapon");
+        player = GetParent().GetParent<Player>();
+        overheatingGun = player.Weapon;
         dashLeft = 0;
 
         (AimIndicator as GeneralAimIndicator).IndicatorType = GeneralAimIndicator.AimIndicatorType.CONICAL;
@@ -72,7 +72,7 @@ public class DashSkill : AimableAttack
         hintReticle.AddChild(new CSGBox
         {
             Scale = 0.5f * Vector3.One,
-            Translation = 2 * Vector3.Up,
+            Translation = 2f * Vector3.Up,
             Material = new SpatialMaterial
             {
                 AlbedoColor = Colors.Green
