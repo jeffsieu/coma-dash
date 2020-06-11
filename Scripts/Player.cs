@@ -67,7 +67,7 @@ public class Player : HealthEntity
         character = GetNode<RunningCharacter>("RunningChar");
         gravity = (float)PhysicsServer.AreaGetParam(GetWorld().Space, PhysicsServer.AreaParameter.Gravity);
         // Move weapon to the front of the player
-        weapon.Translation = Vector3.Forward * Scale.z + Vector3.Up * Scale.y / 2;
+        weapon.Translation = Vector3.Forward * Scale.z + Vector3.Up * Scale.y;
     }
 
     public override void _Input(InputEvent @event)
@@ -143,7 +143,6 @@ public class Player : HealthEntity
             // Add kinetic friction
             AddCentralForce(-FrictionFactor * Mass * GravityScale * gravity * velDirection);
         }
-
     }
 
     public void Face(Vector3 faceDirection, float delta)
