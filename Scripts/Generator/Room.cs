@@ -29,7 +29,7 @@ public class Room : StaticBody
             });
         }
 
-        SetFloorShaderParams(polygon[0], (ShaderMaterial) material);
+        SetFloorShaderParams(polygon[0], (ShaderMaterial)material);
 
         AddChild(floorMesh);
         Translation = new Vector3(0, -unitSize, 0);
@@ -53,7 +53,7 @@ public class Room : StaticBody
         // make a duplicate of the shader so that can customize the `size` uniform
         // might want to see if this costs anything? I don't think so though
         // 5 lines of shader code shouldn't cost anything
-        ShaderMaterial dupMaterial = (ShaderMaterial) material.Duplicate();
+        ShaderMaterial dupMaterial = (ShaderMaterial)material.Duplicate();
         dupMaterial.SetShaderParam("size", new Vector2(width, height));
         floorMesh.Material = dupMaterial;
     }
