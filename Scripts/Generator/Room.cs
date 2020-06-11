@@ -22,11 +22,6 @@ public class Room : StaticBody
                 Operation = CSGShape.OperationEnum.Subtraction,
                 Depth = 1.5f
             };
-            floorMesh.AddChild(holeMesh);
-            AddChild(new CollisionPolygon
-            {
-                Polygon = polygon[i]
-            });
         }
 
         SetFloorShaderParams(polygon[0], (ShaderMaterial)material);

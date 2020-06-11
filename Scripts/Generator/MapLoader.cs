@@ -182,8 +182,6 @@ public class MapLoader : Spatial
             AddChild(new Room(polygon, unitSize, FloorMaterial));
             AddChild(new Door(polygon, unitSize, FloorMaterial));
         }
-
-        AddFloor();
     }
 
     private List<Vector2[][]> PolygonsFromBitmap(bool[,] bitmap)
@@ -384,23 +382,6 @@ public class MapLoader : Spatial
         }
 
         return points.ToArray();
-    }
-
-    private void AddFloor()
-    {
-        float mapLength = size * unitSize;
-        StaticBody floor = new StaticBody
-        {
-            CollisionLayer = 1
-        };
-        floor.Name = "Floor";
-        floor.AddChild(new CollisionShape
-        {
-            Shape = new BoxShape()
-        });
-
-        floor.Scale = new Vector3(mapLength, 1, mapLength);
-        AddChild(floor);
     }
 
     private void InitBitmap(bool[,] bitmap, bool value)
