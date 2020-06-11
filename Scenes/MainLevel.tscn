@@ -67,6 +67,8 @@ shader_param/grout_color = Color( 0.39, 0.51, 0.54, 1 )
 transform = Transform( 1, 0, 0, 0, 0.461393, 0.887196, 0, -0.887196, 0.461393, 1.34645, 50.4642, 26.7106 )
 fov = 35.0
 script = ExtResource( 2 )
+PlayerDistanceThreshold = 2.0
+FollowPlayerSpeedFactor = 0.5
 
 [node name="OutlineEffect" type="MeshInstance" parent="Camera"]
 mesh = SubResource( 2 )
