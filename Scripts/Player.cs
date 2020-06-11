@@ -162,7 +162,7 @@ public class Player : HealthEntity
         }
     }
 
-    public void WeaponFired(Projectile projectile) 
+    public void WeaponFired(Projectile projectile)
     {
         GD.Print(projectile.Velocity.Length());
         ApplyCentralImpulse(-10 * projectile.Mass * projectile.Velocity);

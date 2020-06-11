@@ -33,7 +33,7 @@ public class Projectile : Spatial
 
     public Vector3 Velocity
     {
-        get 
+        get
         {
             return speed * direction;
         }
