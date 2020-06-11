@@ -10,6 +10,8 @@ public abstract class StraightProjectileWeapon : AimableAttack
     protected Spatial projectileContainer;
     protected bool isTryingToFire = false;
     protected float cooldown = 0.0f;
+    [Signal]
+    public delegate void Fired(Projectile projectile);
 
     public StraightProjectileWeapon(float range, float projectileDamage, float projectileSpeed, float coolDownDuration) : base(range)
     {
@@ -52,6 +54,7 @@ public abstract class StraightProjectileWeapon : AimableAttack
             };
             projectileContainer.AddChild(projectile);
             projectile.Connect("hit_enemy", this, "OnProjectileHit");
+            EmitSignal(nameof(Fired), projectile);
             OnProjectileFired();
         }
     }
