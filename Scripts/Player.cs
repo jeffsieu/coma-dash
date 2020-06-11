@@ -66,7 +66,6 @@ public class Player : HealthEntity
         skill = GetNode<AimableAttack>("Skill");
         character = GetNode<RunningCharacter>("RunningChar");
         gravity = (float)PhysicsServer.AreaGetParam(GetWorld().Space, PhysicsServer.AreaParameter.Gravity);
-
         // Move weapon to the front of the player
         weapon.Translation = Vector3.Forward * Scale.z + Vector3.Up * Scale.y / 2;
     }
@@ -94,17 +93,21 @@ public class Player : HealthEntity
         Vector3 faceDirection = GetFaceDirection();
         Vector3 vel = LinearVelocity;
         float velMag = LinearVelocity.Length();
-        
+
         float animationTimeFactor = 0.15f;
-        character.SetSpeed(velMag * animationTimeFactor);
+
 
         if (velMag > 1)
         {
             Face(vel.Normalized(), delta);
+            character.RunAnimation();
+            character.SetSpeed(velMag * animationTimeFactor);
         }
         else
         {
             Face(faceDirection, delta);
+            character.PlayIdle();
+            character.SetSpeed(1);
         }
 
         // So that the global rotation of the weapon will be zero
