@@ -140,7 +140,10 @@ public class DashSkill : AimableAttack
         float lowestDegreesDifference = 0;
 
         Vector3 forward = -GlobalTransform.basis.z;
-        foreach (PhysicsBody body in bodies)
+
+        // docs said that GetOverlappingBodies returns an array of PhysicsBody but it also returns
+        // a CSGPolygon which isn't a PhysicsBody
+        foreach (Spatial body in bodies)
         {
             if (!(body is Enemy))
                 continue;
@@ -168,7 +171,7 @@ public class DashSkill : AimableAttack
         if (closestEnemy == null)
         {
             Array sideBodies = coneSides.GetOverlappingBodies();
-            foreach (PhysicsBody body in sideBodies)
+            foreach (Spatial body in sideBodies)
             {
                 if (!(body is Enemy))
                     continue;
@@ -256,7 +259,7 @@ public class DashSkill : AimableAttack
             overheatingGun.Cool(coolAmount);
         }
 
-        foreach (PhysicsBody body in impactArea.GetOverlappingBodies())
+        foreach (Spatial body in impactArea.GetOverlappingBodies())
         {
             if (!(body is Enemy))
                 continue;
