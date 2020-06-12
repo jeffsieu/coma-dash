@@ -257,7 +257,7 @@ public class DashSkill : AimableAttack
             Vector3 targetEnemyVelocity = 5.0f * targetEnemyDirection + 15.0f * Vector3.Up;
             targetEnemy.ApplyCentralImpulse(targetEnemy.Mass * targetEnemyVelocity);
             targetEnemy.Damage(damage);
-            overheatingGun.Cool(coolAmount);
+            player.Weapon.Cool(coolAmount);
             MeshInstance m = GetNode<MeshInstance>("Shockwave");
             ShaderMaterial mat = m.GetSurfaceMaterial(0) as ShaderMaterial;
             mat.SetShaderParam("t", 0);

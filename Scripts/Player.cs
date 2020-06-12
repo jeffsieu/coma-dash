@@ -69,6 +69,7 @@ public class Player : HealthEntity
     public override void _Ready()
     {
         base._Ready();
+        healthBarPositionOffset = Vector3.Up * Scale.z * 3.5f;
         camera = GetParent().GetNode<Camera>("Camera");
         character = GetNode<RunningCharacter>("RunningChar");
         skill = character.GetNode<AimableAttack>("Skill");
@@ -164,7 +165,6 @@ public class Player : HealthEntity
 
     public void WeaponFired(Projectile projectile)
     {
-        GD.Print(projectile.Velocity.Length());
         ApplyCentralImpulse(-10 * projectile.Mass * projectile.Velocity);
     }
 
