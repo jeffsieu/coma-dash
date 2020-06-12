@@ -3,7 +3,7 @@ using Godot;
 
 public class Door : StaticBody
 {
-    public Door(Vector2[][] polygon, int unitSize, Material material)
+    public Door(Vector2[][] polygon, int unitSize)
     {
         RotationDegrees = new Vector3(90, 0, 0);
         Scale = unitSize * Vector3.One;

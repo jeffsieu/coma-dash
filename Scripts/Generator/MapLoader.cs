@@ -6,16 +6,16 @@ using Godot;
 public class MapLoader : Spatial
 {
     [Export]
-    public bool Preview
+    public bool ShowPreview
     {
         get
         {
-            return preview;
+            return showPreview;
         }
         set
         {
-            preview = value;
-            if (!preview) RemoveAllChildren();
+            showPreview = value;
+            if (!showPreview) RemoveAllChildren();
             else
                 RebuildMap();
         }
@@ -77,7 +77,7 @@ public class MapLoader : Spatial
         }
     }
 
-    private bool preview;
+    private bool showPreview;
 
     private int unitSize;
     private Material wallMaterial;
@@ -95,7 +95,7 @@ public class MapLoader : Spatial
 
     private void RebuildMap()
     {
-        if (!ready || (Engine.EditorHint && !Preview)) return;
+        if (!ready || (Engine.EditorHint && !ShowPreview)) return;
         RemoveAllChildren();
         BuildMap(ParseMap());
     }
@@ -180,7 +180,7 @@ public class MapLoader : Spatial
         foreach (Vector2[][] polygon in PolygonsFromBitmap(doorMap))
         {
             AddChild(new Room(polygon, unitSize, FloorMaterial));
-            AddChild(new Door(polygon, unitSize, FloorMaterial));
+            AddChild(new Door(polygon, unitSize));
         }
     }
 

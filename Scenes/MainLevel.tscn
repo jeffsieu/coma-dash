@@ -66,11 +66,10 @@ font_data = SubResource( 6 )
 [node name="MapLoader" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -64, -1, -232 )
 script = ExtResource( 7 )
-Preview = true
-UnitSize = 4
-MapPath = "res://Maps/map.data"
 WallMaterial = SubResource( 1 )
 FloorMaterial = SubResource( 3 )
+MapPath = "res://Maps/map.data"
+UnitSize = 4
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.461393, 0.887196, 0, -0.887196, 0.461393, 1.34645, 50.4642, 26.7106 )
