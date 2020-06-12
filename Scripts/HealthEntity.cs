@@ -60,6 +60,7 @@ public abstract class HealthEntity : RigidBody, IStatusHolder
     private static readonly float whiteBarAnimationDuration = 0.5f;
     private static readonly Color defaultHealthBarColor = new Color("#F1AB86");
 
+    protected Vector3 healthBarPositionOffset;
     protected ProgressBar healthBar;
     protected ProgressBar whiteHealthBar;
     protected StyleBoxFlat healthBarStyleBox;
@@ -159,7 +160,7 @@ public abstract class HealthEntity : RigidBody, IStatusHolder
 
     private void DisplayHealthBar()
     {
-        Vector2 positionOnScreen = camera.UnprojectPosition(GlobalTransform.origin);
+        Vector2 positionOnScreen = camera.UnprojectPosition(GlobalTransform.origin + healthBarPositionOffset);
         if (Health > 0)
         {
             Vector2 size = healthBar.RectSize;
