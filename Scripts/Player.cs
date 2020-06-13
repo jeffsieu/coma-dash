@@ -14,6 +14,9 @@ public class Player : HealthEntity
     protected float FrictionFactor = 1.6f;
     [Export]
     protected float TorqueFactor = 400f;
+    [Export]
+    protected float RecoilImpulseMultiplier = 10f;
+
     public bool IsMovementLocked = false;
     public bool disableFriction = false;
 
@@ -156,7 +159,7 @@ public class Player : HealthEntity
 
     public void WeaponFired(Projectile projectile)
     {
-        ApplyCentralImpulse(-10 * projectile.Mass * projectile.Velocity);
+        ApplyCentralImpulse(-1 * RecoilImpulseMultiplier * projectile.Mass * projectile.Velocity);
     }
 
     public void Face(Vector3 faceDirection, float delta)
