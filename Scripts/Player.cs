@@ -43,20 +43,11 @@ public class Player : HealthEntity
         }
     }
 
-    public OverheatingGun Weapon
-    {
-        get
-        {
-            return weapon;
-        }
-    }
+    public OverheatingGun Weapon { get; private set; }
 
     private Vector2 mousePosition;
-    private Vector3 velocity;
     private Camera camera;
     private InputMode inputMode = InputMode.Keyboard;
-    private Vector3 previousFaceDirection = Vector3.Forward;
-    private OverheatingGun weapon;
     private AimableAttack skill;
     private RunningCharacter character;
 
@@ -73,11 +64,11 @@ public class Player : HealthEntity
         camera = GetParent().GetNode<Camera>("Camera");
         character = GetNode<RunningCharacter>("RunningChar");
         skill = character.GetNode<AimableAttack>("Skill");
-        weapon = character.GetNode<OverheatingGun>("Weapon");
+        Weapon = character.GetNode<OverheatingGun>("Weapon");
         gravity = (float)PhysicsServer.AreaGetParam(GetWorld().Space, PhysicsServer.AreaParameter.Gravity);
         // Move weapon to the front of the player
-        weapon.Translation = Vector3.Forward * weapon.Scale.z + Vector3.Up * weapon.Scale.y;
-        weapon.Connect("Fired", this, "WeaponFired");
+        Weapon.Translation = Vector3.Forward * Weapon.Scale.z + Vector3.Up * Weapon.Scale.y;
+        Weapon.Connect("Fired", this, "WeaponFired");
     }
 
     public override void _Input(InputEvent @event)
@@ -129,17 +120,17 @@ public class Player : HealthEntity
         }
 
         // So that the global rotation of the weapon will be zero
-        weapon.WeightedAttackDirection = GetWeightedAttackDirection();
-        weapon.IsAttackButtonPressed = IsPrimaryAttackPressed;
+        Weapon.WeightedAttackDirection = GetWeightedAttackDirection();
+        Weapon.IsAttackButtonPressed = IsPrimaryAttackPressed;
 
         skill.WeightedAttackDirection = GetWeightedAttackDirection();
         skill.IsAttackButtonPressed = IsSecondaryAttackPressed;
 
         bool showSkillAimIndicator = IsSecondaryAttackPressed;
-        weapon.AimIndicator.Visible = !showSkillAimIndicator;
+        Weapon.AimIndicator.Visible = !showSkillAimIndicator;
         skill.AimIndicator.Visible = showSkillAimIndicator;
 
-        weapon.AimIndicator.Translation = Vector3.Down;
+        Weapon.AimIndicator.Translation = Vector3.Down;
         skill.AimIndicator.Translation = Vector3.Down;
     }
 
@@ -193,7 +184,7 @@ public class Player : HealthEntity
             if (cursorPosition.HasValue)
             {
                 Vector3 displacement = cursorPosition.Value - Translation;
-                return weapon.GetWeightedAttackDirectionFromMouseDisplacement(displacement);
+                return Weapon.GetWeightedAttackDirectionFromMouseDisplacement(displacement);
             }
         }
         return Vector2.Zero;
