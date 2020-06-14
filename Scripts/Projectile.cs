@@ -23,6 +23,22 @@ public class Projectile : Spatial
     private Vector3 origin;
     private RigidBody projectileInstance;
 
+    public float Mass
+    {
+        get
+        {
+            return projectileInstance.Mass;
+        }
+    }
+
+    public Vector3 Velocity
+    {
+        get
+        {
+            return speed * direction;
+        }
+    }
+
     public Projectile(float range, float speed, Vector3 direction, PackedScene projectileScene)
     {
         this.range = range;
@@ -40,9 +56,9 @@ public class Projectile : Spatial
         projectileInstance.GravityScale = 0;
         // To make the bullet's origin at the edge of the projectile weapon
         Vector3 weaponFrontDirection = -GlobalTransform.basis.z;
+        projectileInstance.ApplyCentralImpulse(projectileInstance.Mass * speed * weaponFrontDirection);
         AddChild(projectileInstance);
         origin = projectileInstance.GlobalTransform.origin;
-        projectileInstance.ApplyCentralImpulse(projectileInstance.Mass * speed * weaponFrontDirection);
     }
 
     public override void _PhysicsProcess(float delta)

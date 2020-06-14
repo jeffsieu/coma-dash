@@ -8,10 +8,32 @@
 [ext_resource path="res://Scenes/DecorationShowcase.tscn" type="PackedScene" id=10]
 [ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=11]
 
-[sub_resource type="SpatialMaterial" id=1]
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 8 )
+shader_param/scale = 2
+shader_param/threshold = 2.0
+shader_param/color = Color( 0, 0, 0, 1 )
+shader_param/enabled = false
+shader_param/pixels_x = 1024.0
+shader_param/pixels_y = 600.0
+
+[sub_resource type="QuadMesh" id=2]
+material = SubResource( 1 )
+size = Vector2( 2, 2 )
+
+[sub_resource type="DynamicFontData" id=3]
+font_path = "res://Fonts/PermanentMarker-Regular.ttf"
+
+[sub_resource type="DynamicFont" id=4]
+size = 23
+outline_size = 3
+outline_color = Color( 0, 0, 0, 1 )
+font_data = SubResource( 3 )
+
+[sub_resource type="SpatialMaterial" id=5]
 albedo_color = Color( 0.486275, 0.470588, 0.529412, 1 )
 
-[sub_resource type="Shader" id=2]
+[sub_resource type="Shader" id=6]
 code = "shader_type spatial;
 
 uniform vec2 size;
@@ -33,51 +55,23 @@ void fragment()
 	ALBEDO = color;
 }"
 
-[sub_resource type="ShaderMaterial" id=3]
-shader = SubResource( 2 )
+[sub_resource type="ShaderMaterial" id=7]
+shader = SubResource( 6 )
 shader_param/size = Vector2( 20, 0 )
 shader_param/tile_color = Color( 1, 0.58, 0.43, 1 )
 shader_param/grout_color = Color( 0.39, 0.51, 0.54, 1 )
 
-[sub_resource type="ShaderMaterial" id=4]
-shader = ExtResource( 8 )
-shader_param/scale = 2
-shader_param/threshold = 2.0
-shader_param/color = Color( 0, 0, 0, 1 )
-shader_param/enabled = true
-shader_param/pixels_x = 1024.0
-shader_param/pixels_y = 600.0
-
-[sub_resource type="QuadMesh" id=5]
-material = SubResource( 4 )
-size = Vector2( 2, 2 )
-
-[sub_resource type="DynamicFontData" id=6]
-font_path = "res://Fonts/PermanentMarker-Regular.ttf"
-
-[sub_resource type="DynamicFont" id=7]
-size = 23
-outline_size = 3
-outline_color = Color( 0, 0, 0, 1 )
-font_data = SubResource( 6 )
-
 [node name="Level" type="Spatial"]
-
-[node name="MapLoader" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -64, -1, -232 )
-script = ExtResource( 7 )
-WallMaterial = SubResource( 1 )
-FloorMaterial = SubResource( 3 )
-MapPath = "res://Maps/map.data"
-UnitSize = 4
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.461393, 0.887196, 0, -0.887196, 0.461393, 1.34645, 50.4642, 26.7106 )
 fov = 35.0
 script = ExtResource( 2 )
+PlayerDistanceThreshold = 2.0
+FollowPlayerSpeedFactor = 0.5
 
 [node name="OutlineEffect" type="MeshInstance" parent="Camera"]
-mesh = SubResource( 5 )
+mesh = SubResource( 2 )
 material/0 = null
 script = ExtResource( 9 )
 
@@ -107,7 +101,7 @@ __meta__ = {
 [node name="Heat" type="Label" parent="GUI/VBoxContainer"]
 margin_right = 824.0
 margin_bottom = 34.0
-custom_fonts/font = SubResource( 7 )
+custom_fonts/font = SubResource( 4 )
 text = "Heat"
 align = 1
 valign = 1
@@ -166,6 +160,13 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.36592, 2.16162, -7.50016 )
 
 [node name="Enemy5" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.91746, 2.16162, -3.4431 )
+
+[node name="MapLoader" type="Spatial" parent="."]
+script = ExtResource( 7 )
+UnitSize = 4
+MapPath = "res://Maps/map.data"
+WallMaterial = SubResource( 5 )
+FloorMaterial = SubResource( 7 )
 
 [node name="DecorationShowcase" parent="." instance=ExtResource( 10 )]
 

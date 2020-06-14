@@ -1,0 +1,109 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Assets/character_v2_1.glb" type="PackedScene" id=1]
+[ext_resource path="res://Scripts/RunningCharacter.cs" type="Script" id=2]
+
+[sub_resource type="SpatialMaterial" id=1]
+albedo_color = Color( 0.498039, 0.443137, 0.305882, 1 )
+
+[sub_resource type="SpatialMaterial" id=2]
+albedo_color = Color( 0.160784, 0.0901961, 0.0901961, 1 )
+metallic = 0.74
+metallic_specular = 0.75
+
+[sub_resource type="Animation" id=3]
+resource_name = "Idle"
+step = 0.0
+tracks/0/type = "transform"
+tracks/0/path = NodePath("metarig002/Skeleton:spine_2")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = PoolRealArray( 0.231978, 1, 0, 0, 0, -0.002, 0.25, -0.078, 0.997, 1, 1, 1 )
+tracks/1/type = "transform"
+tracks/1/path = NodePath("metarig002/Skeleton:pelvis_l")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = PoolRealArray( 0.6, 1, 1.11759e-08, -3.72529e-09, -6.51926e-09, 0.11078, -0.420013, -0.0161349, 0.900587, 1, 1, 1, 0.733333, 1, 1.11759e-08, -3.72529e-09, -6.51926e-09, 0.068676, -0.262625, 0.00204985, 0.962449, 1, 1, 1 )
+tracks/2/type = "transform"
+tracks/2/path = NodePath("metarig002/Skeleton:pelvis_r")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = PoolRealArray( 0.133333, 1, 2.79397e-09, 9.31323e-10, 0, -0.0180974, -0.0865686, -0.0125462, 0.996002, 1, 1, 1, 0.266667, 1, 2.79397e-09, 9.31323e-10, 0, -0.0629379, -0.2663, -0.0281395, 0.961422, 1, 1, 1 )
+tracks/3/type = "transform"
+tracks/3/path = NodePath("metarig002/Skeleton:thigh_l")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = PoolRealArray( 0.666667, 1, 0, 0, 0, -0.58, -0.064, 0, 0.746, 0.999999, 1, 1 )
+tracks/4/type = "transform"
+tracks/4/path = NodePath("metarig002/Skeleton:foot_r")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = PoolRealArray(  )
+tracks/5/type = "transform"
+tracks/5/path = NodePath("metarig002/Skeleton:thigh_r")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = PoolRealArray( 0.2, 1, 0, 0, 0, 0.32, -0.021, -0.005, 0.935, 1, 1, 1 )
+tracks/6/type = "transform"
+tracks/6/path = NodePath("metarig002/Skeleton:upper_arm_r")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = PoolRealArray( 0.666667, 1, -0.1, 0, 0, 0.524, 0.8, -0.047, 0.648, 1, 1, 1 )
+tracks/7/type = "transform"
+tracks/7/path = NodePath("metarig002/Skeleton:hand_r")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = PoolRealArray( 0.563869, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 )
+tracks/8/type = "transform"
+tracks/8/path = NodePath("metarig002/Skeleton:forearm_r")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = PoolRealArray( 0.141877, 1, 0, 0, 0, 0, 0, -0.1, 1, 1, 1, 1 )
+
+[sub_resource type="CubeMesh" id=4]
+size = Vector3( 0.03, 0.03, 0.03 )
+
+[node name="RunningChar" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="metarig002" parent="." index="0"]
+transform = Transform( -2, 0, -7.78829e-07, 0, 2, 0, 7.78829e-07, 0, -2, -0.00527827, 0.247139, -0.049717 )
+
+[node name="Skeleton" parent="metarig002" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.309494, 0 )
+
+[node name="Body_Sample" parent="metarig002/Skeleton" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0029424, 0.014693, -0.00371737 )
+material/0 = SubResource( 1 )
+
+[node name="Pistol_v1" parent="metarig002/Skeleton" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.063263, 0 )
+material/0 = SubResource( 2 )
+
+[node name="AnimationPlayer" parent="." index="1"]
+autoplay = "Idle"
+anims/Idle = SubResource( 3 )
+
+[node name="WeaponPosition" type="MeshInstance" parent="." index="2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.157, 1.68407, -1.4846 )
+visible = false
+mesh = SubResource( 4 )
+material/0 = null
