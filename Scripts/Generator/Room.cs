@@ -41,11 +41,11 @@ public class Room : LevelRegion
     public override void _PhysicsProcess(float delta)
     {
         // Todo: Remove after EnemySpawner is implemented
-        if (Input.IsKeyPressed((int) KeyList.H))
+        if (Input.IsKeyPressed((int)KeyList.H))
         {
             OpenAllConnectedDoors();
         }
-        if (Input.IsKeyPressed((int) KeyList.J))
+        if (Input.IsKeyPressed((int)KeyList.J))
         {
             CloseAllConnectedDoors();
         }
