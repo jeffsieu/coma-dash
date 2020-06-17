@@ -87,6 +87,9 @@ public class MapLoader : Spatial
     private int size;
     private bool ready = false;
 
+    private List<LevelRegion> levelRegions;
+    private RegionLabel[,] regionMap;
+
     public override void _Ready()
     {
         ready = true;
@@ -107,6 +110,15 @@ public class MapLoader : Spatial
             child.QueueFree();
             RemoveChild(child);
         }
+    }
+
+    private void ClearRegions()
+    {
+        levelRegions = new List<LevelRegion>();
+        regionMap = new RegionLabel[size, size];
+        for (int i = 0; i < size; ++i)
+            for (int j = 0; j < size; ++j)
+                regionMap[i, j] = new RegionLabel(RegionType.NONE, 0);
     }
 
     private int[,] ParseMap()
@@ -137,6 +149,8 @@ public class MapLoader : Spatial
 
     private void BuildMap(int[,] pixels)
     {
+        ClearRegions();
+
         bool[,] floorMap = new bool[size, size];
         bool[,] doorMap = new bool[size, size];
         bool[,] wallMap = new bool[size, size];
@@ -171,22 +185,43 @@ public class MapLoader : Spatial
             }
         }
 
-        foreach (Vector2[][] polygon in PolygonsFromBitmap(wallMap))
-            AddChild(new Wall(polygon, unitSize, WallMaterial));
-
-        foreach (Vector2[][] polygon in PolygonsFromBitmap(floorMap))
-            AddChild(new Room(polygon, unitSize, FloorMaterial));
-
-        foreach (Vector2[][] polygon in PolygonsFromBitmap(doorMap))
+        foreach (RegionParseInfo parseInfo in ParseBitmap(wallMap))
         {
-            AddChild(new Room(polygon, unitSize, FloorMaterial));
-            AddChild(new Door(polygon, unitSize));
+            Wall wall = new Wall(parseInfo.Polygon, unitSize, WallMaterial);
+            AddChild(wall);
         }
+
+        foreach (RegionParseInfo parseInfo in ParseBitmap(floorMap))
+        {
+            Room room = new Room(parseInfo.Polygon, unitSize, FloorMaterial);
+            UpdateRegionLabels(parseInfo.Bitmap, RegionType.ROOM, levelRegions.Count);
+            levelRegions.Add(room);
+            AddChild(room);
+        }
+
+        foreach (RegionParseInfo parseInfo in ParseBitmap(doorMap))
+        {
+            AddChild(new Room(parseInfo.Polygon, unitSize, FloorMaterial));
+            UpdateRegionLabels(parseInfo.Bitmap, RegionType.DOOR, levelRegions.Count);
+            Door door = new Door(parseInfo.Polygon, unitSize);
+            levelRegions.Add(door);
+            AddChild(door);
+        }
+
+        ConnectRoomsWithDoors();
     }
 
-    private List<Vector2[][]> PolygonsFromBitmap(bool[,] bitmap)
+    private void UpdateRegionLabels(bool[,] bitmap, RegionType regionType, int id)
     {
-        List<Vector2[][]> polygons = new List<Vector2[][]>();
+        for (int i = 0; i < size; ++i)
+            for (int j = 0; j < size; ++j)
+                if (bitmap[i, j])
+                    regionMap[i, j] = new RegionLabel(regionType, id);
+    }
+
+    private List<RegionParseInfo> ParseBitmap(bool[,] bitmap)
+    {
+        List<RegionParseInfo> parseInfos = new List<RegionParseInfo>();
         bool[,] visitedCell = new bool[size, size]; // visited points on the grid, not pixels
         InitBitmap(visitedCell, false);
 
@@ -224,11 +259,11 @@ public class MapLoader : Spatial
                             }
                         }
                     }
-                    polygons.Add(PolygonFromBitmap(connectedBitmap));
+                    parseInfos.Add(new RegionParseInfo(connectedBitmap, PolygonFromBitmap(connectedBitmap)));
                 }
             }
         }
-        return polygons;
+        return parseInfos;
     }
 
     private Vector2[][] PolygonFromBitmap(bool[,] bitmap)
@@ -395,5 +430,32 @@ public class MapLoader : Spatial
     {
         points.Add(point);
         visited[(int)point.x, (int)point.y] = true;
+    }
+
+    private void ConnectRoomsWithDoors()
+    {
+        for (int y = 0; y < size; ++y)
+        {
+            for (int x = 0; x < size; ++x)
+            {
+                if (regionMap[x, y].Type != RegionType.ROOM) continue;
+                int[] dx = { 0, 0, 1, -1 };
+                int[] dy = { 1, -1, 0, 0 };
+                for (int i = 0; i < 4; ++i)
+                {
+                    int nx = x + dx[i];
+                    int ny = y + dy[i];
+                    if (nx < 0 || nx >= size) continue;
+                    if (ny < 0 || ny >= size) continue;
+
+                    if (regionMap[nx, ny].Type == RegionType.DOOR)
+                    {
+                        Door door = levelRegions[regionMap[nx, ny].Id] as Door;
+                        Room room = levelRegions[regionMap[x, y].Id] as Room;
+                        room.AddDoor(door);
+                    }
+                }
+            }
+        }
     }
 }

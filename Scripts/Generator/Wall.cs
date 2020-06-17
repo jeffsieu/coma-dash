@@ -1,7 +1,7 @@
 using System;
 using Godot;
 
-public class Wall : StaticBody
+public class Wall : LevelRegion
 {
     private readonly float WALL_HEIGHT = 2.2f;
     public Wall(Vector2[][] polygon, int unitSize, Material material)
