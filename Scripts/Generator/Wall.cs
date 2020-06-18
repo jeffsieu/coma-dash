@@ -1,7 +1,7 @@
 using System;
 using Godot;
 
-public class Wall : StaticBody
+public class Wall : LevelRegion
 {
     private readonly float WALL_HEIGHT = 2.2f;
     public Wall(Vector2[][] polygon, int unitSize, Material material)
@@ -28,7 +28,7 @@ public class Wall : StaticBody
         }
         AddChild(wallMesh);
         wallMesh.UseCollision = true;
-        wallMesh.CollisionLayer = 1;
-        wallMesh.CollisionMask = 1;
+        wallMesh.CollisionLayer = ColLayer.Environment;
+        wallMesh.CollisionMask = ColLayer.Environment;
     }
 }

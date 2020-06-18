@@ -64,7 +64,10 @@
     <Compile Include="Scripts\Enemy\Enemy.cs" />
     <Compile Include="Scripts\Enemy\EnemyPencil.cs" />
     <Compile Include="Scripts\Generator\Door.cs" />
+    <Compile Include="Scripts\Generator\LevelRegion.cs" />
     <Compile Include="Scripts\Generator\MapLoader.cs" />
+    <Compile Include="Scripts\Generator\RegionLabel.cs" />
+    <Compile Include="Scripts\Generator\RegionParseInfo.cs" />
     <Compile Include="Scripts\Generator\RoomGenerator.cs" />
     <Compile Include="Scripts\Generator\Room.cs" />
     <Compile Include="Scripts\Generator\Wall.cs" />
