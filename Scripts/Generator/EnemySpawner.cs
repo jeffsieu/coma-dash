@@ -1,6 +1,6 @@
-using Godot;
 using System;
 using System.Collections.Generic;
+using Godot;
 
 /// <summary>
 /// Spawns enemies in a parent <see cref="Room"/>, and keeps track of their status.

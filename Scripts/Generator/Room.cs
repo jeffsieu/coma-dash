@@ -132,21 +132,21 @@ public class Room : LevelRegion
             foreach (Room room in door.ConnectedRooms)
                 if (room != this)
                     rooms.Add(room);
-        }   
+        }
         return rooms;
     }
 
     public Vector3 GetRandomTileCenter()
     {
         Vector2 tile = Tiles[rng.RandiRange(0, Tiles.Length - 1)];
-        return new Vector3((tile.x + 0.5f)* unitSize, 0, (tile.y + 0.5f) * unitSize) + mapLoader.GlobalTransform.origin;
+        return new Vector3((tile.x + 0.5f) * unitSize, 0, (tile.y + 0.5f) * unitSize) + mapLoader.GlobalTransform.origin;
     }
 
     public bool Contains(Spatial spatial)
     {
         Vector3 localTranslation = spatial.GlobalTransform.origin - mapLoader.GlobalTransform.origin;
-        int localX = (int) localTranslation.x / unitSize;
-        int localY = (int) localTranslation.z / unitSize;
+        int localX = (int)localTranslation.x / unitSize;
+        int localY = (int)localTranslation.z / unitSize;
         return Tiles.Contains<Vector2>(new Vector2(localX, localY));
     }
 }
