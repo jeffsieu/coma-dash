@@ -28,7 +28,7 @@ public class Wall : LevelRegion
         }
         AddChild(wallMesh);
         wallMesh.UseCollision = true;
-        wallMesh.CollisionLayer = 1;
-        wallMesh.CollisionMask = 1;
+        wallMesh.CollisionLayer = ColLayer.Environment;
+        wallMesh.CollisionMask = ColLayer.Environment;
     }
 }

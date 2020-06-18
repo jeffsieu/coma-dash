@@ -34,8 +34,8 @@ public class Room : LevelRegion
         Translation = new Vector3(0, -unitSize, 0);
 
         floorMesh.UseCollision = true;
-        floorMesh.CollisionLayer = 1;
-        floorMesh.CollisionMask = 1;
+        floorMesh.CollisionLayer = ColLayer.Environment;
+        floorMesh.CollisionMask = ColLayer.Environment;
     }
 
     public override void _PhysicsProcess(float delta)

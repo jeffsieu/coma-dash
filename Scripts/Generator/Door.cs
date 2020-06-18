@@ -19,8 +19,8 @@ public class Door : LevelRegion
         AddChild(doorMesh);
 
         doorMesh.UseCollision = true;
-        doorMesh.CollisionLayer = 1;
-        doorMesh.CollisionMask = 1;
+        doorMesh.CollisionLayer = ColLayer.Environment;
+        doorMesh.CollisionMask = ColLayer.Environment;
     }
 
     public void Open()
