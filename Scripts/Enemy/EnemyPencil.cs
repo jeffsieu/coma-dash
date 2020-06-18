@@ -29,14 +29,14 @@ public class EnemyPencil : RigidBody
     private void BodyEnteredSelf(Node node)
     {
         PhysicsBody body = node as PhysicsBody;
-        if (body.CollisionLayer == 1 && body.Name == "Floor")
+        if (body.CollisionLayer == ColLayer.Environment && body.Name == "Floor")
             onGround = true;
     }
 
     private void BodyExitedSelf(Node node)
     {
         PhysicsBody body = node as PhysicsBody;
-        if (body.CollisionLayer == 1 && body.Name == "Floor")
+        if (body.CollisionLayer == ColLayer.Environment && body.Name == "Floor")
             onGround = false;
 
     }
