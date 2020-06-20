@@ -63,6 +63,7 @@
     <Compile Include="Scripts\Effects\OutlineEffect.cs" />
     <Compile Include="Scripts\Enemy\Enemy.cs" />
     <Compile Include="Scripts\Enemy\EnemyPencil.cs" />
+    <Compile Include="Scripts\Enemy\MeleeEnemy.cs" />
     <Compile Include="Scripts\Generator\Door.cs" />
     <Compile Include="Scripts\Generator\EnemySpawner.cs" />
     <Compile Include="Scripts\Generator\LevelRegion.cs" />

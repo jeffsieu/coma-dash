@@ -14,17 +14,16 @@ public abstract class HealthEntity : RigidBody, IStatusHolder
         }
         protected set
         {
-            health = value;
             if (healthBar != null)
                 healthBar.Value = value;
-            if (whiteHealthBar != null)
+            if (whiteHealthBar != null && value < health)
             {
                 tween.RemoveAll();
                 tween.PlaybackProcessMode = Tween.TweenProcessMode.Physics;
                 tween.InterpolateProperty(whiteHealthBar, "value", null, value, whiteBarAnimationDuration, Tween.TransitionType.Linear, Tween.EaseType.In);
                 tween.Start();
             }
-
+            health = value;
         }
     }
 
@@ -45,6 +44,16 @@ public abstract class HealthEntity : RigidBody, IStatusHolder
         }
     }
 
+    public float RegenerationDelay
+    {
+        get; protected set;
+    } = 0;
+
+    public float RegenerationRate
+    {
+        get; protected set;
+    } = 0;
+
     public Color HealthBarColor
     {
         set
@@ -56,18 +65,25 @@ public abstract class HealthEntity : RigidBody, IStatusHolder
 
     private static readonly int borderWidth = 3;
     private static readonly int borderRadius = 3;
-    private static readonly Vector2 healthBarSize = new Vector2(50, 10);
+    private static readonly Vector2 healthBarSize = new Vector2(50, 15);
+    private static readonly Vector2 regenerationBarSize = new Vector2(50, 10);
     private static readonly float whiteBarAnimationDuration = 0.5f;
     private static readonly Color defaultHealthBarColor = new Color("#F1AB86");
+    private static readonly Color regenerationBarColor = new Color("#4FF05A");
 
     protected Vector3 healthBarPositionOffset;
     protected ProgressBar healthBar;
     protected ProgressBar whiteHealthBar;
+    protected ProgressBar regenerationBar;
     protected StyleBoxFlat healthBarStyleBox;
     protected StyleBoxFlat whiteHealthBarStyleBox;
+    protected VBoxContainer column;
     protected Tween tween;
+
     private float health;
     private float maxHealth;
+    private float deltaUntilRegeneration = 0;
+
     private Camera camera;
 
     public HealthEntity()
@@ -88,6 +104,7 @@ public abstract class HealthEntity : RigidBody, IStatusHolder
             Value = health,
             MinValue = 0,
             MaxValue = maxHealth,
+            RectMinSize = healthBarSize,
             RectSize = healthBarSize,
             PercentVisible = false
         };
@@ -116,6 +133,7 @@ public abstract class HealthEntity : RigidBody, IStatusHolder
             Value = health,
             MinValue = 0,
             MaxValue = maxHealth,
+            RectMinSize = healthBarSize,
             RectSize = healthBarSize,
             PercentVisible = false
         };
@@ -148,33 +166,101 @@ public abstract class HealthEntity : RigidBody, IStatusHolder
             CornerRadiusTopRight = borderRadius
         });
 
+        regenerationBar = new ProgressBar
+        {
+            Value = 0,
+            MinValue = 0,
+            MaxValue = 1,
+            RectMinSize = regenerationBarSize,
+            RectSize = regenerationBarSize,
+            PercentVisible = false
+        };
+        StyleBoxFlat regenerationBarStyleBox = new StyleBoxFlat
+        {
+            BgColor = regenerationBarColor,
+            AntiAliasing = false,
+            BorderColor = Colors.Black,
+            BorderWidthBottom = borderWidth,
+            BorderWidthLeft = borderWidth,
+            BorderWidthRight = borderWidth,
+            BorderWidthTop = borderWidth,
+            CornerRadiusBottomLeft = borderRadius,
+            CornerRadiusBottomRight = borderRadius,
+            CornerRadiusTopLeft = borderRadius,
+            CornerRadiusTopRight = borderRadius
+        };
+        regenerationBar.AddStyleboxOverride("fg", regenerationBarStyleBox);
+        regenerationBar.AddStyleboxOverride("bg", new StyleBoxFlat
+        {
+            BgColor = Colors.Black,
+            AntiAliasing = true,
+            BorderColor = Colors.Black,
+            BorderWidthBottom = borderWidth,
+            BorderWidthLeft = borderWidth,
+            BorderWidthRight = borderWidth,
+            BorderWidthTop = borderWidth,
+            CornerRadiusBottomLeft = borderRadius,
+            CornerRadiusBottomRight = borderRadius,
+            CornerRadiusTopLeft = borderRadius,
+            CornerRadiusTopRight = borderRadius
+        });
+
         tween = new Tween();
         AddChild(tween);
-        Node2D healthBarContainer = new Node2D();
+
+        Node2D statusBarContainer = new Node2D();
+        column = new VBoxContainer();
+
+        CenterContainer healthBarContainer = new CenterContainer();
         healthBarContainer.AddChild(whiteHealthBar);
         healthBarContainer.AddChild(healthBar);
-        healthBarContainer.ZIndex = -1;
-        AddChild(healthBarContainer);
+
+        CenterContainer regenerationBarContainer = new CenterContainer();
+        regenerationBarContainer.AddChild(regenerationBar);
+
+        column.AddConstantOverride("separation", 0);
+        column.AddChild(regenerationBarContainer);
+        column.AddChild(healthBarContainer);
+
+        statusBarContainer.AddChild(column);
+        statusBarContainer.ZIndex = -1;
+
+        AddChild(statusBarContainer);
     }
 
-    public override void _PhysicsProcess(float delta)
+    public override void _Process(float delta)
     {
-        DisplayHealthBar();
+        UpdateStatusBars(delta);
     }
 
-    private void DisplayHealthBar()
+    protected void UpdateStatusBars(float delta)
     {
         Vector2 positionOnScreen = camera.UnprojectPosition(GlobalTransform.origin + healthBarPositionOffset);
         if (Health > 0)
         {
-            Vector2 size = healthBar.RectSize;
-            Vector2 scale = healthBar.RectScale;
+            Vector2 size = column.RectSize;
+            Vector2 scale = column.RectScale;
 
             Vector2 healthBarPosition = positionOnScreen + new Vector2(-size.x * scale.x / 2, -size.y * scale.y) + Vector2.Up * 10;
 
-            healthBar.RectPosition = healthBarPosition;
-            whiteHealthBar.RectPosition = healthBarPosition;
+            column.RectPosition = healthBarPosition;
         }
+
+        deltaUntilRegeneration = Mathf.Max(deltaUntilRegeneration - delta, 0);
+        if (Health < MaxHealth)
+        {
+            regenerationBar.Value = RegenerationDelay > 0 ? 1 - deltaUntilRegeneration / RegenerationDelay : 1;
+
+            if (deltaUntilRegeneration == 0)
+            {
+                Health = Mathf.Min(Health + RegenerationRate * delta, MaxHealth);
+            }
+        }
+
+        bool showRegenBar = regenerationBar.Value != regenerationBar.MaxValue && Health < MaxHealth && RegenerationRate > 0;
+        Color m = regenerationBar.Modulate;
+        m.a = showRegenBar ? 1 : 0;
+        regenerationBar.Modulate = m;
     }
 
     public void ResetHealthBarColor()
@@ -189,6 +275,7 @@ public abstract class HealthEntity : RigidBody, IStatusHolder
             return;
 
         Health = Mathf.Max(Health - damage, 0);
+        deltaUntilRegeneration = RegenerationDelay;
 
         if (Health == 0)
         {
