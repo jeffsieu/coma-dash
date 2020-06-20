@@ -73,6 +73,7 @@ public abstract class HealthEntity : RigidBody, IStatusHolder
     public HealthEntity()
     {
         statuses = new Dictionary<Type, Status>();
+        AddUserSignal("died");
     }
 
     public override void _Ready()
@@ -149,8 +150,11 @@ public abstract class HealthEntity : RigidBody, IStatusHolder
 
         tween = new Tween();
         AddChild(tween);
-        AddChild(whiteHealthBar);
-        AddChild(healthBar);
+        Node2D healthBarContainer = new Node2D();
+        healthBarContainer.AddChild(whiteHealthBar);
+        healthBarContainer.AddChild(healthBar);
+        healthBarContainer.ZIndex = -1;
+        AddChild(healthBarContainer);
     }
 
     public override void _PhysicsProcess(float delta)
@@ -181,6 +185,9 @@ public abstract class HealthEntity : RigidBody, IStatusHolder
 
     public virtual void Damage(float damage)
     {
+        if (Health == 0)
+            return;
+
         Health = Mathf.Max(Health - damage, 0);
 
         if (Health == 0)
@@ -195,6 +202,7 @@ public abstract class HealthEntity : RigidBody, IStatusHolder
 
     protected virtual void Die()
     {
+        EmitSignal("died", this);
         SetCollisionMaskBit(ColLayer.Bit.Projectiles, false);
     }
 

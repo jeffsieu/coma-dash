@@ -193,7 +193,12 @@ public class MapLoader : Spatial
 
         foreach (RegionParseInfo parseInfo in ParseBitmap(floorMap))
         {
-            Room room = new Room(parseInfo.Polygon, unitSize, FloorMaterial);
+            List<Vector2> tilesInRoom = new List<Vector2>();
+            for (int y = 0; y < size; ++y)
+                for (int x = 0; x < size; ++x)
+                    if (parseInfo.Bitmap[x, y])
+                        tilesInRoom.Add(new Vector2(x, y));
+            Room room = new Room(parseInfo.Polygon, tilesInRoom.ToArray(), unitSize, FloorMaterial);
             UpdateRegionLabels(parseInfo.Bitmap, RegionType.ROOM, levelRegions.Count);
             levelRegions.Add(room);
             AddChild(room);
@@ -201,7 +206,12 @@ public class MapLoader : Spatial
 
         foreach (RegionParseInfo parseInfo in ParseBitmap(doorMap))
         {
-            AddChild(new Room(parseInfo.Polygon, unitSize, FloorMaterial));
+            List<Vector2> tilesInRoom = new List<Vector2>();
+            for (int y = 0; y < size; ++y)
+                for (int x = 0; x < size; ++x)
+                    if (parseInfo.Bitmap[x, y])
+                        tilesInRoom.Add(new Vector2(x, y));
+            AddChild(new Room(parseInfo.Polygon, tilesInRoom.ToArray(), unitSize, FloorMaterial));
             UpdateRegionLabels(parseInfo.Bitmap, RegionType.DOOR, levelRegions.Count);
             Door door = new Door(parseInfo.Polygon, unitSize);
             levelRegions.Add(door);
@@ -452,7 +462,8 @@ public class MapLoader : Spatial
                     {
                         Door door = levelRegions[regionMap[nx, ny].Id] as Door;
                         Room room = levelRegions[regionMap[x, y].Id] as Room;
-                        room.AddDoor(door);
+                        room.ConnectDoor(door);
+                        door.ConnectRoom(room);
                     }
                 }
             }
