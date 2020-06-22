@@ -46,6 +46,7 @@ public class Enemy : HealthEntity
     protected override void Die()
     {
         base.Die();
+        CollisionLayer = 0;
         material.FlagsTransparent = true;
         Tween tween = new Tween();
         AddChild(tween);

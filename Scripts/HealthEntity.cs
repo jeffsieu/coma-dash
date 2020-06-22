@@ -290,7 +290,7 @@ public abstract class HealthEntity : RigidBody, IStatusHolder
     protected virtual void Die()
     {
         EmitSignal("died", this);
-        SetCollisionMaskBit(ColLayer.Bit.Projectiles, false);
+        CollisionMask = ColLayer.Environment;
     }
 
     public bool HasStatus<S>() where S : Status
