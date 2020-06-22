@@ -64,7 +64,7 @@ public class MeleeEnemy : Enemy
         inPreAttack = false;
         stateManager.GoTo(PostAttack);
     }
-    
+
     protected void PostAttack(float elapsedDelta)
     {
         // Remain on the spot until "stun" duration is over
