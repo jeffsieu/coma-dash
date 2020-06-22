@@ -306,7 +306,7 @@ public class MapLoader : Spatial
         List<Vector2> points = new List<Vector2>();
 
         // start with bottom left corner of point
-        Vector2 prev = new Vector2(startX, startY + 1);
+        Vector2 prev = new Vector2(startX - 1, startY);
         AddPointToPolygon(prev, points, visitedPoint);
         visitedCell[startX, startY] = true;
 
