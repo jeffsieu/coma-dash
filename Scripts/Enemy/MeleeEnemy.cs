@@ -15,6 +15,8 @@ public class MeleeEnemy : Enemy
         base._Ready();
         stateManager = new StateManager();
         AddChild(stateManager);
+
+        stateManager.GoTo(Idle);
     }
 
     public override void _Process(float delta)
@@ -25,26 +27,20 @@ public class MeleeEnemy : Enemy
         UpdateStatusBars(delta);
     }
 
-    public override void _PhysicsProcess(float delta)
+    protected void Idle(float delta, float elapsedDelta)
     {
-        base._PhysicsProcess(delta);
-
-        // Let StateManager take over
-        if (stateManager.IsRunning)
-            return;
-
         if (GlobalTransform.origin.DistanceTo(player.GlobalTransform.origin) < range)
         {
             AttackTarget();
         }
         else
         {
-            Vector3 velocity = 5.0f * GlobalTransform.origin.DirectionTo(GetNextPointToTarget());
+            Vector3 velocity = 500f * delta * GlobalTransform.origin.DirectionTo(GetNextPointToTarget());
             LinearVelocity = velocity;
         }
     }
 
-    protected void PreAttack(float elapsedDelta)
+    protected void PreAttack(float delta, float elapsedDelta)
     {
         // Become white
         LinearVelocity = Vector3.Zero;
@@ -56,7 +52,7 @@ public class MeleeEnemy : Enemy
         }
     }
 
-    protected void Attack(float elapsedDelta)
+    protected void Attack(float delta, float elapsedDelta)
     {
         // Try to attack target
         if (GlobalTransform.origin.DistanceTo(player.GlobalTransform.origin) <= range)
@@ -65,12 +61,12 @@ public class MeleeEnemy : Enemy
         stateManager.GoTo(PostAttack);
     }
 
-    protected void PostAttack(float elapsedDelta)
+    protected void PostAttack(float delta, float elapsedDelta)
     {
         // Remain on the spot until "stun" duration is over
         if (elapsedDelta >= postAttackPauseDuration)
         {
-            stateManager.Stop();
+            stateManager.GoTo(Idle);
         }
     }
 

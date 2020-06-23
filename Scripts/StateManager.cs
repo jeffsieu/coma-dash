@@ -1,6 +1,6 @@
 using Godot;
 
-using State = System.Action<float>;
+using State = System.Action<float, float>;
 
 public class StateManager : Node
 {
@@ -24,9 +24,9 @@ public class StateManager : Node
 
     public override void _PhysicsProcess(float delta)
     {
-        if (currentState != null && !isPaused)
+        if (IsRunning)
         {
-            currentState.Invoke(stateElapsedDelta);
+            currentState.Invoke(delta, stateElapsedDelta);
             stateElapsedDelta += delta;
         }
     }
@@ -41,6 +41,11 @@ public class StateManager : Node
     public void Pause()
     {
         isPaused = true;
+    }
+
+    public void Resume()
+    {
+        isPaused = false;
     }
 
     public void Stop()
