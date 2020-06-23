@@ -3,8 +3,8 @@ using Godot;
 public class Enemy : HealthEntity
 {
     public Vector3 Velocity;
-    private readonly float gravity = 4.85f;
-    private SpatialMaterial material;
+    protected SpatialMaterial material;
+    protected Player player;
 
     public Enemy()
     {
@@ -15,6 +15,7 @@ public class Enemy : HealthEntity
     {
         base._Ready();
         CollisionLayer = ColLayer.Enemies;
+        SetCollisionMaskBit(ColLayer.Bit.Enemies, true);
         material = new SpatialMaterial()
         {
             AlbedoColor = Colors.White,
@@ -23,21 +24,29 @@ public class Enemy : HealthEntity
 
         MeshInstance cylinder = GetNode<MeshInstance>("MeshInstance");
         cylinder.SetSurfaceMaterial(0, material);
+
+        player = GetTree().Root.GetNode<Spatial>("Level").GetNode<Player>("Player");
+
+        RegenerationRate = 0.0f;
     }
 
-    public override void _PhysicsProcess(float delta)
+    public override void _Process(float delta)
     {
-        base._PhysicsProcess(delta);
-        Vector3 velocity = LinearVelocity * new Vector3(1, 0, 1);
-        AddCentralForce(1 * velocity.Length() * -velocity);
         Color baseColor = Colors.Red;
         Color healthColor = baseColor.LinearInterpolate(Colors.White, 1 - Health / 100);
         material.AlbedoColor = healthColor;
+        UpdateStatusBars(delta);
+    }
+
+    protected Vector3 GetNextPointToTarget()
+    {
+        return GlobalTransform.origin + GlobalTransform.origin.DirectionTo(player.GlobalTransform.origin);
     }
 
     protected override void Die()
     {
         base.Die();
+        CollisionLayer = 0;
         material.FlagsTransparent = true;
         Tween tween = new Tween();
         AddChild(tween);

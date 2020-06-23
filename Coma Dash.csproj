@@ -63,6 +63,7 @@
     <Compile Include="Scripts\Effects\OutlineEffect.cs" />
     <Compile Include="Scripts\Enemy\Enemy.cs" />
     <Compile Include="Scripts\Enemy\EnemyPencil.cs" />
+    <Compile Include="Scripts\Enemy\MeleeEnemy.cs" />
     <Compile Include="Scripts\Generator\Door.cs" />
     <Compile Include="Scripts\Generator\EnemySpawner.cs" />
     <Compile Include="Scripts\Generator\LevelRegion.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Scripts\PlayerCamera.cs" />
     <Compile Include="Scripts\Projectile.cs" />
     <Compile Include="Scripts\RunningCharacter.cs" />
+    <Compile Include="Scripts\StateManager.cs" />
     <Compile Include="Scripts\Status\MarkStatus.cs" />
     <Compile Include="Scripts\Status\Status.cs" />
     <Compile Include="Scripts\Status\IStatusHolder.cs" />

@@ -279,11 +279,11 @@ custom_styles/panel = SubResource( 6 )
 [node name="MapLoader" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -64, -1, -232 )
 script = ExtResource( 7 )
-UnitSize = 4
 FloorMaterial = SubResource( 8 )
+ShowPreview = true
+UnitSize = 4
 WallMaterial = SubResource( 9 )
 MapPath = "res://Maps/map.data"
-ShowPreview = true
 
 [node name="DecorationShowcase" parent="." instance=ExtResource( 10 )]
 

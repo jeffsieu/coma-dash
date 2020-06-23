@@ -1,6 +1,4 @@
-using System;
 using Godot;
-using Godot.Collections;
 
 public class Player : HealthEntity
 {
@@ -57,8 +55,9 @@ public class Player : HealthEntity
     public Player()
     {
         MaxHealth = 100;
+        RegenerationDelay = 1.0f;
+        RegenerationRate = 10.0f;
     }
-
 
     public override void _Ready()
     {
@@ -246,6 +245,6 @@ public class Player : HealthEntity
     protected override void Die()
     {
         base.Die();
-        QueueFree();
+        // TODO: Game over
     }
 }
