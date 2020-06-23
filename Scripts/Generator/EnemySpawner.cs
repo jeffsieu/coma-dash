@@ -18,8 +18,8 @@ public class EnemySpawner : Node
     public override void _Ready()
     {
         room = GetParent<Room>();
-        gui = GetTree().Root.GetNode("Level").GetNode<GUI>("GUI");
-        enemyContainer = GetTree().Root.GetNode("Level").GetNode<Spatial>("Enemies");
+        gui = GetTree().Root.GetNodeOrNull("Level")?.GetNode<GUI>("GUI");
+        enemyContainer = GetTree().Root.GetNodeOrNull("Level")?.GetNode<Spatial>("Enemies");
         spawnCount = 5;
     }
 

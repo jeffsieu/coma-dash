@@ -57,7 +57,7 @@ public class Room : LevelRegion
         AddChild(floorMesh);
         AddChild(enemySpawner);
 
-        Player player = GetTree().Root.GetNode("Level").GetNode<Player>("Player");
+        Player player = GetTree().Root.GetNodeOrNull("Level")?.GetNode<Player>("Player");
         if (Contains(player))
         {
             Activate();
@@ -144,6 +144,8 @@ public class Room : LevelRegion
 
     public bool Contains(Spatial spatial)
     {
+        if (spatial == null)
+            return false;
         Vector3 localTranslation = spatial.GlobalTransform.origin - mapLoader.GlobalTransform.origin;
         int localX = (int)localTranslation.x / unitSize;
         int localY = (int)localTranslation.z / unitSize;
