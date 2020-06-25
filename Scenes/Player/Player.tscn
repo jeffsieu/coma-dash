@@ -5,7 +5,8 @@
 [ext_resource path="res://Scripts/Weapon/DashSkill.cs" type="Script" id=3]
 [ext_resource path="res://Scripts/AimIndicator/GeneralAimIndicator.cs" type="Script" id=4]
 [ext_resource path="res://Shaders/Shockwave.shader" type="Shader" id=5]
-[ext_resource path="res://Scenes/RunningCharacter.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Scenes/Player/RunningCharacter.tscn" type="PackedScene" id=6]
+
 
 [sub_resource type="CylinderMesh" id=1]
 

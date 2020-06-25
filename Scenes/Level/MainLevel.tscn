@@ -6,8 +6,8 @@
 [ext_resource path="res://Scripts/Generator/MapLoader.cs" type="Script" id=7]
 [ext_resource path="res://Shaders/Outline.shader" type="Shader" id=8]
 [ext_resource path="res://Scripts/Effects/OutlineEffect.cs" type="Script" id=9]
-[ext_resource path="res://Scenes/DecorationShowcase.tscn" type="PackedScene" id=10]
-[ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=11]
+[ext_resource path="res://Scenes/Assets/DecorationShowcase.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Scenes/Player/Player.tscn" type="PackedScene" id=11]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 8 )
@@ -277,13 +277,12 @@ size_flags_horizontal = 3
 custom_styles/panel = SubResource( 6 )
 
 [node name="MapLoader" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -64, -1, -232 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -20, -1, -4 )
 script = ExtResource( 7 )
-FloorMaterial = SubResource( 8 )
-ShowPreview = true
-UnitSize = 4
-WallMaterial = SubResource( 9 )
 MapPath = "res://Maps/map.data"
+FloorMaterial = SubResource( 8 )
+WallMaterial = SubResource( 9 )
+UnitSize = 4
 
 [node name="DecorationShowcase" parent="." instance=ExtResource( 10 )]
 
