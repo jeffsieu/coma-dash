@@ -97,6 +97,7 @@ public class Room : LevelRegion
         // 5 lines of shader code shouldn't cost anything
         ShaderMaterial dupMaterial = (ShaderMaterial)material.Duplicate();
         dupMaterial.SetShaderParam("size", new Vector2(width, height));
+        dupMaterial.SetShaderParam("start_pos", new Vector2(maxX, maxY));
         floorMesh.Material = dupMaterial;
     }
 
