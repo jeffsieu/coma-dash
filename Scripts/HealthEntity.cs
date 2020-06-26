@@ -279,9 +279,9 @@ public abstract class HealthEntity : RigidBody, IStatusHolder
 
         if (Health == 0)
         {
-            whiteHealthBar.QueueFree();
-            healthBar.QueueFree();
-            tween.QueueFree();
+            whiteHealthBar.Visible = false;
+            healthBar.Visible = false;
+            tween.RemoveAll();
             statuses.Clear();
             Die();
         }

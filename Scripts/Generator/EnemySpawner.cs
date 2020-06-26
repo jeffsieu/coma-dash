@@ -28,13 +28,14 @@ public class EnemySpawner : Node
         for (int i = 0; i < spawnCount; ++i)
         {
             Enemy enemy = enemyScene.Instance() as Enemy;
+            enemyContainer.AddChild(enemy);
+
             Vector3 tilePosition = room.GetRandomTileCenter();
             Transform transform = enemy.GlobalTransform;
             transform.origin = tilePosition;
 
             enemy.GlobalTransform = transform;
             enemy.Connect("died", this, "OnEnemyDied");
-            enemyContainer.AddChild(enemy);
             spawnedEnemies.Add(enemy);
         }
         UpdateObjectiveText();
