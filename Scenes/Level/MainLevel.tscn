@@ -7,8 +7,8 @@
 [ext_resource path="res://Scripts/Generator/MapLoader.cs" type="Script" id=7]
 [ext_resource path="res://Shaders/Outline.shader" type="Shader" id=8]
 [ext_resource path="res://Scripts/Effects/OutlineEffect.cs" type="Script" id=9]
-[ext_resource path="res://Scenes/DecorationShowcase.tscn" type="PackedScene" id=10]
-[ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=11]
+[ext_resource path="res://Scenes/Assets/DecorationShowcase.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Scenes/Player/Player.tscn" type="PackedScene" id=11]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 8 )
@@ -41,15 +41,15 @@ font_data = SubResource( 3 )
 [sub_resource type="StyleBoxFlat" id=6]
 bg_color = Color( 0.6, 0.6, 0.6, 0 )
 
-[sub_resource type="SpatialMaterial" id=7]
-albedo_color = Color( 0.486275, 0.470588, 0.529412, 1 )
-
-[sub_resource type="ShaderMaterial" id=9]
+[sub_resource type="ShaderMaterial" id=7]
 shader = ExtResource( 4 )
 shader_param/size = Vector2( 20, 0 )
 shader_param/start_pos = null
 shader_param/tile_color = Color( 1, 0.58, 0.43, 1 )
 shader_param/grout_color = Color( 0.39, 0.51, 0.54, 1 )
+
+[sub_resource type="SpatialMaterial" id=8]
+albedo_color = Color( 0.486275, 0.470588, 0.529412, 1 )
 
 [node name="Level" type="Spatial"]
 
@@ -260,10 +260,10 @@ custom_styles/panel = SubResource( 6 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -64, -1, -232 )
 script = ExtResource( 7 )
 ShowPreview = true
-UnitSize = 4
 MapPath = "res://Maps/map.data"
-WallMaterial = SubResource( 7 )
-FloorMaterial = SubResource( 9 )
+UnitSize = 4
+FloorMaterial = SubResource( 7 )
+WallMaterial = SubResource( 8 )
 
 [node name="DecorationShowcase" parent="." instance=ExtResource( 10 )]
 

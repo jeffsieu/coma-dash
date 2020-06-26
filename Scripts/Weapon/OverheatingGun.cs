@@ -56,7 +56,7 @@ public class OverheatingGun : StraightProjectileWeapon
 
     public OverheatingGun() : base(20.0f, 10.0f, 100.0f, 0.1f)
     {
-        projectileScene = ResourceLoader.Load<PackedScene>("res://Scenes/Bullet.tscn");
+        projectileScene = ResourceLoader.Load<PackedScene>("res://Scenes/Player/Bullet.tscn");
         rng = new RandomNumberGenerator();
     }
 

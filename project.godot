@@ -16,7 +16,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Coma Dash"
-run/main_scene="res://Scenes/MainLevel.tscn"
+run/main_scene="res://Scenes/Level/MainLevel.tscn"
 config/icon="res://icon.png"
 
 [display]

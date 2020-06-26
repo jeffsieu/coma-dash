@@ -13,7 +13,7 @@ public class EnemySpawner : Node
     private int spawnCount;
     private int deadCount = 0;
     private readonly HashSet<Enemy> spawnedEnemies = new HashSet<Enemy>();
-    private readonly PackedScene enemyScene = ResourceLoader.Load<PackedScene>("res://Scenes/MeleeEnemy.tscn");
+    private readonly PackedScene enemyScene = ResourceLoader.Load<PackedScene>("res://Scenes/Enemy/MeleeEnemy.tscn");
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
