@@ -51,6 +51,7 @@ public class Player : HealthEntity
     private InputMode inputMode = InputMode.Keyboard;
     private AimableAttack skill;
     private RunningCharacter character;
+    private Level level;
 
     public Player()
     {
@@ -63,6 +64,7 @@ public class Player : HealthEntity
     {
         base._Ready();
         healthBarPositionOffset = Vector3.Up * Scale.z * 3.5f;
+        level = GetTree().Root.GetNode<Level>("Level");
         camera = GetParent().GetNode<Camera>("Camera");
         character = GetNode<RunningCharacter>("RunningChar");
         skill = character.GetNode<AimableAttack>("Skill");
@@ -245,6 +247,6 @@ public class Player : HealthEntity
     protected override void Die()
     {
         base.Die();
-        // TODO: Game over
+        level.GameOver();
     }
 }

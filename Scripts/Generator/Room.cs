@@ -57,7 +57,7 @@ public class Room : LevelRegion
         AddChild(floorMesh);
         AddChild(enemySpawner);
 
-        Player player = GetTree().Root.GetNodeOrNull("Level")?.GetNode<Player>("Player");
+        Player player = GetTree().Root.GetNodeOrNull<Level>("Level")?.GetNode<Player>("Player");
         if (Contains(player))
         {
             Activate();
