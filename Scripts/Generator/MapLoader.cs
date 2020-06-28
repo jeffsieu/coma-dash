@@ -245,6 +245,7 @@ public class MapLoader : Spatial
                     bool[,] connectedBitmap = new bool[size, size];
                     InitBitmap(connectedBitmap, false);
 
+                    // DFS using stack to group all connected cells together
                     Stack<Tuple<int, int>> stack = new Stack<Tuple<int, int>>();
                     stack.Push(new Tuple<int, int>(x, y));
                     visitedCell[x, y] = true;
