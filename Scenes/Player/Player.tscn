@@ -7,11 +7,11 @@
 [ext_resource path="res://Shaders/Shockwave.shader" type="Shader" id=5]
 [ext_resource path="res://Scenes/Player/RunningCharacter.tscn" type="PackedScene" id=6]
 
-
 [sub_resource type="CylinderMesh" id=1]
 
-[sub_resource type="CylinderShape" id=2]
-height = 2.8
+[sub_resource type="CapsuleShape" id=2]
+radius = 1.15
+height = 1.97
 
 [sub_resource type="PlaneMesh" id=3]
 size = Vector2( 10, 10 )
@@ -43,7 +43,7 @@ mesh = SubResource( 1 )
 material/0 = null
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.34233, 0 )
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 1.86622, 0 )
 shape = SubResource( 2 )
 
 [node name="RunningChar" parent="." instance=ExtResource( 6 )]
@@ -54,11 +54,10 @@ script = ExtResource( 2 )
 
 [node name="AimIndicator" type="Spatial" parent="RunningChar/Weapon"]
 script = ExtResource( 4 )
-Width = 2.0
 IndicatorType = 2
 
 [node name="Skill" type="Spatial" parent="RunningChar"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.642582, 0 )
 script = ExtResource( 3 )
 
 [node name="Shockwave" type="MeshInstance" parent="RunningChar/Skill"]
