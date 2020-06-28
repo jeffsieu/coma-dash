@@ -76,6 +76,7 @@
     <Compile Include="Scripts\GUI.cs" />
     <Compile Include="Scripts\HealthEntity.cs" />
     <Compile Include="Scripts\InputMode.cs" />
+    <Compile Include="Scripts\Level.cs" />
     <Compile Include="Scripts\Player.cs" />
     <Compile Include="Scripts\PlayerCamera.cs" />
     <Compile Include="Scripts\Projectile.cs" />
