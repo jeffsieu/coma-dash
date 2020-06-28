@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -8,18 +7,20 @@ using Godot;
 public class EnemySpawner : Node
 {
     private Room room;
+    private Level level;
     private Spatial enemyContainer;
     private GUI gui;
     private int spawnCount;
     private int deadCount = 0;
     private readonly HashSet<Enemy> spawnedEnemies = new HashSet<Enemy>();
     private readonly PackedScene enemyScene = ResourceLoader.Load<PackedScene>("res://Scenes/Enemy/MeleeEnemy.tscn");
-    // Called when the node enters the scene tree for the first time.
+
     public override void _Ready()
     {
         room = GetParent<Room>();
-        gui = GetTree().Root.GetNodeOrNull("Level")?.GetNode<GUI>("GUI");
-        enemyContainer = GetTree().Root.GetNodeOrNull("Level")?.GetNode<Spatial>("Enemies");
+        level = GetTree().Root.GetNodeOrNull<Level>("Level");
+        gui = level?.GetNode<GUI>("GUI");
+        enemyContainer = level?.GetNode<Spatial>("Enemies");
         spawnCount = 5;
     }
 
@@ -60,6 +61,7 @@ public class EnemySpawner : Node
             return;
         deadCount++;
         UpdateObjectiveText();
+        UpdateTimeLeft();
 
         if (deadCount == spawnCount)
         {
@@ -73,5 +75,10 @@ public class EnemySpawner : Node
     private void UpdateObjectiveText()
     {
         gui.ObjectiveText.Text = $"Defeat {deadCount}/{spawnCount} enemies";
+    }
+
+    private void UpdateTimeLeft()
+    {
+        level.TimeLeft += 5;
     }
 }
