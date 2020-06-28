@@ -303,7 +303,7 @@ public class MapLoader : Spatial
         return points.ToArray();
     }
 
-    private Vector2[] TracePolygon(bool[,] bitmap, bool[,] visitedCell, int startX, int startY)
+    private Vector2[] TracePolygon(bool[,] paddedBitmap, bool[,] visitedCell, int startX, int startY)
     {
         int nsize = size + 2;
         bool[,] visitedPoint = new bool[nsize + 1, nsize + 1]; // visited points on the grid, not pixels
@@ -340,7 +340,7 @@ public class MapLoader : Spatial
 
                 // only check if next path is valid if we are not doing a uturn
                 // we are traversing along the edge of the polygon so the next cell should be part of the edge
-                if (i <= 2 && bitmap[nextCellX, nextCellY]) continue;
+                if (i <= 2 && paddedBitmap[nextCellX, nextCellY]) continue;
 
                 switch (i)
                 {
