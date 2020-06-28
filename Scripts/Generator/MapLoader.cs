@@ -242,8 +242,7 @@ public class MapLoader : Spatial
                 // group connected cells together then traverse the sides to generate a Vector2[] of polygon vertices
                 if (!visitedCell[x, y] && bitmap[x, y])
                 {
-                    int nsize = size + 2;
-                    bool[,] connectedBitmap = new bool[nsize, nsize];
+                    bool[,] connectedBitmap = new bool[size, size];
                     InitBitmap(connectedBitmap, false);
 
                     Stack<Tuple<int, int>> stack = new Stack<Tuple<int, int>>();
@@ -252,7 +251,7 @@ public class MapLoader : Spatial
                     while (stack.Count > 0)
                     {
                         Tuple<int, int> top = stack.Pop();
-                        connectedBitmap[top.Item1 + 1, top.Item2 + 1] = true;
+                        connectedBitmap[top.Item1, top.Item2] = true;
 
                         int[] dx = { 0, 0, 1, -1 };
                         int[] dy = { 1, -1, 0, 0 };
@@ -278,7 +277,12 @@ public class MapLoader : Spatial
 
     private Vector2[][] PolygonFromBitmap(bool[,] bitmap)
     {
+        // add one unit of padding at all four sides around the map
         int nsize = size + 2;
+        bool[,] paddedBitmap = new bool[nsize, nsize];
+        InitBitmap(paddedBitmap, false);
+        for (int y = 0; y < size; ++y) for (int x = 0; x < size; ++x) paddedBitmap[x + 1, y + 1] = bitmap[x, y];
+
         List<Vector2[]> points = new List<Vector2[]>();
         bool[,] visitedCell = new bool[nsize, nsize]; // visited cells on the grid
         InitBitmap(visitedCell, false);
@@ -288,9 +292,10 @@ public class MapLoader : Spatial
             for (int x = 0; x < nsize; ++x)
             {
                 if (visitedCell[x, y]) continue;
-                if (!bitmap[x, y] && bitmap[x, y + 1])
+                // want to start tracing when a cell is "off" and has an "on" cell below it
+                if (!paddedBitmap[x, y] && paddedBitmap[x, y + 1])
                 {
-                    points.Add(TracePolygon(bitmap, visitedCell, x, y));
+                    points.Add(TracePolygon(paddedBitmap, visitedCell, x, y));
                 }
             }
         }
