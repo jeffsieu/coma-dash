@@ -91,11 +91,14 @@ public class MapLoader : Spatial
     private RegionLabel[,] regionMap;
 
     private Level level;
+    private Player player;
 
     public override void _Ready()
     {
         ready = true;
         level = GetTree().Root.GetNodeOrNull<Level>("Level");
+        player = level.GetNodeOrNull<Player>("Player");
+        Translation = new Vector3(0, -1, 0);
         RebuildMap();
     }
 
@@ -161,8 +164,6 @@ public class MapLoader : Spatial
         InitBitmap(doorMap, false);
         InitBitmap(wallMap, false);
 
-        int playerX = 0, playerY = 0;
-        int bossX = 0, bossY = 0;
         for (int y = 0; y < size; ++y)
         {
             for (int x = 0; x < size; ++x)
@@ -180,14 +181,11 @@ public class MapLoader : Spatial
                         break;
                     case MapElement.PLAYER:
                         floorMap[x, y] = true;
-                        Translation = new Vector3((-x) * unitSize, -1, (-y) * unitSize);
-                        playerX = x;
-                        playerY = y;
+                        player.Translation = new Vector3(x * unitSize, -1, y * unitSize);
                         break;
                     case MapElement.BOSS:
                         floorMap[x, y] = true;
-                        bossX = x;
-                        bossY = y;
+                        CreateBoss(x, y);
                         break;
                     default:
                         floorMap[x, y] = true;
@@ -195,8 +193,6 @@ public class MapLoader : Spatial
                 }
             }
         }
-
-        CreateBoss(bossX - playerX, bossY - playerY);
 
         foreach (RegionParseInfo parseInfo in ParseBitmap(wallMap))
         {
