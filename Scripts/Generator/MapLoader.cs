@@ -90,9 +90,12 @@ public class MapLoader : Spatial
     private List<LevelRegion> levelRegions;
     private RegionLabel[,] regionMap;
 
+    private Level level;
+
     public override void _Ready()
     {
         ready = true;
+        level = GetTree().Root.GetNodeOrNull<Level>("Level");
         RebuildMap();
     }
 
@@ -158,25 +161,33 @@ public class MapLoader : Spatial
         InitBitmap(doorMap, false);
         InitBitmap(wallMap, false);
 
+        int playerX = 0, playerY = 0;
+        int bossX = 0, bossY = 0;
         for (int y = 0; y < size; ++y)
         {
             for (int x = 0; x < size; ++x)
             {
                 int pixel = pixels[x, y];
-
-                switch (pixels[x, y])
+                switch (pixel)
                 {
-                    case 0:
+                    case MapElement.NONE:
                         break;
-                    case 0xffffff:
+                    case MapElement.WALL:
                         wallMap[x, y] = true;
                         break;
-                    case 0xff0000:
+                    case MapElement.DOOR:
                         doorMap[x, y] = true;
                         break;
-                    case 0x00ff00:
+                    case MapElement.PLAYER:
                         floorMap[x, y] = true;
                         Translation = new Vector3((-x) * unitSize, -1, (-y) * unitSize);
+                        playerX = x;
+                        playerY = y;
+                        break;
+                    case MapElement.BOSS:
+                        floorMap[x, y] = true;
+                        bossX = x;
+                        bossY = y;
                         break;
                     default:
                         floorMap[x, y] = true;
@@ -184,6 +195,8 @@ public class MapLoader : Spatial
                 }
             }
         }
+
+        CreateBoss(bossX - playerX, bossY - playerY);
 
         foreach (RegionParseInfo parseInfo in ParseBitmap(wallMap))
         {
@@ -227,6 +240,11 @@ public class MapLoader : Spatial
             for (int j = 0; j < size; ++j)
                 if (bitmap[i, j])
                     regionMap[i, j] = new RegionLabel(regionType, id);
+    }
+
+    private void CreateBoss(int x, int y)
+    {
+        level.CreateBoss(x * unitSize, y * unitSize);
     }
 
     private List<RegionParseInfo> ParseBitmap(bool[,] bitmap)
