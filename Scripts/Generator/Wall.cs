@@ -16,11 +16,11 @@ public class Wall : LevelRegion
             Depth = WALL_HEIGHT
         };
 
-        for (int i = 0; i < regionShape.HolePolygons.Length; ++i)
+        foreach (Vector2[] holePolygon in regionShape.HolePolygons)
         {
             CSGPolygon holeMesh = new CSGPolygon
             {
-                Polygon = regionShape.HolePolygons[i],
+                Polygon = holePolygon,
                 Operation = CSGShape.OperationEnum.Subtraction,
                 Depth = 1.5f * WALL_HEIGHT
             };
