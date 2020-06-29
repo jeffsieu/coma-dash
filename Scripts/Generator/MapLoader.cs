@@ -187,7 +187,7 @@ public class MapLoader : Spatial
 
         foreach (RegionParseInfo parseInfo in ParseBitmap(wallMap))
         {
-            Wall wall = new Wall(parseInfo.Polygon, unitSize, WallMaterial);
+            Wall wall = new Wall(parseInfo.PolygonPoints, unitSize, WallMaterial);
             AddChild(wall);
         }
 
@@ -198,7 +198,7 @@ public class MapLoader : Spatial
                 for (int x = 0; x < size; ++x)
                     if (parseInfo.Bitmap[x, y])
                         tilesInRoom.Add(new Vector2(x, y));
-            Room room = new Room(parseInfo.Polygon, tilesInRoom.ToArray(), unitSize, FloorMaterial);
+            Room room = new Room(parseInfo.PolygonPoints, tilesInRoom.ToArray(), unitSize, FloorMaterial);
             UpdateRegionLabels(parseInfo.Bitmap, RegionType.ROOM, levelRegions.Count);
             levelRegions.Add(room);
             AddChild(room);
@@ -211,9 +211,9 @@ public class MapLoader : Spatial
                 for (int x = 0; x < size; ++x)
                     if (parseInfo.Bitmap[x, y])
                         tilesInRoom.Add(new Vector2(x, y));
-            AddChild(new Room(parseInfo.Polygon, tilesInRoom.ToArray(), unitSize, FloorMaterial));
+            AddChild(new Room(parseInfo.PolygonPoints, tilesInRoom.ToArray(), unitSize, FloorMaterial));
             UpdateRegionLabels(parseInfo.Bitmap, RegionType.DOOR, levelRegions.Count);
-            Door door = new Door(parseInfo.Polygon, unitSize);
+            Door door = new Door(parseInfo.PolygonPoints, unitSize);
             levelRegions.Add(door);
             AddChild(door);
         }
@@ -229,6 +229,11 @@ public class MapLoader : Spatial
                     regionMap[i, j] = new RegionLabel(regionType, id);
     }
 
+
+    /// <summary>
+    /// Parse a bitmap looking for connected regions using depth-first search.
+    /// </summary>
+    /// <returns>A list of regions on the map represented by <see cref="RegionParseInfo"/>.</returns>
     private List<RegionParseInfo> ParseBitmap(bool[,] bitmap)
     {
         List<RegionParseInfo> parseInfos = new List<RegionParseInfo>();
@@ -276,7 +281,21 @@ public class MapLoader : Spatial
         return parseInfos;
     }
 
-    private Vector2[][] PolygonFromBitmap(bool[,] bitmap)
+    /// <summary>
+    /// Search for edges inside a bitmap, by checking for an "off" cell next to an "on" cell. 
+    /// To be specific, a point is considered an edge when it is "off" and has an "on" cell below it. 
+    /// The coordinates of these points are passed to <see cref="TracePolygon"/>, which traces the edges
+    /// to return the outline of regions found in the bitmap, represented by a set of connected points.
+    /// As there might be holes in regions, more than one set of connected points (outline) will be found.
+    /// Therefore, there will be a main outline polygon, and optionally several hole polygons that will
+    /// be subtracted from the main polygon.
+    ///
+    /// Note: The bitmap is padded by one unit on all sides of the bitmap so that 
+    /// regions sticking to the sides of the bitmap also have edges to be traced.
+    /// </summary>
+    /// <returns>A main polygon and an array of hole polygons stored in a <see cref="PolygonPoints"/> object.
+    /// </returns>
+    private PolygonPoints PolygonFromBitmap(bool[,] bitmap)
     {
         // add one unit of padding at all four sides around the map
         int nsize = size + 2;
@@ -293,7 +312,7 @@ public class MapLoader : Spatial
             for (int x = 0; x < nsize; ++x)
             {
                 if (visitedCell[x, y]) continue;
-                // want to start tracing when a cell is "off" and has an "on" cell below it
+                // want to start tracing when a cell is "off" and has an "on" cell below it, aka an edge
                 if (!paddedBitmap[x, y] && paddedBitmap[x, y + 1])
                 {
                     points.Add(TracePolygon(paddedBitmap, visitedCell, x, y));
@@ -301,9 +320,19 @@ public class MapLoader : Spatial
             }
         }
 
-        return points.ToArray();
+        Vector2[] mainPolygon = points[0];
+        points.Remove(points[0]);
+        Vector2[][] holePolygons = points.ToArray();
+        return new PolygonPoints(mainPolygon, holePolygons);
     }
 
+    /// <summary>
+    /// Given a bitmap and a starting position, trace the outline of a region that is adjacent to the starting
+    /// position. The algorithm can be imagined as a blind person putting his hands on the wall on his right,
+    /// and keeping his hands on the wall, walking until he reaches back to the starting position.
+    /// </summary>
+    /// <returns>An array of connected points representing a closed polygon.
+    /// </returns>
     private Vector2[] TracePolygon(bool[,] paddedBitmap, bool[,] visitedCell, int startX, int startY)
     {
         int nsize = size + 2;
