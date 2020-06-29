@@ -244,6 +244,7 @@ public class DashSkill : AimableAttack
         isRunning = true;
         dashLeft = duration;
         Vector3 direction = (targetLocation - currentLocation).Normalized();
+        direction.y = 0;
         player.disableFriction = true;
         player.ApplyCentralImpulse(player.Mass * -player.LinearVelocity);
         player.ApplyCentralImpulse(direction * player.Mass * dashSpeed);
