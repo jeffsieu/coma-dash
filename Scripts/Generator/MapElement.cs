@@ -1,6 +1,3 @@
-using System;
-using Godot;
-
 public static class MapElement
 {
     public const int NONE = 0;

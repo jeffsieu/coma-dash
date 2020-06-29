@@ -185,7 +185,7 @@ public class MapLoader : Spatial
                         break;
                     case MapElement.BOSS:
                         floorMap[x, y] = true;
-                        CreateBoss(x, y);
+                        level.CreateBoss(new Vector2(x, y) * unitSize);
                         break;
                     default:
                         floorMap[x, y] = true;
@@ -236,11 +236,6 @@ public class MapLoader : Spatial
             for (int j = 0; j < size; ++j)
                 if (bitmap[i, j])
                     regionMap[i, j] = new RegionLabel(regionType, id);
-    }
-
-    private void CreateBoss(int x, int y)
-    {
-        level.CreateBoss(x * unitSize, y * unitSize);
     }
 
     private List<RegionParseInfo> ParseBitmap(bool[,] bitmap)

@@ -54,14 +54,14 @@ public class Level : Spatial
         GD.Print("Cleared level!");
     }
 
-    public void CreateBoss(int x, int y)
+    public void CreateBoss(Vector2 position)
     {
         Enemy boss = bossScene.Instance() as Enemy;
         enemyContainer = GetNode<Spatial>("Enemies");
         enemyContainer.AddChild(boss);
 
         Transform transform = boss.GlobalTransform;
-        transform.origin = new Vector3(x, 0, y);
+        transform.origin = new Vector3(position.x, 0, position.y);
 
         boss.GlobalTransform = transform;
         boss.Connect("died", this, "Win");
