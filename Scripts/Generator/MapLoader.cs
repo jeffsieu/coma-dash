@@ -187,7 +187,7 @@ public class MapLoader : Spatial
 
         foreach (RegionParseInfo parseInfo in ParseBitmap(wallMap))
         {
-            Wall wall = new Wall(parseInfo.PolygonPoints, unitSize, WallMaterial);
+            Wall wall = new Wall(parseInfo.RegionShape, unitSize, WallMaterial);
             AddChild(wall);
         }
 
@@ -198,7 +198,7 @@ public class MapLoader : Spatial
                 for (int x = 0; x < size; ++x)
                     if (parseInfo.Bitmap[x, y])
                         tilesInRoom.Add(new Vector2(x, y));
-            Room room = new Room(parseInfo.PolygonPoints, tilesInRoom.ToArray(), unitSize, FloorMaterial);
+            Room room = new Room(parseInfo.RegionShape, tilesInRoom.ToArray(), unitSize, FloorMaterial);
             UpdateRegionLabels(parseInfo.Bitmap, RegionType.ROOM, levelRegions.Count);
             levelRegions.Add(room);
             AddChild(room);
@@ -211,9 +211,9 @@ public class MapLoader : Spatial
                 for (int x = 0; x < size; ++x)
                     if (parseInfo.Bitmap[x, y])
                         tilesInRoom.Add(new Vector2(x, y));
-            AddChild(new Room(parseInfo.PolygonPoints, tilesInRoom.ToArray(), unitSize, FloorMaterial));
+            AddChild(new Room(parseInfo.RegionShape, tilesInRoom.ToArray(), unitSize, FloorMaterial));
             UpdateRegionLabels(parseInfo.Bitmap, RegionType.DOOR, levelRegions.Count);
-            Door door = new Door(parseInfo.PolygonPoints, unitSize);
+            Door door = new Door(parseInfo.RegionShape, unitSize);
             levelRegions.Add(door);
             AddChild(door);
         }
@@ -293,9 +293,9 @@ public class MapLoader : Spatial
     /// Note: The bitmap is padded by one unit on all sides of the bitmap so that 
     /// regions sticking to the sides of the bitmap also have edges to be traced.
     /// </summary>
-    /// <returns>A main polygon and an array of hole polygons stored in a <see cref="PolygonPoints"/> object.
+    /// <returns>A main polygon and an array of hole polygons stored in a <see cref="RegionShape"/> object.
     /// </returns>
-    private PolygonPoints PolygonFromBitmap(bool[,] bitmap)
+    private RegionShape PolygonFromBitmap(bool[,] bitmap)
     {
         // add one unit of padding at all four sides around the map
         int nsize = size + 2;
@@ -323,7 +323,7 @@ public class MapLoader : Spatial
         Vector2[] mainPolygon = points[0];
         points.Remove(points[0]);
         Vector2[][] holePolygons = points.ToArray();
-        return new PolygonPoints(mainPolygon, holePolygons);
+        return new RegionShape(mainPolygon, holePolygons);
     }
 
     /// <summary>

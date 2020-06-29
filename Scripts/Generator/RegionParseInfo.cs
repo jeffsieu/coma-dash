@@ -4,12 +4,12 @@ using Godot;
 public class RegionParseInfo
 {
     public bool[,] Bitmap { get; private set; }
-    public PolygonPoints PolygonPoints { get; private set; }
+    public RegionShape RegionShape { get; private set; }
 
-    public RegionParseInfo(bool[,] bitmap, PolygonPoints polygonPoints)
+    public RegionParseInfo(bool[,] bitmap, RegionShape regionShape)
     {
         Bitmap = bitmap;
-        PolygonPoints = polygonPoints;
+        RegionShape = regionShape;
     }
 }
 
@@ -17,12 +17,12 @@ public class RegionParseInfo
 /// MainPolygon represents the main shape, and HolePolygons are to be subtracted from
 /// within the main shape.
 /// </summary>
-public class PolygonPoints
+public class RegionShape
 {
     public Vector2[] MainPolygon { get; private set; }
     public Vector2[][] HolePolygons { get; private set; }
 
-    public PolygonPoints(Vector2[] main, Vector2[][] holes)
+    public RegionShape(Vector2[] main, Vector2[][] holes)
     {
         MainPolygon = main;
         HolePolygons = holes;
