@@ -85,6 +85,7 @@ public class MapLoader : Spatial
     private string mapPath;
 
     private int size;
+    private int[,] pixels;
     private bool ready = false;
 
     private List<LevelRegion> levelRegions;
@@ -106,7 +107,8 @@ public class MapLoader : Spatial
     {
         if (!ready || (Engine.EditorHint && !ShowPreview)) return;
         RemoveAllChildren();
-        BuildMap(ParseMap());
+        ParseMap();
+        BuildMap();
     }
 
     private void RemoveAllChildren()
@@ -127,19 +129,19 @@ public class MapLoader : Spatial
                 regionMap[i, j] = new RegionLabel(RegionType.NONE, 0);
     }
 
-    private int[,] ParseMap()
+    private void ParseMap()
     {
         File mapFile = new File();
         Error openError = mapFile.Open(mapPath, File.ModeFlags.Read);
         if (openError != Error.Ok)
         {
             size = 0;
-            return new int[0, 0];
+            pixels = new int[0, 0];
         }
 
         // each pixel is 3 bytes wide
         size = (int)Math.Sqrt(mapFile.GetLen() / 3);
-        int[,] pixels = new int[size, size];
+        pixels = new int[size, size];
         for (int y = 0; y < size; ++y)
         {
             for (int x = 0; x < size; ++x)
@@ -150,10 +152,9 @@ public class MapLoader : Spatial
                 pixels[x, y] = pixel;
             }
         }
-        return pixels;
     }
 
-    private void BuildMap(int[,] pixels)
+    private void BuildMap()
     {
         ClearRegions();
 
@@ -230,6 +231,7 @@ public class MapLoader : Spatial
         }
 
         ConnectRoomsWithDoors();
+        ClearPlayerAndBossRooms();
     }
 
     private void UpdateRegionLabels(bool[,] bitmap, RegionType regionType, int id)
@@ -477,6 +479,21 @@ public class MapLoader : Spatial
                         door.ConnectRoom(room);
                     }
                 }
+            }
+        }
+    }
+
+    private void ClearPlayerAndBossRooms()
+    {
+        for (int y = 0; y < size; ++y)
+        {
+            for (int x = 0; x < size; ++x)
+            {
+                int pixel = pixels[x, y];
+                if (pixel != MapElement.BOSS && pixel != MapElement.PLAYER) continue;
+                Room room = levelRegions[regionMap[x, y].Id] as Room;
+                GD.Print(x, ", ", y);
+                room.IsEmptyRoom = true;
             }
         }
     }

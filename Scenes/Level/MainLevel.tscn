@@ -297,7 +297,7 @@ size_flags_horizontal = 3
 custom_styles/panel = SubResource( 7 )
 
 [node name="MapLoader" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -64, -1, -232 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
 script = ExtResource( 7 )
 ShowPreview = true
 UnitSize = 4

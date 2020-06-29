@@ -11,6 +11,7 @@ public class Room : LevelRegion
 
     public HashSet<Door> ConnectedDoors { get; private set; }
     public Vector2[] Tiles { get; private set; }
+    public bool IsEmptyRoom = false;
 
     private readonly RandomNumberGenerator rng;
     private readonly int unitSize;
@@ -58,10 +59,6 @@ public class Room : LevelRegion
         AddChild(enemySpawner);
 
         Player player = GetTree().Root.GetNodeOrNull<Level>("Level")?.GetNode<Player>("Player");
-        if (Contains(player))
-        {
-            Activate();
-        }
     }
 
     public override void _Process(float delta)
@@ -103,7 +100,8 @@ public class Room : LevelRegion
 
     public void Activate()
     {
-        if (!isActive)
+        GD.Print(IsEmptyRoom);
+        if (!isActive && !IsEmptyRoom)
         {
             isActive = true;
             enemySpawner.SpawnEnemies();
