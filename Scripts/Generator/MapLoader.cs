@@ -97,7 +97,7 @@ public class MapLoader : Spatial
     {
         ready = true;
         level = GetTree().Root.GetNodeOrNull<Level>("Level");
-        player = level.GetNodeOrNull<Player>("Player");
+        player = level?.GetNodeOrNull<Player>("Player");
         Translation = new Vector3(0, -1, 0);
         RebuildMap();
     }
@@ -181,11 +181,13 @@ public class MapLoader : Spatial
                         break;
                     case MapElement.PLAYER:
                         floorMap[x, y] = true;
-                        player.Translation = new Vector3(x * unitSize, -1, y * unitSize);
+                        if (!Engine.EditorHint)
+                            player.Translation = new Vector3(x * unitSize, -1, y * unitSize);
                         break;
                     case MapElement.BOSS:
                         floorMap[x, y] = true;
-                        level.CreateBoss(new Vector2(x, y) * unitSize);
+                        if (!Engine.EditorHint)
+                            level.CreateBoss(new Vector2(x, y) * unitSize);
                         break;
                     default:
                         floorMap[x, y] = true;
