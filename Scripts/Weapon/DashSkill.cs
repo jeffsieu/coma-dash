@@ -9,9 +9,6 @@ using Godot.Collections;
 /// </summary>
 public class DashSkill : AimableAttack
 {
-    [Export]
-    private float KnockHeight = 0.3f;
-
     private readonly float spreadDegrees;
     private readonly float dashSpeed;
     private readonly float damage;
@@ -247,7 +244,7 @@ public class DashSkill : AimableAttack
         isRunning = true;
         dashLeft = duration;
         Vector3 direction = (targetLocation - currentLocation).Normalized();
-        direction.y = KnockHeight;
+        direction.y = 0;
         player.disableFriction = true;
         player.ApplyCentralImpulse(player.Mass * -player.LinearVelocity);
         player.ApplyCentralImpulse(direction * player.Mass * dashSpeed);
