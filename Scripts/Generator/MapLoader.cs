@@ -183,12 +183,14 @@ public class MapLoader : Spatial
                     case MapElement.PLAYER:
                         floorMap[x, y] = true;
                         if (!Engine.EditorHint)
+                        {
                             player.Translation = new Vector3(x * unitSize, -1, y * unitSize);
+                            PlayerCamera camera = level.GetNode<PlayerCamera>("Camera");
+                            camera.Translation = camera.TargetTranslation;
+                        }
                         break;
                     case MapElement.BOSS:
                         floorMap[x, y] = true;
-                        if (!Engine.EditorHint)
-                            level.CreateBoss(new Vector2(x, y) * unitSize);
                         break;
                     default:
                         floorMap[x, y] = true;
@@ -231,7 +233,7 @@ public class MapLoader : Spatial
         }
 
         ConnectRoomsWithDoors();
-        ClearPlayerAndBossRooms();
+        AddRoomBehaviors();
     }
 
     private void UpdateRegionLabels(bool[,] bitmap, RegionType regionType, int id)
@@ -296,12 +298,13 @@ public class MapLoader : Spatial
 
     /// <summary>
     /// Search for edges inside a bitmap, by checking for an "off" cell next to an "on" cell. 
-    /// To be specific, a point is considered an edge when it is "off" and has an "on" cell below it. 
+    /// 
+    /// <para>To be specific, a point is considered an edge when it is "off" and has an "on" cell below it. 
     /// The coordinates of these points are passed to <see cref="TracePolygon"/>, which traces the edges
     /// to return the outline of regions found in the bitmap, represented by a set of connected points.
     /// As there might be holes in regions, more than one set of connected points (outline) will be found.
     /// Therefore, there will be a main outline polygon, and optionally several hole polygons that will
-    /// be subtracted from the main polygon.
+    /// be subtracted from the main polygon.</para>
     ///
     /// Note: The bitmap is padded by one unit on all sides of the bitmap so that 
     /// regions sticking to the sides of the bitmap also have edges to be traced.
@@ -341,8 +344,10 @@ public class MapLoader : Spatial
 
     /// <summary>
     /// Given a bitmap and a starting position, trace the outline of a region that is adjacent to the starting
-    /// position. The algorithm can be imagined as a blind person putting his hands on the wall on his right,
-    /// and keeping his hands on the wall, walking until he reaches back to the starting position.
+    /// position.
+    /// 
+    /// <para>The algorithm can be imagined as a blind person putting his hands on the wall on his right,
+    /// and keeping his hands on the wall, walking until he reaches back to the starting position.</para>
     /// </summary>
     /// <returns>An array of connected points representing a closed polygon.
     /// </returns>
@@ -518,18 +523,42 @@ public class MapLoader : Spatial
         }
     }
 
-    private void ClearPlayerAndBossRooms()
+    private void AddRoomBehaviors()
     {
+        int spawnRoomId = -1;
+        int bossRoomId = -1;
+
+        HashSet<int> enemyRoomIds = new HashSet<int>();
         for (int y = 0; y < size; ++y)
         {
             for (int x = 0; x < size; ++x)
             {
                 int pixel = pixels[x, y];
-                if (pixel != MapElement.BOSS && pixel != MapElement.PLAYER) continue;
-                Room room = levelRegions[regionMap[x, y].Id] as Room;
-                GD.Print(x, ", ", y);
-                room.IsEmptyRoom = true;
+                int regionId = regionMap[x, y].Id;
+                Room room = levelRegions[regionId] as Room;
+
+                enemyRoomIds.Add(regionId);
+
+                if (pixel == MapElement.BOSS)
+                {
+                    room.AddChild(new BossRoomBehavior(new Vector2(x, y) * unitSize));
+                    bossRoomId = regionId;
+                }
+                else if (pixel == MapElement.PLAYER)
+                {
+                    room.AddChild(new StartingRoomBehavior());
+                    spawnRoomId = regionId;
+                }
             }
+        }
+
+        enemyRoomIds.Remove(spawnRoomId);
+        enemyRoomIds.Remove(bossRoomId);
+
+        foreach (int enemyRoomId in enemyRoomIds)
+        {
+            Room enemyRoom = levelRegions[enemyRoomId] as Room;
+            enemyRoom?.AddChild(new EnemyRoomBehavior());
         }
     }
 }

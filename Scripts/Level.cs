@@ -6,7 +6,6 @@ public class Level : Spatial
     private static readonly float initialTime = 30.0f;
     private GUI gui;
     private Spatial enemyContainer;
-    private readonly PackedScene bossScene = ResourceLoader.Load<PackedScene>("res://Scenes/Enemy/BigMeleeEnemy.tscn");
 
     public float TimeLeft
     {
@@ -52,18 +51,5 @@ public class Level : Spatial
     {
         // TODO: Replace with level cleared screen
         GD.Print("Cleared level!");
-    }
-
-    public void CreateBoss(Vector2 position)
-    {
-        Enemy boss = bossScene.Instance() as Enemy;
-        enemyContainer = GetNode<Spatial>("Enemies");
-        enemyContainer.AddChild(boss);
-
-        Transform transform = boss.GlobalTransform;
-        transform.origin = new Vector3(position.x, 0, position.y);
-
-        boss.GlobalTransform = transform;
-        boss.Connect("died", this, "Win");
     }
 }
