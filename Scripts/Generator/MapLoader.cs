@@ -183,12 +183,14 @@ public class MapLoader : Spatial
                     case MapElement.PLAYER:
                         floorMap[x, y] = true;
                         if (!Engine.EditorHint)
+                        {
                             player.Translation = new Vector3(x * unitSize, -1, y * unitSize);
+                            PlayerCamera camera = level.GetNode<PlayerCamera>("Camera");
+                            camera.Translation = camera.TargetTranslation;
+                        }
                         break;
                     case MapElement.BOSS:
                         floorMap[x, y] = true;
-                        if (!Engine.EditorHint)
-                            level.CreateBoss(new Vector2(x, y) * unitSize);
                         break;
                     default:
                         floorMap[x, y] = true;
@@ -231,7 +233,7 @@ public class MapLoader : Spatial
         }
 
         ConnectRoomsWithDoors();
-        ClearPlayerAndBossRooms();
+        AddRoomBehaviors();
     }
 
     private void UpdateRegionLabels(bool[,] bitmap, RegionType regionType, int id)
@@ -518,18 +520,42 @@ public class MapLoader : Spatial
         }
     }
 
-    private void ClearPlayerAndBossRooms()
+    private void AddRoomBehaviors()
     {
+        int spawnRoomId = -1;
+        int bossRoomId = -1;
+
+        HashSet<int> enemyRoomIds = new HashSet<int>();
         for (int y = 0; y < size; ++y)
         {
             for (int x = 0; x < size; ++x)
             {
                 int pixel = pixels[x, y];
-                if (pixel != MapElement.BOSS && pixel != MapElement.PLAYER) continue;
-                Room room = levelRegions[regionMap[x, y].Id] as Room;
-                GD.Print(x, ", ", y);
-                room.IsEmptyRoom = true;
+                int regionId = regionMap[x, y].Id;
+                Room room = levelRegions[regionId] as Room;
+
+                enemyRoomIds.Add(regionId);
+
+                if (pixel == MapElement.BOSS)
+                {
+                    room.AddChild(new BossRoomBehavior(new Vector2(x, y) * unitSize));
+                    bossRoomId = regionId;
+                }
+                else if (pixel == MapElement.PLAYER)
+                {
+                    room.AddChild(new SpawnRoomBehavior());
+                    spawnRoomId = regionId;
+                }
             }
+        }
+
+        enemyRoomIds.Remove(spawnRoomId);
+        enemyRoomIds.Remove(bossRoomId);
+
+        foreach (int enemyRoomId in enemyRoomIds)
+        {
+            Room enemyRoom = levelRegions[enemyRoomId] as Room;
+            enemyRoom?.AddChild(new EnemyRoomBehavior());
         }
     }
 }

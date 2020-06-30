@@ -22,8 +22,7 @@ public class MeleeEnemy : Enemy
     public override void _Process(float delta)
     {
         Color baseColor = Colors.Red;
-        Color healthColor = baseColor.LinearInterpolate(Colors.White, 1 - Health / 100);
-        material.AlbedoColor = inPreAttack ? Colors.White : healthColor;
+        material.AlbedoColor = inPreAttack ? Colors.White : baseColor;
         UpdateStatusBars(delta);
     }
 
