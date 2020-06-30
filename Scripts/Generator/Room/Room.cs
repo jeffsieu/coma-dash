@@ -99,7 +99,6 @@ public class Room : LevelRegion
         if (!IsActive)
         {
             IsActive = true;
-            GD.Print("im activated");
             EmitSignal("activated", this);
         }
     }

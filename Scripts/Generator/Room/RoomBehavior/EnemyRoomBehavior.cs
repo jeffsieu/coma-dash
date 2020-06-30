@@ -7,11 +7,8 @@ public class EnemyRoomBehavior : Node
     public override void _Ready()
     {
         Room room = GetParent<Room>();
-
         enemySpawner = new EnemySpawner();
         AddChild(enemySpawner);
-
-        GD.Print("im connected");
         room.Connect("activated", enemySpawner, "OnRoomActivated");
     }
 }

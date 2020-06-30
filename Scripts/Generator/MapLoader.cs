@@ -298,12 +298,13 @@ public class MapLoader : Spatial
 
     /// <summary>
     /// Search for edges inside a bitmap, by checking for an "off" cell next to an "on" cell. 
-    /// To be specific, a point is considered an edge when it is "off" and has an "on" cell below it. 
+    /// 
+    /// <para>To be specific, a point is considered an edge when it is "off" and has an "on" cell below it. 
     /// The coordinates of these points are passed to <see cref="TracePolygon"/>, which traces the edges
     /// to return the outline of regions found in the bitmap, represented by a set of connected points.
     /// As there might be holes in regions, more than one set of connected points (outline) will be found.
     /// Therefore, there will be a main outline polygon, and optionally several hole polygons that will
-    /// be subtracted from the main polygon.
+    /// be subtracted from the main polygon.</para>
     ///
     /// Note: The bitmap is padded by one unit on all sides of the bitmap so that 
     /// regions sticking to the sides of the bitmap also have edges to be traced.
@@ -343,8 +344,10 @@ public class MapLoader : Spatial
 
     /// <summary>
     /// Given a bitmap and a starting position, trace the outline of a region that is adjacent to the starting
-    /// position. The algorithm can be imagined as a blind person putting his hands on the wall on his right,
-    /// and keeping his hands on the wall, walking until he reaches back to the starting position.
+    /// position.
+    /// 
+    /// <para>The algorithm can be imagined as a blind person putting his hands on the wall on his right,
+    /// and keeping his hands on the wall, walking until he reaches back to the starting position.</para>
     /// </summary>
     /// <returns>An array of connected points representing a closed polygon.
     /// </returns>
