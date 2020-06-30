@@ -7,7 +7,7 @@ public class Door : LevelRegion
     private CSGPolygon doorMesh;
     public HashSet<Room> ConnectedRooms { get; private set; }
 
-    public Door(Vector2[][] polygon, int unitSize)
+    public Door(RegionShape regionShape, int unitSize)
     {
         RotationDegrees = new Vector3(90, 0, 0);
         Scale = unitSize * Vector3.One;
@@ -16,7 +16,7 @@ public class Door : LevelRegion
 
         doorMesh = new CSGPolygon
         {
-            Polygon = polygon[0]
+            Polygon = regionShape.MainPolygon
         };
         SpatialMaterial doorMaterial = new SpatialMaterial();
         doorMaterial.AlbedoColor = Colors.AliceBlue;
