@@ -1,6 +1,6 @@
 using Godot;
 
-public class SpawnRoomBehavior : Node
+public class StartingRoomBehavior : Node
 {
     public override void _Ready()
     {

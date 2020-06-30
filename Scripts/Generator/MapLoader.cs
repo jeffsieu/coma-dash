@@ -546,7 +546,7 @@ public class MapLoader : Spatial
                 }
                 else if (pixel == MapElement.PLAYER)
                 {
-                    room.AddChild(new SpawnRoomBehavior());
+                    room.AddChild(new StartingRoomBehavior());
                     spawnRoomId = regionId;
                 }
             }

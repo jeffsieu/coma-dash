@@ -76,7 +76,7 @@
     <Compile Include="Scripts\Generator\Room\Room.cs" />
     <Compile Include="Scripts\Generator\Room\RoomBehavior\BossRoomBehavior.cs" />
     <Compile Include="Scripts\Generator\Room\RoomBehavior\EnemyRoomBehavior.cs" />
-    <Compile Include="Scripts\Generator\Room\RoomBehavior\SpawnRoomBehavior.cs" />
+    <Compile Include="Scripts\Generator\Room\RoomBehavior\StartingRoomBehavior.cs" />
     <Compile Include="Scripts\Generator\Wall.cs" />
     <Compile Include="Scripts\GUI.cs" />
     <Compile Include="Scripts\HealthEntity.cs" />
