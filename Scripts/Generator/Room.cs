@@ -17,7 +17,7 @@ public class Room : LevelRegion
     private readonly int unitSize;
     private bool isActive = false;
 
-    public Room(Vector2[][] polygon, Vector2[] tiles, int unitSize, Material material)
+    public Room(RegionShape regionShape, Vector2[] tiles, int unitSize, Material material)
     {
         RotationDegrees = new Vector3(90, 0, 0);
         Scale = unitSize * Vector3.One;
@@ -32,13 +32,13 @@ public class Room : LevelRegion
 
         floorMesh = new CSGPolygon
         {
-            Polygon = polygon[0]
+            Polygon = regionShape.MainPolygon
         };
-        for (int i = 1; i < polygon.Length; ++i)
+        foreach (Vector2[] holePolygon in regionShape.HolePolygons)
         {
             CSGPolygon holeMesh = new CSGPolygon
             {
-                Polygon = polygon[i],
+                Polygon = holePolygon,
                 Operation = CSGShape.OperationEnum.Subtraction,
                 Depth = 1.5f
             };
@@ -48,7 +48,7 @@ public class Room : LevelRegion
         floorMesh.CollisionMask = ColLayer.Environment;
 
         enemySpawner = new EnemySpawner();
-        SetFloorShaderParams(polygon[0], (ShaderMaterial)material);
+        SetFloorShaderParams(regionShape.MainPolygon, (ShaderMaterial)material);
     }
 
     public override void _Ready()
