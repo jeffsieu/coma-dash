@@ -101,12 +101,12 @@ public abstract class HealthEntity : RigidBody, IStatusHolder
         Health = maxHealth;
         healthBar = new ProgressBar
         {
-            Value = health,
             MinValue = 0,
             MaxValue = maxHealth,
             RectMinSize = healthBarSize,
             RectSize = healthBarSize,
-            PercentVisible = false
+            PercentVisible = false,
+            Value = health  // must set Value at the end otherwise it will get overriden by other values
         };
         healthBarStyleBox = new StyleBoxFlat
         {
@@ -130,12 +130,12 @@ public abstract class HealthEntity : RigidBody, IStatusHolder
 
         whiteHealthBar = new ProgressBar
         {
-            Value = health,
             MinValue = 0,
             MaxValue = maxHealth,
             RectMinSize = healthBarSize,
             RectSize = healthBarSize,
-            PercentVisible = false
+            PercentVisible = false,
+            Value = health  // must set Value at the end otherwise it will get overriden by other values
         };
         whiteHealthBarStyleBox = new StyleBoxFlat
         {

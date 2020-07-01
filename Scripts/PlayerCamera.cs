@@ -19,6 +19,16 @@ public class PlayerCamera : Camera
     [Export]
     private readonly float VelocityDamping = 0.9f;
 
+    public Vector3 TargetTranslation
+    {
+        get
+        {
+            Vector3 playerTranslation = player.GlobalTransform.origin;
+            return playerTranslation + TargetHeight * Vector3.Up + OffsetZ * Vector3.Back;
+        }
+    }
+
+
     private Player player;
     private float TargetHeight;
     private Vector3 followCursorVelocity;

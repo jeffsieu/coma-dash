@@ -5,6 +5,7 @@ public class Level : Spatial
 {
     private static readonly float initialTime = 30.0f;
     private GUI gui;
+    private Spatial enemyContainer;
 
     public float TimeLeft
     {
@@ -44,5 +45,11 @@ public class Level : Spatial
     public void GameOver()
     {
 
+    }
+
+    public void Win(HealthEntity entity)
+    {
+        // TODO: Replace with level cleared screen
+        GD.Print("Cleared level!");
     }
 }

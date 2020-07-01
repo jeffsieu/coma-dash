@@ -126,6 +126,7 @@ public class DashSkill : AimableAttack
 
                 Transform hintReticleGlobalTransform = hintReticle.GlobalTransform;
                 hintReticleGlobalTransform.origin = enemyLocation;
+                hintReticleGlobalTransform.origin.y = targetEnemy.Scale.y + 2.0f;
                 hintReticleGlobalTransform.basis = Basis.Identity;
                 hintReticle.GlobalTransform = hintReticleGlobalTransform;
             }
