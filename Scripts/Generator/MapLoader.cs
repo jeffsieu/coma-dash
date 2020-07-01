@@ -351,7 +351,7 @@ public class MapLoader : Spatial
     /// </summary>
     /// <returns>An array of connected points representing a closed polygon.
     /// </returns>
-    private Vector2[] TracePolygon(bool[,] paddedBitmap, bool[,] visitedCell, int startX, int startY)
+    private Vector2[] TracePolygon(bool[,] paddedBitmap, bool[,] visitedCell, int startCellX, int startCellY)
     {
         int nsize = size + 2;
         bool[,] visitedPoint = new bool[nsize + 1, nsize + 1]; // visited points on the grid, not pixels
@@ -359,13 +359,13 @@ public class MapLoader : Spatial
         List<Vector2> points = new List<Vector2>();
 
         // start with bottom left corner of point
-        Vector2 prev = new Vector2(startX - 1, startY);
+        Vector2 prev = new Vector2(startCellX - 1, startCellY);
         AddPointToPolygon(prev, points, visitedPoint);
-        visitedCell[startX, startY] = true;
+        visitedCell[startCellX, startCellY] = true;
 
         // directions: 0 - east, 1 - north, 2 - west, 3 - south
         int dir = 0;
-        int cellX = startX, cellY = startY;
+        int cellX = startCellX, cellY = startCellY;
 
         // offsets for right, forward, left, uturn
         int[] dx = { 0, 1, 0, -1 };
@@ -461,7 +461,7 @@ public class MapLoader : Spatial
                 int nextPolygonPointY = (int)prev.y + (i < 2 ? dy[ndir] : dy2[ndir]);
                 if (nextPolygonPointX == points[0].x && nextPolygonPointY == points[0].y) done = true;
 
-                if (cellX == startX && cellY == startY) done = true;
+                if (cellX == startCellX && cellY == startCellY) done = true;
 
                 break;
             }
@@ -472,12 +472,16 @@ public class MapLoader : Spatial
         // .--.
         // |  |
         // +--*
-        Vector2 last = points[points.Count - 1];
-        if (last.x == startX + 1 && last.y == startY + 1)
+        Vector2 lastPoint = points[points.Count - 1];
+        if (lastPoint.x == startCellX + 1 && lastPoint.y == startCellY + 1)
         {
-            points.Add(new Vector2(last.x, last.y - 1));
-            points.Add(new Vector2(last.x - 1, last.y - 1));
+            points.Add(new Vector2(lastPoint.x, lastPoint.y - 1));
+            points.Add(new Vector2(lastPoint.x - 1, lastPoint.y - 1));
         }
+
+        // ending position must be same as starting
+        if (lastPoint.x != points[0].x || lastPoint.y != points[0].y)
+            points.Add(new Vector2(points[0].x, points[0].y));
 
         return points.ToArray();
     }
