@@ -17,14 +17,24 @@ public class EnemySpawner : Node
 
     public override void _Ready()
     {
-        room = GetParent<Room>();
+        EnemyRoomBehavior enemyRoomBehavior = GetParent<EnemyRoomBehavior>();
+        room = enemyRoomBehavior.GetParent<Room>();
         level = GetTree().Root.GetNodeOrNull<Level>("Level");
         gui = level?.GetNode<GUI>("GUI");
         enemyContainer = level?.GetNode<Spatial>("Enemies");
         spawnCount = 5;
+
+        // If room is already activated at this point
+        if (room.IsActive)
+            OnRoomActivated(room);
     }
 
-    public void SpawnEnemies()
+    public void OnRoomActivated(Room room)
+    {
+        SpawnEnemies();
+    }
+
+    private void SpawnEnemies()
     {
         for (int i = 0; i < spawnCount; ++i)
         {
