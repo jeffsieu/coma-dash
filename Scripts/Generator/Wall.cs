@@ -17,7 +17,7 @@ public class Wall : LevelRegion
         CSGPolygon wallMesh = new CSGPolygon
         {
             Polygon = regionShape.MainPolygon,
-            Material = material,
+            MaterialOverride = material,
             Depth = WALL_HEIGHT
         };
 

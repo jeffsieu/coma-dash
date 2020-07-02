@@ -17,6 +17,7 @@ public class TransparentWall : LevelRegion
 
         this.normalMaterial = normalMaterial;
         this.transparentMaterial = transparentMaterial.Duplicate() as SpatialMaterial;
+        ResetMaterialOpacity();
 
         tween = new Tween();
         AddChild(tween);
@@ -30,7 +31,7 @@ public class TransparentWall : LevelRegion
         wallMesh = new CSGPolygon
         {
             Polygon = regionShape.MainPolygon,
-            Material = normalMaterial,
+            MaterialOverride = transparentMaterial,
             Depth = WALL_HEIGHT
         };
 
@@ -44,10 +45,17 @@ public class TransparentWall : LevelRegion
             };
             wallMesh.AddChild(holeMesh);
         }
+
         wallMesh.UseCollision = true;
         wallMesh.CollisionLayer = ColLayer.Environment;
         wallMesh.CollisionMask = ColLayer.Environment;
+
+        CSGPolygon shadowMesh = wallMesh.Duplicate() as CSGPolygon;
+        shadowMesh.MaterialOverride = null;
+        shadowMesh.CastShadow = GeometryInstance.ShadowCastingSetting.ShadowsOnly;
+
         AddChild(wallMesh);
+        AddChild(shadowMesh);
     }
 
     private void CreateFloorMesh(RegionShape regionShape, int unitSize)
@@ -55,7 +63,7 @@ public class TransparentWall : LevelRegion
         floorMesh = new CSGPolygon
         {
             Polygon = regionShape.MainPolygon,
-            Material = normalMaterial,
+            MaterialOverride = normalMaterial,
             Depth = 1
         };
 
@@ -80,11 +88,8 @@ public class TransparentWall : LevelRegion
         if (hidden) return;
         hidden = true;
 
-        Color color = transparentMaterial.AlbedoColor;
-        color.a = 1.0f;
-        transparentMaterial.AlbedoColor = color;
+        ResetMaterialOpacity();
 
-        wallMesh.Material = transparentMaterial;
         tween.RemoveAll();
         tween.PlaybackProcessMode = Tween.TweenProcessMode.Physics;
         tween.InterpolateProperty(transparentMaterial, "albedo_color:a", 1.0f, 0.75f, HIDE_BLEND_DURATION,
@@ -101,12 +106,13 @@ public class TransparentWall : LevelRegion
         tween.PlaybackProcessMode = Tween.TweenProcessMode.Physics;
         tween.InterpolateProperty(transparentMaterial, "albedo_color:a", transparentMaterial.AlbedoColor.a,
                                   1.0f, UNHIDE_BLEND_DURATION, Tween.TransitionType.Linear, Tween.EaseType.In);
-        tween.InterpolateCallback(this, UNHIDE_BLEND_DURATION, "UseNormalMaterial");
         tween.Start();
     }
 
-    private void UseNormalMaterial()
+    private void ResetMaterialOpacity()
     {
-        wallMesh.Material = normalMaterial;
+        Color color = transparentMaterial.AlbedoColor;
+        color.a = 1.0f;
+        transparentMaterial.AlbedoColor = color;
     }
 }
