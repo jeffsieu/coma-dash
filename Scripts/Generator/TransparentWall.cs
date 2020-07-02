@@ -4,20 +4,25 @@ using Godot;
 public class TransparentWall : LevelRegion
 {
     private readonly float WALL_HEIGHT = 2.2f;
+    private readonly float HIDE_BLEND_DURATION = 0.75f;
+    private readonly float UNHIDE_BLEND_DURATION = 0.5f;
     private CSGPolygon wallMesh, floorMesh;
-    private Material normalMaterial, transparentMaterial;
-    public TransparentWall(RegionShape regionShape, int unitSize, Material normalMaterial, Material transparentMaterial)
+    private SpatialMaterial normalMaterial, transparentMaterial;
+    private Tween tween;
+    private bool hidden = false;
+    public TransparentWall(RegionShape regionShape, int unitSize, SpatialMaterial normalMaterial, SpatialMaterial transparentMaterial)
     {
         RotationDegrees = new Vector3(90, 0, 0);
         Scale = unitSize * Vector3.One;
 
         this.normalMaterial = normalMaterial;
-        this.transparentMaterial = transparentMaterial;
+        this.transparentMaterial = transparentMaterial.Duplicate() as SpatialMaterial;
+
+        tween = new Tween();
+        AddChild(tween);
 
         CreateWallMesh(regionShape, unitSize);
         CreateFloorMesh(regionShape, unitSize);
-
-        HideWall();
     }
 
     private void CreateWallMesh(RegionShape regionShape, int unitSize)
@@ -72,10 +77,35 @@ public class TransparentWall : LevelRegion
 
     public void HideWall()
     {
+        if (hidden) return;
+        hidden = true;
+
+        Color color = transparentMaterial.AlbedoColor;
+        color.a = 1.0f;
+        transparentMaterial.AlbedoColor = color;
+
         wallMesh.Material = transparentMaterial;
+        tween.RemoveAll();
+        tween.PlaybackProcessMode = Tween.TweenProcessMode.Physics;
+        tween.InterpolateProperty(transparentMaterial, "albedo_color:a", 1.0f, 0.75f, HIDE_BLEND_DURATION,
+                                  Tween.TransitionType.Linear, Tween.EaseType.In);
+        tween.Start();
     }
 
     public void UnhideWall()
+    {
+        if (!hidden) return;
+        hidden = false;
+
+        tween.RemoveAll();
+        tween.PlaybackProcessMode = Tween.TweenProcessMode.Physics;
+        tween.InterpolateProperty(transparentMaterial, "albedo_color:a", transparentMaterial.AlbedoColor.a,
+                                  1.0f, UNHIDE_BLEND_DURATION, Tween.TransitionType.Linear, Tween.EaseType.In);
+        tween.InterpolateCallback(this, UNHIDE_BLEND_DURATION, "UseNormalMaterial");
+        tween.Start();
+    }
+
+    private void UseNormalMaterial()
     {
         wallMesh.Material = normalMaterial;
     }
