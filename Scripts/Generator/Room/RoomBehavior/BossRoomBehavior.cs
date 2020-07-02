@@ -17,6 +17,8 @@ public class BossRoomBehavior : Node
 
     public void CreateBoss()
     {
+        if (Engine.EditorHint) return;
+
         Enemy boss = bossScene.Instance() as Enemy;
         Level level = GetTree().Root.GetNodeOrNull<Level>("Level");
         Spatial enemyContainer = level.GetNode<Spatial>("Enemies");

@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Scripts/GUI.cs" type="Script" id=1]
 [ext_resource path="res://Scripts/PlayerCamera.cs" type="Script" id=2]
@@ -47,6 +47,10 @@ font_data = SubResource( 3 )
 
 [sub_resource type="StyleBoxFlat" id=7]
 bg_color = Color( 0.6, 0.6, 0.6, 0 )
+
+[sub_resource type="SpatialMaterial" id=10]
+flags_transparent = true
+albedo_color = Color( 0.486275, 0.470588, 0.529412, 0.788235 )
 
 [sub_resource type="SpatialMaterial" id=8]
 albedo_color = Color( 0.486275, 0.470588, 0.529412, 1 )
@@ -299,6 +303,7 @@ custom_styles/panel = SubResource( 7 )
 [node name="MapLoader" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
 script = ExtResource( 7 )
+TransparentWallMaterial = SubResource( 10 )
 ShowPreview = true
 UnitSize = 4
 MapPath = "res://Maps/map.data"
@@ -314,3 +319,5 @@ contacts_reported = 1
 contact_monitor = true
 
 [node name="Enemies" type="Spatial" parent="."]
+
+[node name="CSGPolygon" type="CSGPolygon" parent="."]

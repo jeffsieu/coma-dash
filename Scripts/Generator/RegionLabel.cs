@@ -3,7 +3,7 @@ using Godot;
 
 public enum RegionType
 {
-    NONE, WALL, ROOM, DOOR
+    NONE, WALL, ROOM, DOOR, TRANSPARENT_WALL
 }
 
 public class RegionLabel
