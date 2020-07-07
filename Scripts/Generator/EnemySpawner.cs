@@ -36,6 +36,8 @@ public class EnemySpawner : Node
 
     private void SpawnEnemies()
     {
+        if (Engine.EditorHint) return;
+
         for (int i = 0; i < spawnCount; ++i)
         {
             Enemy enemy = enemyScene.Instance() as Enemy;

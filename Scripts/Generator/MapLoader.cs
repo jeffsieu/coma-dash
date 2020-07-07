@@ -50,7 +50,7 @@ public class MapLoader : Spatial
     }
 
     [Export]
-    public Material WallMaterial
+    public SpatialMaterial WallMaterial
     {
         get
         {
@@ -59,6 +59,20 @@ public class MapLoader : Spatial
         set
         {
             wallMaterial = value;
+            RebuildMap();
+        }
+    }
+
+    [Export]
+    public SpatialMaterial TransparentWallMaterial
+    {
+        get
+        {
+            return transparentWallMaterial;
+        }
+        set
+        {
+            transparentWallMaterial = value;
             RebuildMap();
         }
     }
@@ -80,7 +94,7 @@ public class MapLoader : Spatial
     private bool showPreview;
 
     private int unitSize;
-    private Material wallMaterial;
+    private SpatialMaterial wallMaterial, transparentWallMaterial;
     private ShaderMaterial floorMaterial;
     private string mapPath;
 
@@ -199,10 +213,23 @@ public class MapLoader : Spatial
             }
         }
 
+        bool[,] transparentWallMap = new bool[size, size];
+        InitBitmap(transparentWallMap, false);
+
+        MarkTransparentWalls(transparentWallMap, wallMap, floorMap, 2);
+        MarkTransparentWalls(transparentWallMap, wallMap, doorMap, 1);
+
         foreach (RegionParseInfo parseInfo in ParseBitmap(wallMap))
         {
             Wall wall = new Wall(parseInfo.RegionShape, unitSize, WallMaterial);
             AddChild(wall);
+        }
+
+        foreach (RegionParseInfo parseInfo in ParseBitmap(transparentWallMap))
+        {
+            TransparentWall transparentWall = new TransparentWall(parseInfo.RegionShape, unitSize, WallMaterial, TransparentWallMaterial);
+            AddRegion(transparentWall, parseInfo.Bitmap, RegionType.TRANSPARENT_WALL);
+            AddChild(transparentWall);
         }
 
         foreach (RegionParseInfo parseInfo in ParseBitmap(floorMap))
@@ -213,8 +240,7 @@ public class MapLoader : Spatial
                     if (parseInfo.Bitmap[x, y])
                         tilesInRoom.Add(new Vector2(x, y));
             Room room = new Room(parseInfo.RegionShape, tilesInRoom.ToArray(), unitSize, FloorMaterial);
-            UpdateRegionLabels(parseInfo.Bitmap, RegionType.ROOM, levelRegions.Count);
-            levelRegions.Add(room);
+            AddRegion(room, parseInfo.Bitmap, RegionType.ROOM);
             AddChild(room);
         }
 
@@ -225,23 +251,61 @@ public class MapLoader : Spatial
                 for (int x = 0; x < size; ++x)
                     if (parseInfo.Bitmap[x, y])
                         tilesInRoom.Add(new Vector2(x, y));
-            AddChild(new Room(parseInfo.RegionShape, tilesInRoom.ToArray(), unitSize, FloorMaterial));
-            UpdateRegionLabels(parseInfo.Bitmap, RegionType.DOOR, levelRegions.Count);
+            Room room = new Room(parseInfo.RegionShape, tilesInRoom.ToArray(), unitSize, FloorMaterial);
             Door door = new Door(parseInfo.RegionShape, unitSize);
-            levelRegions.Add(door);
+            door.Floor = room;
+            AddRegion(door, parseInfo.Bitmap, RegionType.DOOR);
             AddChild(door);
+            AddChild(room);
         }
 
         ConnectRoomsWithDoors();
+        ConnectRoomsWithWalls();
+        ConnectDoorsWithWalls();
         AddRoomBehaviors();
     }
 
-    private void UpdateRegionLabels(bool[,] bitmap, RegionType regionType, int id)
+    /// <summary>
+    /// Update <see cref="levelRegions"/> and <see cref="regionMap"/> with a new region.
+    /// </summary>
+    private void AddRegion(LevelRegion region, bool[,] bitmap, RegionType regionType)
     {
         for (int i = 0; i < size; ++i)
             for (int j = 0; j < size; ++j)
                 if (bitmap[i, j])
-                    regionMap[i, j] = new RegionLabel(regionType, id);
+                    regionMap[i, j] = new RegionLabel(regionType, levelRegions.Count);
+        levelRegions.Add(region);
+    }
+
+    /// <summary>
+    /// Create a bitmap for transparent walls based on the wall and floor bitmaps.
+    /// </summary>
+    /// <param name="thickness">Thickness of the wall to be made transparent</param>
+    /// <para>
+    /// This method checks if a cell is a floor, and if so, for <see cref="thickness"/>
+    /// number of cells below it, check if they are walls. If so, set them to false in the
+    /// wall bitmap and set them as on in the transparent wall bitmap.
+    /// </para>
+    /// <returns>A new bitmap to create <see cref="TransparentWall"/>s.</returns>
+    private void MarkTransparentWalls(bool[,] transparentWallMap, bool[,] wallMap, bool[,] floorMap, int thickness)
+    {
+        for (int y = 0; y < size; ++y)
+        {
+            for (int x = 0; x < size; ++x)
+            {
+                if (!floorMap[x, y]) continue;
+                for (int i = 1; i <= thickness; ++i)
+                {
+                    int ny = y + i;
+                    if (ny >= size) break;
+                    if (wallMap[x, ny])
+                    {
+                        wallMap[x, ny] = false;
+                        transparentWallMap[x, ny] = true;
+                    }
+                }
+            }
+        }
     }
 
 
@@ -522,6 +586,46 @@ public class MapLoader : Spatial
                         room.ConnectDoor(door);
                         door.ConnectRoom(room);
                     }
+                }
+            }
+        }
+    }
+
+    private void ConnectRoomsWithWalls()
+    {
+        for (int y = 0; y < size; ++y)
+        {
+            for (int x = 0; x < size; ++x)
+            {
+                if (regionMap[x, y].Type != RegionType.ROOM) continue;
+                int ny = y + 1;
+                if (ny >= size) continue;
+
+                if (regionMap[x, ny].Type == RegionType.TRANSPARENT_WALL)
+                {
+                    TransparentWall wall = levelRegions[regionMap[x, ny].Id] as TransparentWall;
+                    Room room = levelRegions[regionMap[x, y].Id] as Room;
+                    room.ConnectWall(wall);
+                }
+            }
+        }
+    }
+
+    private void ConnectDoorsWithWalls()
+    {
+        for (int y = 0; y < size; ++y)
+        {
+            for (int x = 0; x < size; ++x)
+            {
+                if (regionMap[x, y].Type != RegionType.DOOR) continue;
+                int ny = y + 1;
+                if (ny >= size) continue;
+
+                if (regionMap[x, ny].Type == RegionType.TRANSPARENT_WALL)
+                {
+                    TransparentWall wall = levelRegions[regionMap[x, ny].Id] as TransparentWall;
+                    Door door = levelRegions[regionMap[x, y].Id] as Door;
+                    door.Floor.ConnectWall(wall);
                 }
             }
         }

@@ -6,6 +6,7 @@ public class Door : LevelRegion
 {
     private CSGPolygon doorMesh;
     public HashSet<Room> ConnectedRooms { get; private set; }
+    public Room Floor;
 
     public Door(RegionShape regionShape, int unitSize)
     {

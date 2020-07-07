@@ -6,9 +6,11 @@ using Godot;
 public class Room : LevelRegion
 {
     private MapLoader mapLoader;
+    private Player player;
     private readonly CSGPolygon floorMesh;
 
     public HashSet<Door> ConnectedDoors { get; private set; }
+    public HashSet<TransparentWall> ConnectedWalls { get; private set; }
     public Vector2[] Tiles { get; private set; }
     public bool IsEmptyRoom = false;
 
@@ -23,6 +25,7 @@ public class Room : LevelRegion
         Translation = new Vector3(0, -unitSize, 0);
 
         ConnectedDoors = new HashSet<Door>();
+        ConnectedWalls = new HashSet<TransparentWall>();
         Tiles = tiles;
         rng = new RandomNumberGenerator();
         rng.Randomize();
@@ -54,6 +57,8 @@ public class Room : LevelRegion
     {
         base._Ready();
         mapLoader = GetParent<MapLoader>();
+        if (!Engine.EditorHint)
+            player = GetTree().Root.GetNode<Level>("Level").GetNode<Player>("Player");
         AddChild(floorMesh);
     }
 
@@ -68,6 +73,14 @@ public class Room : LevelRegion
         {
             CloseAllConnectedDoors();
         }
+    }
+
+    public override void _PhysicsProcess(float delta)
+    {
+        if (Contains(player))
+            HideAllConnectedWalls();
+        else
+            UnhideAllConnectedWalls();
     }
 
     private void SetFloorShaderParams(Vector2[] polygon, ShaderMaterial material)
@@ -108,6 +121,11 @@ public class Room : LevelRegion
         ConnectedDoors.Add(door);
     }
 
+    public void ConnectWall(TransparentWall wall)
+    {
+        ConnectedWalls.Add(wall);
+    }
+
     public void OpenAllConnectedDoors()
     {
         foreach (Door door in ConnectedDoors) door.Open();
@@ -116,6 +134,16 @@ public class Room : LevelRegion
     public void CloseAllConnectedDoors()
     {
         foreach (Door door in ConnectedDoors) door.Close();
+    }
+
+    public void HideAllConnectedWalls()
+    {
+        foreach (TransparentWall wall in ConnectedWalls) wall.HideWall();
+    }
+
+    public void UnhideAllConnectedWalls()
+    {
+        foreach (TransparentWall wall in ConnectedWalls) wall.UnhideWall();
     }
 
     public HashSet<Room> GetConnectedRooms()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Scripts/GUI.cs" type="Script" id=1]
 [ext_resource path="res://Scripts/PlayerCamera.cs" type="Script" id=2]
@@ -51,7 +51,11 @@ bg_color = Color( 0.6, 0.6, 0.6, 0 )
 [sub_resource type="SpatialMaterial" id=8]
 albedo_color = Color( 0.486275, 0.470588, 0.529412, 1 )
 
-[sub_resource type="ShaderMaterial" id=9]
+[sub_resource type="SpatialMaterial" id=9]
+flags_transparent = true
+albedo_color = Color( 0.486275, 0.470588, 0.529412, 0.788235 )
+
+[sub_resource type="ShaderMaterial" id=10]
 shader = ExtResource( 4 )
 shader_param/size = Vector2( 20, 0 )
 shader_param/start_pos = null
@@ -303,7 +307,8 @@ ShowPreview = true
 UnitSize = 4
 MapPath = "res://Maps/map.data"
 WallMaterial = SubResource( 8 )
-FloorMaterial = SubResource( 9 )
+TransparentWallMaterial = SubResource( 9 )
+FloorMaterial = SubResource( 10 )
 
 [node name="DecorationShowcase" parent="." instance=ExtResource( 10 )]
 
