@@ -69,11 +69,6 @@ public class MeleeEnemy : Enemy
         }
     }
 
-    protected void DeadState(float delta, float elapsedDelta)
-    {
-        // Do nothing and wait unitl removed from scene
-    }
-
     protected void AttackTarget()
     {
         stateManager.GoTo(PreAttackState);
@@ -82,6 +77,6 @@ public class MeleeEnemy : Enemy
     protected override void Die()
     {
         base.Die();
-        stateManager.GoTo(DeadState);
+        stateManager.Stop();
     }
 }
