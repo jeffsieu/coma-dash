@@ -16,7 +16,7 @@ public class MeleeEnemy : Enemy
         stateManager = new StateManager();
         AddChild(stateManager);
 
-        stateManager.GoTo(Idle);
+        stateManager.GoTo(IdleState);
     }
 
     public override void _Process(float delta)
@@ -26,7 +26,7 @@ public class MeleeEnemy : Enemy
         UpdateStatusBars(delta);
     }
 
-    protected void Idle(float delta, float elapsedDelta)
+    protected void IdleState(float delta, float elapsedDelta)
     {
         if (GlobalTransform.origin.DistanceTo(player.GlobalTransform.origin) < range)
         {
@@ -39,7 +39,7 @@ public class MeleeEnemy : Enemy
         }
     }
 
-    protected void PreAttack(float delta, float elapsedDelta)
+    protected void PreAttackState(float delta, float elapsedDelta)
     {
         // Become white
         LinearVelocity = Vector3.Zero;
@@ -47,30 +47,41 @@ public class MeleeEnemy : Enemy
 
         if (elapsedDelta >= preAttackPauseDuration)
         {
-            stateManager.GoTo(Attack);
+            stateManager.GoTo(AttackState);
         }
     }
 
-    protected void Attack(float delta, float elapsedDelta)
+    protected void AttackState(float delta, float elapsedDelta)
     {
         // Try to attack target
         if (GlobalTransform.origin.DistanceTo(player.GlobalTransform.origin) <= range)
             player.Damage(damage);
         inPreAttack = false;
-        stateManager.GoTo(PostAttack);
+        stateManager.GoTo(PostAttackState);
     }
 
-    protected void PostAttack(float delta, float elapsedDelta)
+    protected void PostAttackState(float delta, float elapsedDelta)
     {
         // Remain on the spot until "stun" duration is over
         if (elapsedDelta >= postAttackPauseDuration)
         {
-            stateManager.GoTo(Idle);
+            stateManager.GoTo(IdleState);
         }
+    }
+
+    protected void DeadState(float delta, float elapsedDelta)
+    {
+        // Do nothing and wait unitl removed from scene
     }
 
     protected void AttackTarget()
     {
-        stateManager.GoTo(PreAttack);
+        stateManager.GoTo(PreAttackState);
+    }
+
+    protected override void Die()
+    {
+        base.Die();
+        stateManager.GoTo(DeadState);
     }
 }
