@@ -5,9 +5,7 @@ public class MeleeEnemy : Enemy
     protected static float range = 5.0f;
     protected static float preAttackPauseDuration = 0.5f;
     protected static float postAttackPauseDuration = 0.5f;
-    protected static float damage = 10.0f;
-
-    protected StateManager stateManager;
+    protected static float damage = 4.0f;
     protected bool inPreAttack = false;
 
     public override void _Ready()
@@ -26,7 +24,7 @@ public class MeleeEnemy : Enemy
         UpdateStatusBars(delta);
     }
 
-    protected void IdleState(float delta, float elapsedDelta)
+    protected override void IdleState(float delta, float elapsedDelta)
     {
         if (GlobalTransform.origin.DistanceTo(player.GlobalTransform.origin) < range)
         {

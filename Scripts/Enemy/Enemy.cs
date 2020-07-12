@@ -6,6 +6,9 @@ public class Enemy : HealthEntity
     protected SpatialMaterial material;
     protected Player player;
 
+    protected float stunnedDuration = 0;
+    protected StateManager stateManager;
+
     public Enemy()
     {
         MaxHealth = 100;
@@ -40,6 +43,25 @@ public class Enemy : HealthEntity
     protected Vector3 GetNextPointToTarget()
     {
         return GlobalTransform.origin + GlobalTransform.origin.DirectionTo(player.GlobalTransform.origin);
+    }
+
+    protected virtual void IdleState(float delta, float elapsedDelta)
+    {
+    }
+
+    protected virtual void StunnedState(float delta, float elapsedDelta)
+    {
+        // Remain on the spot until stun duration is over
+        if (elapsedDelta >= stunnedDuration)
+        {
+            stateManager.GoTo(IdleState);
+        }
+    }
+
+    public virtual void Stun(float duration)
+    {
+        stunnedDuration = duration;
+        stateManager.GoTo(StunnedState);
     }
 
     protected override void Die()

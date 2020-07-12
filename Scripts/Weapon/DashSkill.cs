@@ -12,6 +12,7 @@ public class DashSkill : AimableAttack
     private readonly float spreadDegrees;
     private readonly float dashSpeed;
     private readonly float damage;
+    private readonly float stunDuration;
     private readonly float impactRange;
     private readonly float coolAmount;
 
@@ -35,6 +36,7 @@ public class DashSkill : AimableAttack
         dashSpeed = 50.0f;
         spreadDegrees = 25.0f;
         damage = 30.0f;
+        stunDuration = 1.2f;
         impactRange = 5.0f;
         coolAmount = 0.4f;
     }
@@ -253,15 +255,15 @@ public class DashSkill : AimableAttack
 
     public void OnFinished()
     {
-
         player.ApplyCentralImpulse(player.Mass * -player.LinearVelocity);
 
         if (targetEnemy != null)
         {
             Vector3 targetEnemyDirection = (targetEnemy.GlobalTransform.origin - GlobalTransform.origin).Normalized();
             Vector3 targetEnemyVelocity = 5.0f * targetEnemyDirection + 15.0f * Vector3.Up;
-            targetEnemy.ApplyCentralImpulse(targetEnemy.Mass * targetEnemyVelocity);
             targetEnemy.Damage(damage);
+            targetEnemy.Stun(stunDuration);
+            targetEnemy.ApplyCentralImpulse(targetEnemy.Mass * targetEnemyVelocity);
             player.Weapon.Cool(coolAmount);
             MeshInstance m = GetNode<MeshInstance>("Shockwave");
             ShaderMaterial mat = m.GetSurfaceMaterial(0) as ShaderMaterial;
